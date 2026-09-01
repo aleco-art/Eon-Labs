@@ -18,20 +18,20 @@ export function SolutionsPage() {
 
 export function ProcessPage() {
   const steps = [
-    ["01", "Entendemos el negocio y el proceso actual", "Vemos qué ocurre hoy, quién participa y dónde se pierde tiempo o información."],
-    ["02", "Identificamos el problema concreto", "Acotamos la dificultad que merece resolverse antes de hablar de funcionalidades."],
-    ["03", "Definimos la primera versión útil", "Elegimos el recorrido mínimo que ya mejora el trabajo."],
-    ["04", "Construimos y mostramos", "La interfaz aparece pronto para validar decisiones con algo tangible."],
-    ["05", "Observamos el uso real", "Revisamos cómo encaja en el día a día, sin asumir que el primer diseño es definitivo."],
-    ["06", "Adaptamos lo necesario", "Ajustamos campos, reglas y pasos a partir de evidencia de uso."],
+    ["01", "Mapeamos el flujo actual", "Identificamos entradas, responsables, decisiones, herramientas y salidas del proceso."],
+    ["02", "Definimos el cuello de botella", "Priorizamos el punto operativo que más tiempo, errores o falta de visibilidad genera."],
+    ["03", "Diseñamos el flujo objetivo", "Acordamos estados, datos, responsabilidades y criterios antes de construir."],
+    ["04", "Ponemos una versión en operación", "Entregamos un recorrido utilizable y lo incorporamos al trabajo cotidiano."],
+    ["05", "Revisamos datos y uso", "Observamos qué se usa, qué se atasca y qué decisiones necesita el equipo."],
+    ["06", "Ajustamos y documentamos", "Mejoramos la herramienta y dejamos reglas operativas claras para el siguiente ciclo."],
   ];
   return <><Seo title="Cómo trabajamos | Eon Labs" description="Un proceso directo para entender, construir y adaptar herramientas digitales operativas." path="/como-trabajamos"/><section className="page-hero section-pad"><p className="eyebrow">CÓMO TRABAJAMOS</p><h1>Construimos cerca del proceso real.</h1><p>Podemos partir de una solución existente de Eon o diseñar una herramienta específica.</p></section><section className="section-pad work-steps">{steps.map(([number, title, text]) => <article key={number}><span>{number}</span><div><h2>{title}</h2><p>{text}</p></div></article>)}</section><section className="compact-cta section-pad"><div><p className="eyebrow">EMPEZAR</p><h2>El primer brief nos ayuda a entender el contexto.</h2></div><Link className="button button-dark" to="/empezar">Empezar proyecto <ArrowRight size={17}/></Link></section></>;
 }
 
 const packageData = [
-  ["Base", "Una herramienta concreta para resolver un problema definido.", "Cuando el alcance está claro.", ["Un recorrido principal", "Datos y estados necesarios", "Primera versión para usar"]],
-  ["Adaptado", "Partimos de una solución existente de Eon y la ajustamos al negocio.", "Cuando una demo se parece a la necesidad.", ["Estructura probada", "Campos y etapas propias", "Ajustes al uso real"]],
-  ["A medida", "Entendemos el proceso y diseñamos una herramienta específicamente para él.", "Cuando el proceso necesita una solución propia.", ["Descubrimiento del proceso", "Diseño específico", "Evolución por uso"]],
+  ["Base", "Partimos de un problema ya definido y construimos una herramienta concreta para resolverlo.", "Un problema ya definido.", ["Un recorrido principal", "Datos y estados necesarios", "Primera versión para usar"]],
+  ["Adaptado", "Del demo a tu negocio.", "Una base que ya encaja.", ["Estructura probada", "Campos y etapas propias", "Ajustes al uso real"]],
+  ["A medida", "Entendemos el proceso a detalle y construimos en base a ello.", "Un proceso propio.", ["Descubrimiento del proceso", "Diseño específico", "Evolución por uso"]],
 ] as const;
 
 export function PackagesPage() {
