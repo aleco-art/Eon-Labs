@@ -5,6 +5,10 @@ import { siteConfig } from "../config";
 
 const links = [{ to: "/showroom", label: "Showroom" }, { to: "/soluciones", label: "Soluciones" }, { to: "/como-trabajamos", label: "Cómo trabajamos" }, { to: "/paquetes", label: "Paquetes" }];
 
+function BrandLogo({ footer = false }: { footer?: boolean }) {
+  return <Link className={`brand-logo ${footer ? "footer-logo" : ""}`} to="/" aria-label="Eon Labs, inicio"><img src="/eon-labs-logo.png" alt="Eon Labs"/></Link>;
+}
+
 export function Layout() {
   const [open, setOpen] = useState(false); const menuRef = useRef<HTMLDivElement>(null); const location = useLocation();
   useEffect(() => { window.scrollTo({ top: 0 }); }, [location.pathname]);
@@ -17,7 +21,7 @@ export function Layout() {
   }, [open]);
   return <div className="site-shell">
     <header className="site-header" ref={menuRef}>
-      <Link className="wordmark" to="/" aria-label="Eon Labs, inicio"><span>E</span>Eon Labs</Link>
+      <BrandLogo/>
       <nav className="desktop-nav" aria-label="Navegación principal">{links.map((link) => <NavLink key={link.to} className={({ isActive }) => isActive ? "active" : ""} to={link.to}>{link.label}</NavLink>)}</nav>
       <Link className="button button-dark header-cta" to="/empezar">Empezar proyecto <ArrowRight size={16}/></Link>
       <button className="menu-button" aria-label={open ? "Cerrar menú" : "Abrir menú"} aria-expanded={open} aria-controls="mobile-nav" onClick={() => setOpen(!open)}>{open ? <X/> : <Menu/>}</button>
@@ -25,7 +29,7 @@ export function Layout() {
     </header>
     <main id="main-content"><Outlet/></main>
     <footer className="site-footer section-pad">
-      <div><Link className="wordmark footer-wordmark" to="/"><span>E</span>Eon Labs</Link><p>Herramientas digitales adaptadas al trabajo real.</p></div>
+      <div><BrandLogo footer/><p>Tecnología accesible bajo demanda.</p></div>
       <nav aria-label="Navegación del pie">{links.map((link) => <Link key={link.to} to={link.to}>{link.label}</Link>)}</nav>
       <div className="footer-contact">{siteConfig.whatsappNumber && <a href={`https://wa.me/${siteConfig.whatsappNumber}`}>WhatsApp</a>}{siteConfig.email && <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>}<Link to="/empezar">Contacto inicial</Link></div>
       <div className="footer-bottom"><span>© {new Date().getFullYear()} Eon Labs</span><span>Las herramientas mostradas son demos, no casos de clientes.</span></div>

@@ -22,9 +22,9 @@ const packages = [
 
 export function HomePage() {
   return <>
-    <Seo title="Eon Labs — Herramientas digitales operativas" description="Software, automatizaciones y herramientas internas adaptadas a pequeñas empresas y profesionales." jsonLd={{ "@context": "https://schema.org", "@type": "WebSite", name: "Eon Labs", description: "Showroom de herramientas digitales operativas." }}/>
+    <Seo title="Eon Labs — Tecnología accesible bajo demanda" description="Software, automatizaciones y herramientas internas adaptadas a pequeñas empresas y profesionales." jsonLd={{ "@context": "https://schema.org", "@type": "WebSite", name: "Eon Labs", description: "Tecnología accesible bajo demanda." }}/>
     <section className="hero section-pad">
-      <div className="hero-copy"><p className="eyebrow">SOFTWARE OPERATIVO · HECHO A MEDIDA</p><h1>Herramientas digitales hechas para <em>cómo funciona</em> tu negocio.</h1><p className="lede">Creamos software, automatizaciones y herramientas internas adaptadas a pequeñas empresas y profesionales.</p>
+      <div className="hero-copy"><p className="eyebrow">SOFTWARE OPERATIVO · HECHO A MEDIDA</p><h1>Tecnología accesible <em>bajo demanda.</em></h1><p className="lede">Creamos software, automatizaciones y herramientas internas adaptadas a pequeñas empresas y profesionales.</p>
         <div className="button-row"><Link className="button button-accent" to="/showroom">Explorar showroom <ArrowRight size={18}/></Link><Link className="text-link" to="/empezar">Cuéntanos qué necesitas</Link></div>
         <div className="hero-proof"><span><CheckCircle2/> Proceso claro</span><span><CheckCircle2/> Primera versión útil</span><span><CheckCircle2/> Adaptado al uso real</span></div>
       </div><HeroPreview/>
