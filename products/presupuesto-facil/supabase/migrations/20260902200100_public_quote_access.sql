@@ -19,8 +19,10 @@ comment on function public.hash_quote_token(text) is 'SHA-256 of a public token.
 revoke all on function public.hash_quote_token(text) from public;
 grant execute on function public.hash_quote_token(text) to authenticated;
 
--- Sharing runs as the caller so row level security still applies: an owner can
--- only ever share a quote they own.
+-- Sharing writes the shared event, and quote_events is append-only for
+-- clients: authenticated holds select and nothing more. So this runs as
+-- definer and checks ownership itself, which keeps a caller from forging
+-- history on a quote that is not theirs.
 
 create or replace function public.share_quote(
   p_quote_id uuid,
@@ -29,7 +31,7 @@ create or replace function public.share_quote(
 )
 returns jsonb
 language plpgsql
-security invoker
+security definer
 set search_path = ''
 as $$
 declare
@@ -49,6 +51,7 @@ begin
          token_expires_at = p_expires_at,
          shared_at = coalesce(shared_at, now())
    where id = p_quote_id
+     and owner_id = (select auth.uid())
      and status = 'draft'
   returning status into v_status;
 

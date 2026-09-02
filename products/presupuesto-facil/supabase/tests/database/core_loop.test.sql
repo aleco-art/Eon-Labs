@@ -2,7 +2,7 @@ begin;
 
 create extension if not exists pgtap with schema extensions;
 
-select plan(18);
+select plan(21);
 
 select has_table('public', 'clients', 'clients table exists');
 select has_table('public', 'quotes', 'quotes table exists');
@@ -62,12 +62,22 @@ select results_eq(
   'public link functions run as security definer'
 );
 
+-- Sharing appends to quote_events, which clients may only read, so it runs as
+-- definer too. That bypasses RLS, and the ownership check moves into the body.
 select results_eq(
   $$select prosecdef from pg_proc p
      join pg_namespace n on n.oid = p.pronamespace
      where n.nspname = 'public' and p.proname = 'share_quote'$$,
-  array[false],
-  'sharing runs as the caller so RLS still applies'
+  array[true],
+  'sharing runs as definer so it can append to the history'
+);
+
+select ok(
+  (select prosrc from pg_proc p
+     join pg_namespace n on n.oid = p.pronamespace
+    where n.nspname = 'public' and p.proname = 'share_quote')
+  like '%owner_id = (select auth.uid())%',
+  'sharing checks ownership explicitly because definer bypasses RLS'
 );
 
 select ok(
