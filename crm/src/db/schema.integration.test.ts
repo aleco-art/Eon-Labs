@@ -111,6 +111,43 @@ describe("CRM database integrity", () => {
     expect(contact.companyId).toBe(company.id);
   });
 
+  it("lists a persisted contact with its company", async () => {
+    const company = await createCompany("Contact company");
+    const contact = await createContact(company.id);
+    const [row] = await db
+      .select({
+        id: contacts.id,
+        companyName: companies.name,
+      })
+      .from(contacts)
+      .innerJoin(companies, eq(contacts.companyId, companies.id))
+      .where(eq(contacts.id, contact.id));
+
+    expect(row).toEqual({ id: contact.id, companyName: "Contact company" });
+  });
+
+  it("updates a persisted contact", async () => {
+    const company = await createCompany();
+    const contact = await createContact(company.id);
+    const [updated] = await db
+      .update(contacts)
+      .set({ firstName: "Grace", jobTitle: "Admiral" })
+      .where(eq(contacts.id, contact.id))
+      .returning();
+
+    expect(updated?.firstName).toBe("Grace");
+    expect(updated?.jobTitle).toBe("Admiral");
+  });
+
+  it("rejects a contact without a company", async () => {
+    await expect(
+      client.query(
+        "INSERT INTO contacts (first_name, last_name) VALUES ($1, $2)",
+        ["Missing", "Company"],
+      ),
+    ).rejects.toMatchObject({ code: "23502" });
+  });
+
   it("rejects a contact without a valid company", async () => {
     await expect(
       client.query(
@@ -118,6 +155,45 @@ describe("CRM database integrity", () => {
         ["Grace", "Hopper", randomUUID()],
       ),
     ).rejects.toMatchObject({ code: "23503" });
+  });
+
+  it("nulls opportunity contact references and deletes the contact atomically", async () => {
+    const company = await createCompany();
+    const contact = await createContact(company.id);
+    const [opportunity] = await db
+      .insert(opportunities)
+      .values({
+        name: "Contact cleanup",
+        companyId: company.id,
+        contactId: contact.id,
+        status: "NEW",
+      })
+      .returning();
+
+    const deleted = await db.transaction(async (transaction) => {
+      await transaction
+        .update(opportunities)
+        .set({ contactId: null })
+        .where(eq(opportunities.contactId, contact.id));
+      return transaction
+        .delete(contacts)
+        .where(eq(contacts.id, contact.id))
+        .returning({ id: contacts.id });
+    });
+
+    const [persistedOpportunity] = await db
+      .select()
+      .from(opportunities)
+      .where(eq(opportunities.id, opportunity!.id));
+    const deletedContacts = await db
+      .select()
+      .from(contacts)
+      .where(eq(contacts.id, contact.id));
+
+    expect(deleted).toEqual([{ id: contact.id }]);
+    expect(persistedOpportunity?.contactId).toBeNull();
+    expect(persistedOpportunity?.companyId).toBe(company.id);
+    expect(deletedContacts).toHaveLength(0);
   });
 
   it("accepts an opportunity with a valid company", async () => {
