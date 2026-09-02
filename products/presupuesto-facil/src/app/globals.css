@@ -1,0 +1,25 @@
+:root {
+  --canvas: #f5f6f2;
+  --surface: #ffffff;
+  --surface-soft: #fafaf8;
+  --ink: #17231f;
+  --ink-soft: #32413c;
+  --muted: #68736f;
+  --muted-light: #8b9490;
+  --line: #e4e7e2;
+  --line-strong: #cfd5d0;
+  --teal: #167164;
+  --teal-deep: #0f554b;
+  --mint: #dcefe8;
+  --coral: #c95743;
+  --danger: #a33b32;
+  --danger-soft: #fff2ef;
+  --danger-line: #f0c8c0;
+}
+
+* { box-sizing: border-box; padding: 0; margin: 0; }
+html { min-height: 100%; }
+body { min-height: 100%; color: var(--ink); background: var(--canvas); font-family: Arial, Helvetica, sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+button, input { font: inherit; }
+a { color: inherit; text-decoration: none; }
+button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid rgba(22, 113, 100, 0.35); outline-offset: 2px; }

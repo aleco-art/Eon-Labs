@@ -2,6 +2,10 @@
 
 Portfolio de proyectos, vibe-coded apps, agents y código de Eon Labs.
 
+## Productos
+
+- [`products/presupuesto-facil`](products/presupuesto-facil): aplicación de presupuestos para instaladores y pequeñas empresas de servicios.
+
 ## Landing V1
 
 La primera aplicación del repositorio es el sitio público de Eon Labs: landing comercial, showroom de cinco herramientas demostrativas y brief guiado para iniciar un proyecto.

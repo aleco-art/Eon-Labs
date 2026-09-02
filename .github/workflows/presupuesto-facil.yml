@@ -1,0 +1,38 @@
+name: Presupuesto Fácil checks
+
+on:
+  pull_request:
+    paths:
+      - "products/presupuesto-facil/**"
+      - ".github/workflows/presupuesto-facil.yml"
+  push:
+    branches: [main]
+    paths:
+      - "products/presupuesto-facil/**"
+      - ".github/workflows/presupuesto-facil.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: products/presupuesto-facil
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://build-check.supabase.co
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_build_check_placeholder
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: products/presupuesto-facil/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
