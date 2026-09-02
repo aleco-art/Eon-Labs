@@ -85,5 +85,5 @@ $$;
 
 comment on function public.create_quote(uuid, text, text, bigint, bigint, jsonb) is 'Creates a draft quote with its items in one transaction.';
 
-revoke all on function public.create_quote(uuid, text, text, bigint, bigint, jsonb) from public;
+revoke all on function public.create_quote(uuid, text, text, bigint, bigint, jsonb) from public, anon;
 grant execute on function public.create_quote(uuid, text, text, bigint, bigint, jsonb) to authenticated;

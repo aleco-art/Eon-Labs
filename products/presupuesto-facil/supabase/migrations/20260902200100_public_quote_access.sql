@@ -16,7 +16,7 @@ $$;
 
 comment on function public.hash_quote_token(text) is 'SHA-256 of a public token. Single source of truth for token hashing.';
 
-revoke all on function public.hash_quote_token(text) from public;
+revoke all on function public.hash_quote_token(text) from public, anon;
 grant execute on function public.hash_quote_token(text) to authenticated;
 
 -- Sharing writes the shared event, and quote_events is append-only for
@@ -66,7 +66,7 @@ begin
 end;
 $$;
 
-revoke all on function public.share_quote(uuid, text, timestamptz) from public;
+revoke all on function public.share_quote(uuid, text, timestamptz) from public, anon;
 grant execute on function public.share_quote(uuid, text, timestamptz) to authenticated;
 
 -- Reading a shared quote also records the first view, so the owner sees a
