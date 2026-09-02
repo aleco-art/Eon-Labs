@@ -34,3 +34,19 @@ export function isSupabaseConfigured() {
       process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
   }).success;
 }
+
+export function getAppUrl() {
+  const configuredUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
+
+  if (configuredUrl) {
+    return z.url().parse(configuredUrl).replace(/\/$/, "");
+  }
+
+  const vercelUrl = process.env.VERCEL_URL?.trim();
+
+  if (vercelUrl) {
+    return `https://${vercelUrl}`;
+  }
+
+  return "http://localhost:3000";
+}

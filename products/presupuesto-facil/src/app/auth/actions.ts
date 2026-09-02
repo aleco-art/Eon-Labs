@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { getAppUrl } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { loginSchema, type LoginState } from "@/lib/validation/auth";
 
@@ -10,7 +11,6 @@ export async function login(
 ): Promise<LoginState> {
   const parsed = loginSchema.safeParse({
     email: formData.get("email"),
-    password: formData.get("password"),
   });
 
   if (!parsed.success) {
@@ -23,12 +23,18 @@ export async function login(
 
   try {
     const supabase = await createClient();
-    const { error } = await supabase.auth.signInWithPassword(parsed.data);
+    const { error } = await supabase.auth.signInWithOtp({
+      email: parsed.data.email,
+      options: {
+        shouldCreateUser: false,
+        emailRedirectTo: `${getAppUrl()}/auth/callback`,
+      },
+    });
 
     if (error) {
       return {
         status: "error",
-        message: "No hemos podido validar esas credenciales.",
+        message: "No hemos podido enviar el enlace. Inténtalo de nuevo en un minuto.",
       };
     }
   } catch {
@@ -38,7 +44,10 @@ export async function login(
     };
   }
 
-  redirect("/dashboard");
+  return {
+    status: "success",
+    message: "Revisa tu correo. Te hemos enviado un enlace de acceso de un solo uso.",
+  };
 }
 
 export async function logout() {

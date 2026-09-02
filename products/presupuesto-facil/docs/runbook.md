@@ -8,6 +8,13 @@
 
 Nunca se conecta una preview a producción y nunca se ejecuta `db reset --linked` contra producción.
 
+## Acceso interno
+
+- Mantener desactivada la opción `Allow new users to sign up` en Supabase Auth.
+- Dar de alta usuarios únicamente mediante invitación administrativa.
+- El usuario solicita desde la app un enlace mágico de un solo uso; no se gestionan contraseñas en la aplicación.
+- Configurar en Supabase Auth la URL del deployment y `/auth/callback` como destino permitido.
+
 ## Despliegue
 
 1. Revisar la migración y ejecutar lint, typecheck, tests y build.

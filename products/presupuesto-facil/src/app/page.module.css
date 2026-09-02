@@ -53,6 +53,8 @@
 .form button:disabled { cursor: wait; opacity: 0.82; }
 .fieldError { color: var(--danger); font-size: 12px; margin-bottom: 16px; }
 .formError { color: var(--danger); background: var(--danger-soft); border: 1px solid var(--danger-line); border-radius: 5px; padding: 11px 12px; margin: 0 0 16px; font-size: 13px; }
+.formSuccess { color: var(--teal-deep); background: var(--mint); border: 1px solid rgba(22, 113, 100, 0.24); border-radius: 5px; padding: 11px 12px; margin: 0 0 16px; font-size: 13px; }
+.magicNote { margin-top: 11px; color: var(--muted-light); font-size: 12px; text-align: center; }
 .spinner { animation: spin 0.9s linear infinite; }
 .accessNote { margin-top: 14px; color: var(--muted-light); font-size: 12px; text-align: center; }
 

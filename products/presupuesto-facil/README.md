@@ -13,6 +13,8 @@ Requisitos: Node.js 24, npm y Docker Desktop para el stack local de Supabase.
 
 La aplicación queda en `http://localhost:3000` y Supabase Studio en `http://127.0.0.1:54323`.
 
+El acceso es por enlace mágico y no usa contraseñas. Las altas públicas permanecen cerradas: un administrador invita primero al usuario desde Supabase Auth y después el usuario solicita el enlace desde la pantalla de acceso.
+
 ## Comprobaciones
 
 ```bash
