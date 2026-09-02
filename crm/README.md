@@ -14,7 +14,15 @@ nvm use
 npm ci
 ```
 
-No environment variables are required for this foundation. Future variables must be documented in `.env.example` without committing secrets.
+## Database
+
+Copy `.env.example` to `.env.local` and set `DATABASE_URL` to the PostgreSQL
+connection string. Do not commit `.env.local`.
+
+```bash
+npm run db:migrate
+npm run test:db
+```
 
 ## Local development
 
@@ -28,6 +36,7 @@ Open [http://localhost:3000](http://localhost:3000). The root route redirects to
 
 ```bash
 npm run test
+npm run test:db
 npm run lint
 npm run typecheck
 npm run format:check
