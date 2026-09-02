@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 
+import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import type { PoolClient } from "pg";
 import { afterAll, afterEach, beforeEach, describe, expect, it } from "vitest";
@@ -68,6 +69,39 @@ describe("CRM database integrity", () => {
     const company = await createCompany();
 
     expect(company.name).toBe("Eon Labs");
+  });
+
+  it("lists a persisted company", async () => {
+    const company = await createCompany("Company list test");
+    const rows = await db
+      .select()
+      .from(companies)
+      .where(eq(companies.id, company.id));
+
+    expect(rows).toHaveLength(1);
+    expect(rows[0]?.name).toBe("Company list test");
+  });
+
+  it("updates a persisted company", async () => {
+    const company = await createCompany("Before update");
+    const [updated] = await db
+      .update(companies)
+      .set({ name: "After update", website: "https://eon.example" })
+      .where(eq(companies.id, company.id))
+      .returning();
+
+    expect(updated?.name).toBe("After update");
+    expect(updated?.website).toBe("https://eon.example");
+  });
+
+  it("deletes an unreferenced company", async () => {
+    const company = await createCompany("Delete test");
+    const deleted = await db
+      .delete(companies)
+      .where(eq(companies.id, company.id))
+      .returning({ id: companies.id });
+
+    expect(deleted).toEqual([{ id: company.id }]);
   });
 
   it("inserts a contact with a valid company", async () => {
