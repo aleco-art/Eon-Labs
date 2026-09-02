@@ -1,0 +1,2 @@
+-- Remote environments are never seeded. Local demo users are created through
+-- Supabase Studio so login credentials do not live in source control.
