@@ -4,6 +4,7 @@ import {
   formatCents,
   lineTaxCents,
   lineTotalCents,
+  parseEurosToCents,
   type QuoteItemInput,
 } from "./money";
 
@@ -119,6 +120,31 @@ describe("formatting", () => {
     // Spanish leaves four-digit amounts ungrouped and puts a non-breaking space
     // before the symbol. Grouping only starts at five digits.
     expect(formatCents(123456).replace(/ /g, " ")).toBe("1234,56 €");
+  });
+
+  it("reads a comma as the decimal separator", () => {
+    expect(parseEurosToCents("12,50")).toBe(1250);
+  });
+
+  it("reads a dot as thousands when a comma is present", () => {
+    expect(parseEurosToCents("1.234,56")).toBe(123456);
+  });
+
+  it("reads a plain dot as decimals", () => {
+    expect(parseEurosToCents("12.50")).toBe(1250);
+  });
+
+  it("reads a whole number", () => {
+    expect(parseEurosToCents("680")).toBe(68000);
+  });
+
+  it("ignores spaces and the euro sign", () => {
+    expect(parseEurosToCents(" 145,00 € ")).toBe(14500);
+  });
+
+  it("rejects text that is not a number", () => {
+    expect(parseEurosToCents("mil euros")).toBeNull();
+    expect(parseEurosToCents("")).toBeNull();
   });
 
   it("formats zero", () => {

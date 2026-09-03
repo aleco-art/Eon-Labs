@@ -1,57 +1,117 @@
-import Image from "next/image";
 import Link from "next/link";
-import { FilePlus2, FileText, LayoutDashboard, LogOut, Settings, Users } from "lucide-react";
-import { logout } from "@/app/auth/actions";
-import { requireUser } from "@/lib/auth";
+import { FilePlus2, FileText } from "lucide-react";
+import { formatCents } from "@/lib/quotes/money";
+import { listQuotes, type QuoteStatus } from "@/lib/quotes/repository";
+import { requireOwnerEmail } from "@/lib/session";
 import styles from "./dashboard.module.css";
 
+export const dynamic = "force-dynamic";
+
+const STATUS_LABEL: Record<QuoteStatus, string> = {
+  draft: "Borrador",
+  shared: "Compartido",
+  viewed: "Visto",
+  accepted: "Aceptado",
+  rejected: "Rechazado",
+  expired: "Caducado",
+};
+
+const dateFormatter = new Intl.DateTimeFormat("es-ES", {
+  day: "numeric",
+  month: "short",
+  hour: "2-digit",
+  minute: "2-digit",
+});
+
+function statusClass(status: QuoteStatus) {
+  if (status === "accepted") return styles.badgeOk;
+  if (status === "rejected") return styles.badgeNo;
+  if (status === "draft") return styles.badgeMuted;
+  return styles.badgeInfo;
+}
+
 export default async function DashboardPage() {
-  const user = await requireUser();
-  const displayName = user.fullName ?? user.email.split("@")[0] ?? "Profesional";
+  const email = await requireOwnerEmail();
+  const quotes = await listQuotes(email);
+
+  const waiting = quotes.filter((q) => q.status === "shared" || q.status === "viewed").length;
+  const accepted = quotes.filter((q) => q.status === "accepted").length;
+  const rejected = quotes.filter((q) => q.status === "rejected").length;
 
   return (
-    <main className={styles.shell}>
-      <aside className={styles.sidebar}>
-        <Link className={styles.brand} href="/dashboard" aria-label="Presupuesto Fácil">
-          <Image src="/eon-mark.svg" alt="" width={36} height={36} />
-          <span><strong>Presupuesto Fácil</strong><small>by Eon Labs</small></span>
+    <>
+      <div className={styles.heading}>
+        <div>
+          <p>Tus presupuestos</p>
+          <h1>Resumen</h1>
+        </div>
+        <Link className={styles.primaryLink} href="/dashboard/nuevo">
+          <FilePlus2 size={18} /> Nuevo presupuesto
         </Link>
-        <nav aria-label="Navegación principal">
-          <Link className={styles.active} href="/dashboard"><LayoutDashboard size={18} /> Resumen</Link>
-          <span><FileText size={18} /> Presupuestos</span>
-          <span><Users size={18} /> Clientes</span>
-        </nav>
-        <div className={styles.sidebarBottom}>
-          <span><Settings size={18} /> Configuración</span>
-          <form action={logout}><button type="submit"><LogOut size={18} /> Salir</button></form>
-        </div>
-      </aside>
+      </div>
 
-      <section className={styles.content}>
-        <header className={styles.topbar}>
-          <div><span>Espacio de trabajo</span><strong>{user.businessName ?? "Mi negocio"}</strong></div>
-          <div className={styles.avatar} aria-label={`Sesión de ${displayName}`}>{displayName.slice(0, 2).toUpperCase()}</div>
-        </header>
-
-        <div className={styles.mainContent}>
-          <div className={styles.heading}>
-            <div><p>Buenos días, {displayName}</p><h1>Resumen</h1></div>
-            <button type="button" disabled><FilePlus2 size={18} /> Nuevo presupuesto</button>
-          </div>
-
-          <section className={styles.metrics} aria-label="Estado de presupuestos">
-            <article><span>Borradores</span><strong>0</strong><small>Por completar</small></article>
-            <article><span>Esperando respuesta</span><strong>0</strong><small>Compartidos y vistos</small></article>
-            <article><span>Aceptados</span><strong>0</strong><small>Este mes</small></article>
-          </section>
-
-          <section className={styles.empty}>
-            <div className={styles.emptyIcon}><FileText size={24} /></div>
-            <h2>Aún no hay presupuestos</h2>
-            <p>La creación del primer presupuesto se habilitará en la siguiente fase.</p>
-          </section>
-        </div>
+      <section className={styles.metrics} aria-label="Estado de presupuestos">
+        <article>
+          <span>Esperando respuesta</span>
+          <strong>{waiting}</strong>
+          <small>Compartidos y vistos</small>
+        </article>
+        <article>
+          <span>Aceptados</span>
+          <strong>{accepted}</strong>
+          <small>Confirmados por el cliente</small>
+        </article>
+        <article>
+          <span>Rechazados</span>
+          <strong>{rejected}</strong>
+          <small>Con o sin comentario</small>
+        </article>
       </section>
-    </main>
+
+      {quotes.length === 0 ? (
+        <section className={styles.empty}>
+          <div className={styles.emptyIcon}>
+            <FileText size={24} />
+          </div>
+          <h2>Aún no hay presupuestos</h2>
+          <p>Crea el primero y compártelo con tu cliente en menos de cinco minutos.</p>
+        </section>
+      ) : (
+        <div className={styles.tableWrap}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th scope="col">Referencia</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Total</th>
+                <th scope="col">Actualizado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {quotes.map((quote) => (
+                <tr key={quote.id}>
+                  <td>
+                    <Link className={styles.rowLink} href={`/dashboard/${quote.id}`}>
+                      {quote.reference}
+                    </Link>
+                  </td>
+                  <td>{quote.clientName}</td>
+                  <td>
+                    <span className={statusClass(quote.status)}>
+                      {STATUS_LABEL[quote.status]}
+                    </span>
+                  </td>
+                  <td className={styles.numeric}>{formatCents(quote.totalCents)}</td>
+                  <td className={styles.muted}>
+                    {dateFormatter.format(new Date(quote.updatedAt))}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </>
   );
 }

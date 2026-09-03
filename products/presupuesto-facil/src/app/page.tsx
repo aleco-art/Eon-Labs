@@ -31,7 +31,7 @@ export default function Home() {
           <p className={styles.intro}>Entra para crear, compartir y seguir cada presupuesto desde un único lugar.</p>
 
           <LoginForm />
-          <p className={styles.accessNote}>Sólo recibirán el enlace los usuarios dados de alta por Eon Labs.</p>
+          <p className={styles.accessNote}>Demo abierta: entra con cualquier correo y verás los presupuestos de ese correo.</p>
         </div>
 
         <div className={styles.preview} aria-label="Vista previa de un presupuesto">

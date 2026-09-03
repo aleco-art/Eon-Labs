@@ -107,3 +107,33 @@ const euroFormatter = new Intl.NumberFormat("es-ES", {
 export function formatCents(cents: number) {
   return euroFormatter.format(cents / CENTS_PER_EURO);
 }
+
+/**
+ * Reads an amount the way a Spanish keyboard types it. A comma is the decimal
+ * separator, a dot groups thousands, and either may be absent. Returns null
+ * rather than guessing when the text is not a number.
+ */
+export function parseEurosToCents(input: string): number | null {
+  const cleaned = input.replace(/[\s€]/g, "");
+
+  if (cleaned === "") {
+    return null;
+  }
+
+  const hasComma = cleaned.includes(",");
+  const hasDot = cleaned.includes(".");
+
+  let normalised = cleaned;
+
+  if (hasComma && hasDot) {
+    normalised = cleaned.replace(/\./g, "").replace(",", ".");
+  } else if (hasComma) {
+    normalised = cleaned.replace(",", ".");
+  }
+
+  if (!/^-?\d+(\.\d+)?$/.test(normalised)) {
+    return null;
+  }
+
+  return roundHalfUp(Number(normalised) * CENTS_PER_EURO);
+}

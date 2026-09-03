@@ -75,6 +75,28 @@ export const quoteSchema = z.object({
   items: z.array(quoteItemSchema).min(1, "Añade al menos un concepto."),
 });
 
+/**
+ * Demo mode takes the customer by name rather than by id: the professional
+ * types who the quote is for and the database reuses an existing client with
+ * that name or creates one.
+ */
+export const newQuoteSchema = z.object({
+  clientName: z.string().trim().min(1, "El cliente necesita un nombre.").max(160),
+  clientEmail: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .max(254)
+    .refine((value) => value === "" || z.email().safeParse(value).success, {
+      message: "Introduce un correo válido.",
+    })
+    .transform((value) => (value === "" ? null : value))
+    .nullable(),
+  reference: z.string().trim().min(1, "La referencia es obligatoria.").max(40),
+  notes: optionalText(2000),
+  items: z.array(quoteItemSchema).min(1, "Añade al menos un concepto."),
+});
+
 export const quoteResponseSchema = z.object({
   decision: z.enum(["accepted", "rejected"], {
     message: "La respuesta no es válida.",
@@ -84,4 +106,5 @@ export const quoteResponseSchema = z.object({
 
 export type ClientInput = z.infer<typeof clientSchema>;
 export type QuoteInput = z.infer<typeof quoteSchema>;
+export type NewQuoteInput = z.infer<typeof newQuoteSchema>;
 export type QuoteResponseInput = z.infer<typeof quoteResponseSchema>;
