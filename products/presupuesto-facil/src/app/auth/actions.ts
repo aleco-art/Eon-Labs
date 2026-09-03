@@ -1,7 +1,9 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getAppUrl } from "@/lib/env";
+import { DEMO_COOKIE } from "@/lib/demo-access";
 import { createClient } from "@/lib/supabase/server";
 import { loginSchema, type LoginState } from "@/lib/validation/auth";
 
@@ -53,5 +55,11 @@ export async function login(
 export async function logout() {
   const supabase = await createClient();
   await supabase.auth.signOut();
+
+  // Clear the review cookie too, otherwise signing out leaves the internal
+  // area open on the next visit.
+  const store = await cookies();
+  store.delete(DEMO_COOKIE);
+
   redirect("/");
 }

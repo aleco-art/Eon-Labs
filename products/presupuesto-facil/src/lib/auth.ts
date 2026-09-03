@@ -3,6 +3,7 @@ import "server-only";
 import { cache } from "react";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { hasDemoAccess } from "@/lib/demo-access";
 
 export type CurrentUser = {
   id: string;
@@ -12,6 +13,17 @@ export type CurrentUser = {
 };
 
 export const requireUser = cache(async (): Promise<CurrentUser> => {
+  // Reviewing the interface must not depend on email delivery. This carries no
+  // Supabase session, so row level security still returns nothing.
+  if (await hasDemoAccess()) {
+    return {
+      id: "demo",
+      email: "demo@eonlabs.test",
+      fullName: "Acceso de prueba",
+      businessName: "Eon Labs (demo)",
+    };
+  }
+
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getClaims();
   const id = data?.claims?.sub;
