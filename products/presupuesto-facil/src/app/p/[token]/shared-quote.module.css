@@ -1,0 +1,61 @@
+.page { max-width: 760px; margin: 0 auto; padding: 40px 20px 64px; display: grid; gap: 18px; }
+
+.sheet { padding: 34px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+
+.head { display: flex; align-items: start; justify-content: space-between; gap: 20px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+.head span { display: block; color: var(--muted-light); font-size: 10px; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+.head h1 { font-size: 26px; }
+.issuer { text-align: right; }
+.issuer strong { font-size: 15px; }
+
+.recipient { color: var(--muted); font-size: 14px; padding: 20px 0 24px; }
+.recipient strong { color: var(--ink); }
+
+.tableWrap { overflow-x: auto; }
+.items { width: 100%; border-collapse: collapse; font-size: 14px; }
+.items th { padding: 10px 12px; border-bottom: 1px solid var(--line-strong); color: var(--muted); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; text-align: right; white-space: nowrap; }
+.items th:first-child { text-align: left; }
+.items td { padding: 13px 12px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+.items td:first-child { text-align: left; white-space: normal; }
+
+.totals { display: grid; gap: 9px; margin-left: auto; margin-top: 22px; width: min(300px, 100%); }
+.totals > div { display: flex; justify-content: space-between; gap: 20px; font-size: 14px; }
+.totals dt { color: var(--muted); }
+.grandTotal { padding-top: 11px; border-top: 1px solid var(--line-strong); font-size: 19px; font-weight: 800; }
+.grandTotal dt { color: var(--ink); }
+
+.notes { margin-top: 28px; padding: 16px 18px; border-radius: 8px; background: var(--surface-soft); }
+.notes h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 7px; }
+.notes p { font-size: 14px; color: var(--ink-soft); white-space: pre-wrap; }
+
+.validity { margin-top: 26px; color: var(--muted-light); font-size: 12px; }
+
+.response { padding: 26px 30px 30px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); display: grid; }
+.response h2 { font-size: 17px; }
+.responseHint { color: var(--muted); font-size: 13px; margin: 7px 0 18px; }
+
+.decisions { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+.decision, .decisionOn { min-height: 50px; display: flex; align-items: center; justify-content: center; gap: 9px; border: 1px solid var(--line-strong); border-radius: 7px; font-size: 14px; font-weight: 700; cursor: pointer; }
+.decisionOn { border-color: var(--teal); background: var(--mint); color: var(--teal-deep); }
+.decision input, .decisionOn input { position: absolute; opacity: 0; pointer-events: none; }
+
+.commentLabel { margin: 20px 0 7px; font-size: 12px; font-weight: 700; }
+.commentLabel span { color: var(--muted-light); font-weight: 400; }
+.response textarea { width: 100%; padding: 11px 13px; border: 1px solid var(--line-strong); border-radius: 7px; font-size: 14px; resize: vertical; background: var(--surface); color: var(--ink); }
+
+.error { margin-top: 13px; padding: 10px 13px; border: 1px solid var(--danger-line); border-radius: 7px; background: var(--danger-soft); color: var(--danger); font-size: 13px; }
+
+.response button { min-height: 48px; margin-top: 18px; border: 0; border-radius: 7px; background: var(--ink); color: white; font-size: 15px; font-weight: 700; cursor: pointer; }
+.response button:disabled { opacity: .45; cursor: not-allowed; }
+
+.answeredOk, .answeredNo { display: flex; align-items: start; gap: 13px; padding: 18px 22px; border: 1px solid var(--line); border-radius: 10px; background: var(--mint); color: var(--teal-deep); }
+.answeredNo { background: var(--danger-soft); border-color: var(--danger-line); color: var(--danger); }
+.answeredOk strong, .answeredNo strong { font-size: 15px; }
+.answeredOk p, .answeredNo p { margin-top: 5px; font-size: 13px; color: var(--ink-soft); white-space: pre-wrap; }
+
+@media (max-width: 620px) {
+  .sheet { padding: 24px 20px; }
+  .head { flex-direction: column; }
+  .issuer { text-align: left; }
+  .decisions { grid-template-columns: 1fr; }
+}
