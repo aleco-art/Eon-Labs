@@ -1,0 +1,1015 @@
+{
+  "source": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+  "checked_at": "2026-09-14",
+  "municipalities": [
+    {
+      "id": "municipio-0101",
+      "name": "Municipio de Bocas del Toro",
+      "province_code": "01",
+      "district_code": "0101",
+      "email": "municipiodebocas08@hotmail.com",
+      "generic_domain": true,
+      "phone": "757-9940",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0102",
+      "name": "Municipio de Changuinola",
+      "province_code": "01",
+      "district_code": "0102",
+      "email": null,
+      "generic_domain": false,
+      "phone": "758-8561 / 758-8424",
+      "excluded": [
+        {
+          "email": "cs***@hotmail .com",
+          "reason": "formato invalido en la fuente"
+        }
+      ],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0103",
+      "name": "Municipio de Chiriquí Grande",
+      "province_code": "01",
+      "district_code": "0103",
+      "email": "municipiochgrande@gmail.com",
+      "generic_domain": true,
+      "phone": "756-9323/ / 759-9793",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0104",
+      "name": "Municipio de Almirante",
+      "province_code": "01",
+      "district_code": "0104",
+      "email": "alcaldiadealmirante@gmail.com",
+      "generic_domain": true,
+      "phone": null,
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0201",
+      "name": "Municipio de Aguadulce",
+      "province_code": "02",
+      "district_code": "0201",
+      "email": null,
+      "generic_domain": false,
+      "phone": "906-0020 / 906-0023 / 906- 0298 / 906-0299",
+      "excluded": [
+        {
+          "email": "in***@gmail.com",
+          "reason": "buzon de un departamento especifico, no del despacho"
+        }
+      ],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0202",
+      "name": "Municipio de Antón",
+      "province_code": "02",
+      "district_code": "0202",
+      "email": "sgeneral.municipiodeanton@gmail.com",
+      "generic_domain": true,
+      "phone": "906-1129 / 906-1130",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0203",
+      "name": "Municipio de La Pintada",
+      "province_code": "02",
+      "district_code": "0203",
+      "email": "alcaldiamunicipalp@hotmail.com",
+      "generic_domain": true,
+      "phone": "983-0069",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0204",
+      "name": "Municipio de Natá",
+      "province_code": "02",
+      "district_code": "0204",
+      "email": "municipiodenata@hotmail.com",
+      "generic_domain": true,
+      "phone": "906-1214 / 906-1211",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0205",
+      "name": "Municipio de Olá",
+      "province_code": "02",
+      "district_code": "0205",
+      "email": "alcaldiamunicipiodeola@gmail.com",
+      "generic_domain": true,
+      "phone": "987-9923",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0206",
+      "name": "Municipio de Penonomé",
+      "province_code": "02",
+      "district_code": "0206",
+      "email": "municipiodepenonome@gmail.com",
+      "generic_domain": true,
+      "phone": "906-1583 / 906-1586 / 906- 1584 / 906-1587",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0302",
+      "name": "Municipio de Chagres",
+      "province_code": "03",
+      "district_code": "0302",
+      "email": "alcaldiadechagres.ds@gmail.com",
+      "generic_domain": true,
+      "phone": "475-6900",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0303",
+      "name": "Municipio de Donoso",
+      "province_code": "03",
+      "district_code": "0303",
+      "email": "alcaldiadedonoso@gmail.com",
+      "generic_domain": true,
+      "phone": "433-3631",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0304",
+      "name": "Municipio de Portobelo",
+      "province_code": "03",
+      "district_code": "0304",
+      "email": null,
+      "generic_domain": false,
+      "phone": "475-6703/ 04 /05",
+      "excluded": [
+        {
+          "email": "no***",
+          "reason": "formato invalido en la fuente"
+        }
+      ],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0305",
+      "name": "Municipio de Santa Isabel",
+      "province_code": "03",
+      "district_code": "0305",
+      "email": "municipiosantaisabel87@gmail.com",
+      "generic_domain": true,
+      "phone": null,
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0306",
+      "name": "Municipio de Omar Torrijos Herrera",
+      "province_code": "03",
+      "district_code": "0306",
+      "email": "mpio.oth.alcaldia@gmail.com",
+      "generic_domain": true,
+      "phone": null,
+      "excluded": [
+        {
+          "email": "mp***@gmail.com",
+          "reason": "buzon de tesoreria, no de atencion"
+        }
+      ],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0401",
+      "name": "Municipio de Alanje",
+      "province_code": "04",
+      "district_code": "0401",
+      "email": "alcaldiamunicipaldealanje@outlook.com",
+      "generic_domain": true,
+      "phone": "772-7001",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0402",
+      "name": "Municipio de Barú",
+      "province_code": "04",
+      "district_code": "0402",
+      "email": null,
+      "generic_domain": false,
+      "phone": "770-7396 / 770-9098 / 770 7258",
+      "excluded": [
+        {
+          "email": "co***@hotmail.com",
+          "reason": "buzon de compras, no de atencion"
+        }
+      ],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0403",
+      "name": "Municipio de Boquerón",
+      "province_code": "04",
+      "district_code": "0403",
+      "email": "alcaldiadeboqueron@hotmail.com",
+      "generic_domain": true,
+      "phone": "722-4022/7224626",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0404",
+      "name": "Municipio de Boquete",
+      "province_code": "04",
+      "district_code": "0404",
+      "email": "munboq.alcaldia@outlook.com",
+      "generic_domain": true,
+      "phone": "720-1261",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0405",
+      "name": "Municipio de Bugaba",
+      "province_code": "04",
+      "district_code": "0405",
+      "email": "municipiodebugaba2014@gmail.com",
+      "generic_domain": true,
+      "phone": "770-6422 Ext.1",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0406",
+      "name": "Municipio de David",
+      "province_code": "04",
+      "district_code": "0406",
+      "email": "alcaldiadedavid@outlook.com",
+      "generic_domain": true,
+      "phone": "775-1013",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0407",
+      "name": "Municipio de Dolega",
+      "province_code": "04",
+      "district_code": "0407",
+      "email": "alcaldia.municipal.dolega@gmail.com",
+      "generic_domain": true,
+      "phone": "776-0256",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0408",
+      "name": "Municipio de Gualaca",
+      "province_code": "04",
+      "district_code": "0408",
+      "email": "municipiogualaca@hotmail.com",
+      "generic_domain": true,
+      "phone": "772-5032",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0409",
+      "name": "Municipio de Remedios",
+      "province_code": "04",
+      "district_code": "0409",
+      "email": "municipio_remedios@hotmail.com",
+      "generic_domain": true,
+      "phone": "727-0534",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0410",
+      "name": "Municipio de Renacimiento",
+      "province_code": "04",
+      "district_code": "0410",
+      "email": "alcaldiarenacimiento@gmail.com",
+      "generic_domain": true,
+      "phone": "722-8807 Ext 1",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0411",
+      "name": "Municipio de San Félix",
+      "province_code": "04",
+      "district_code": "0411",
+      "email": "municipiosf@hotmail.com",
+      "generic_domain": true,
+      "phone": "728-0847 / 48/ 49",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0412",
+      "name": "Municipio de San Lorenzo",
+      "province_code": "04",
+      "district_code": "0412",
+      "email": "municipiosanlorenzo2016@gmail.com",
+      "generic_domain": true,
+      "phone": "726-5027",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0414",
+      "name": "Municipio de Tierras Altas",
+      "province_code": "04",
+      "district_code": "0414",
+      "email": "mtierrasaltas19@gmail.com",
+      "generic_domain": true,
+      "phone": "728-0665/ 66",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0413",
+      "name": "Municipio de Tolé",
+      "province_code": "04",
+      "district_code": "0413",
+      "email": "municipiodetole@gmail.com",
+      "generic_domain": true,
+      "phone": "726-0028",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0501",
+      "name": "Municipio de Chepigana",
+      "province_code": "05",
+      "district_code": "0501",
+      "email": "tumunicipioc5@gmail.com",
+      "generic_domain": true,
+      "phone": "299-6244 / 299-6243/ 299- 5138 (administración del municipio)299-6404",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0502",
+      "name": "Municipio de Pinogana",
+      "province_code": "05",
+      "district_code": "0502",
+      "email": "municipiodepinogana@gmail.com",
+      "generic_domain": true,
+      "phone": "299-6508 (El Real) 299 5242 / 299 5360 (Metetí)",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0503",
+      "name": "Municipio de Santa Fe",
+      "province_code": "05",
+      "district_code": "0503",
+      "email": "secretariaalcaldia728@gmail.com",
+      "generic_domain": true,
+      "phone": null,
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0601",
+      "name": "Municipio de Chitré",
+      "province_code": "06",
+      "district_code": "0601",
+      "email": "municipiodechitre@gmail.com",
+      "generic_domain": true,
+      "phone": "910-0155 / 996-4497 996- 4397 996-0484",
+      "excluded": [
+        {
+          "email": "jc***@gmail.com",
+          "reason": "parece una cuenta personal (el municipio publica otra direccion)"
+        }
+      ],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0602",
+      "name": "Municipio de Las Minas",
+      "province_code": "06",
+      "district_code": "0602",
+      "email": "municipiodelasminas@gmail.com",
+      "generic_domain": true,
+      "phone": "992-0096",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0603",
+      "name": "Municipio de Los Pozos",
+      "province_code": "06",
+      "district_code": "0603",
+      "email": null,
+      "generic_domain": false,
+      "phone": "992-2050",
+      "excluded": [
+        {
+          "email": "bo***@hotmail.com",
+          "reason": "parece una cuenta personal"
+        }
+      ],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0604",
+      "name": "Municipio de Ocú",
+      "province_code": "06",
+      "district_code": "0604",
+      "email": "municipiodeocu2014@gmail.com",
+      "generic_domain": true,
+      "phone": "974 0224 / 910 5237",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0605",
+      "name": "Municipio de Parita",
+      "province_code": "06",
+      "district_code": "0605",
+      "email": "muniparita2014@hotmail.com",
+      "generic_domain": true,
+      "phone": "974-2102",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0606",
+      "name": "Municipio de Pesé",
+      "province_code": "06",
+      "district_code": "0606",
+      "email": "municipiopese@hotmail.com",
+      "generic_domain": true,
+      "phone": "913-1703",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0607",
+      "name": "Municipio de Santa María",
+      "province_code": "06",
+      "district_code": "0607",
+      "email": "alcaldiasantamaria-06@hotmail.com",
+      "generic_domain": true,
+      "phone": "976-1189",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0701",
+      "name": "Municipio de Guararé",
+      "province_code": "07",
+      "district_code": "0701",
+      "email": "municipiodeguarare@hotmail.com",
+      "generic_domain": true,
+      "phone": "994-5523",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0702",
+      "name": "Municipio de Las Tablas",
+      "province_code": "07",
+      "district_code": "0702",
+      "email": "alcaldia@municipiolastablas.com",
+      "generic_domain": false,
+      "phone": "923-9820 al 25",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0703",
+      "name": "Municipio de Los Santos",
+      "province_code": "07",
+      "district_code": "0703",
+      "email": "alcaldiadelossantos@hotmail.com",
+      "generic_domain": true,
+      "phone": "966-9468 / 966-8211 / 966- 8229 / 966-9421",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0704",
+      "name": "Municipio de Macaracas",
+      "province_code": "07",
+      "district_code": "0704",
+      "email": "municipiodemacaracas@hotmail.com",
+      "generic_domain": true,
+      "phone": "995-4292",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0705",
+      "name": "Municipio de Pedasí",
+      "province_code": "07",
+      "district_code": "0705",
+      "email": "municipiopedasi@gmail.com",
+      "generic_domain": true,
+      "phone": "995-2154 / 995-2875",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0706",
+      "name": "Municipio de Pocrí",
+      "province_code": "07",
+      "district_code": "0706",
+      "email": "alcaldia2014pocri@hotmail.com",
+      "generic_domain": true,
+      "phone": "995-6034 / 995-6048",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0707",
+      "name": "Municipio de Tonosí",
+      "province_code": "07",
+      "district_code": "0707",
+      "email": "tonosi@tonosi.municipios.gob.pa",
+      "generic_domain": false,
+      "phone": "995-8095",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0802",
+      "name": "Municipio de Balboa",
+      "province_code": "08",
+      "district_code": "0802",
+      "email": "municipiodebalboa@hotmail.com",
+      "generic_domain": true,
+      "phone": "298 7063 (Palacio Municipal Balboa)225 2975 (Oficina en Panamá)",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0806",
+      "name": "Municipio de Chimán",
+      "province_code": "08",
+      "district_code": "0806",
+      "email": null,
+      "generic_domain": false,
+      "phone": "250-4087",
+      "excluded": [
+        {
+          "email": "he***@outlook.es",
+          "reason": "parece una cuenta personal"
+        }
+      ],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0805",
+      "name": "Municipio de Chepo",
+      "province_code": "08",
+      "district_code": "0805",
+      "email": "municipiodechepo001@gmail.com",
+      "generic_domain": true,
+      "phone": "519-1251 /519-1606",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0811",
+      "name": "Municipio de Taboga",
+      "province_code": "08",
+      "district_code": "0811",
+      "email": "alcaldia1419@hotmail.com",
+      "generic_domain": true,
+      "phone": "250-2016",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0808",
+      "name": "Municipio de Panamá",
+      "province_code": "08",
+      "district_code": "0808",
+      "email": null,
+      "generic_domain": false,
+      "phone": "506-9801 / 506-9817 / 204 1100/ 506- 9803 Despacho Superior: 596 9802",
+      "excluded": [
+        {
+          "email": "pa***@municipio-pma.gob.pa",
+          "reason": "buzon nominal de una funcionaria; se usan canales institucionales del Municipio de Panama"
+        }
+      ],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0810",
+      "name": "Municipio de San Miguelito",
+      "province_code": "08",
+      "district_code": "0810",
+      "email": "despachosuperioras@gmail.com",
+      "generic_domain": true,
+      "phone": "508-9424/ 9824/ 508-9000",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-1301",
+      "name": "Municipio de Arraiján",
+      "province_code": "13",
+      "district_code": "1301",
+      "email": "despachosuperior@arraijan.municipios.gob.pa",
+      "generic_domain": false,
+      "phone": "344-0352 / 259-8055 / 2897 259-8215",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-1303",
+      "name": "Municipio de Capira",
+      "province_code": "13",
+      "district_code": "1303",
+      "email": "alcaldiacapira0@gmail.com",
+      "generic_domain": true,
+      "phone": "346-0838",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-1304",
+      "name": "Municipio de Chame",
+      "province_code": "13",
+      "district_code": "1304",
+      "email": "alcaldiachame@gmail.com",
+      "generic_domain": true,
+      "phone": "240-6089 / 240-6041",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-1309",
+      "name": "Municipio de San Carlos",
+      "province_code": "13",
+      "district_code": "1309",
+      "email": "alcaldia.sancarlospty@gmail.com",
+      "generic_domain": true,
+      "phone": "346-0642 alcaldia /346-0639 CM",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-1307",
+      "name": "Municipio de La Chorrera",
+      "province_code": "13",
+      "district_code": "1307",
+      "email": "despachomunicipiolch@gmail.com",
+      "generic_domain": true,
+      "phone": "346-0292 alcaldía/ 346-1712 CM",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0901",
+      "name": "Municipio de Atalaya",
+      "province_code": "09",
+      "district_code": "0901",
+      "email": "municipiodeatalaya2019@gmail.com",
+      "generic_domain": true,
+      "phone": "999-0077",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0902",
+      "name": "Municipio de Calobre",
+      "province_code": "09",
+      "district_code": "0902",
+      "email": "alcaldiadecalobre.2015@gmail.com",
+      "generic_domain": true,
+      "phone": "959-9019",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0903",
+      "name": "Municipio de Cañazas",
+      "province_code": "09",
+      "district_code": "0903",
+      "email": null,
+      "generic_domain": false,
+      "phone": "959-8535",
+      "excluded": [
+        {
+          "email": "al***@gmail.com",
+          "reason": "no identifica a la institucion"
+        }
+      ],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0904",
+      "name": "Municipio de La Mesa",
+      "province_code": "09",
+      "district_code": "0904",
+      "email": "municipiodelamesa2019@gmail.com",
+      "generic_domain": true,
+      "phone": "999-6021",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0905",
+      "name": "Municipio de Las Palmas",
+      "province_code": "09",
+      "district_code": "0905",
+      "email": "alcaldiadelaspalmas@gmail.com",
+      "generic_domain": true,
+      "phone": "959-3050",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0912",
+      "name": "Municipio de Mariato",
+      "province_code": "09",
+      "district_code": "0912",
+      "email": "municipiodemariato@gmail.com",
+      "generic_domain": true,
+      "phone": "999-8554",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0906",
+      "name": "Municipio de Montijo",
+      "province_code": "09",
+      "district_code": "0906",
+      "email": "municipiomontijo@gmail.com",
+      "generic_domain": true,
+      "phone": "999-8041 / 999-8144",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0907",
+      "name": "Municipio de Río de Jesús",
+      "province_code": "09",
+      "district_code": "0907",
+      "email": "municipioderiodejesus@gmail.com",
+      "generic_domain": true,
+      "phone": "954-4011 / 954-4240",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0908",
+      "name": "Municipio de San Francisco",
+      "province_code": "09",
+      "district_code": "0908",
+      "email": "alcaldiasanf@gmail.com",
+      "generic_domain": true,
+      "phone": "954-2014 / 933 8077",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0909",
+      "name": "Municipio de Santa Fe",
+      "province_code": "09",
+      "district_code": "0909",
+      "email": "alcaldia.despachosuperior@gmail.com",
+      "generic_domain": true,
+      "phone": "954 0936",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-0911",
+      "name": "Municipio de Soná",
+      "province_code": "09",
+      "district_code": "0911",
+      "email": "alcaldiadesona@gmail.com",
+      "generic_domain": true,
+      "phone": "933-7475",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-1201",
+      "name": "Municipio de Besiko",
+      "province_code": "12",
+      "district_code": "1201",
+      "email": "municipiodebesiko584@gmail.com",
+      "generic_domain": true,
+      "phone": null,
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-1208",
+      "name": "Municipio de Jirondai",
+      "province_code": "12",
+      "district_code": "1208",
+      "email": null,
+      "generic_domain": false,
+      "phone": null,
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-1206",
+      "name": "Municipio de Kankintú",
+      "province_code": "12",
+      "district_code": "1206",
+      "email": null,
+      "generic_domain": false,
+      "phone": null,
+      "excluded": [
+        {
+          "email": "mm***@u@gmyaahilo.coo.mcom",
+          "reason": "formato invalido en la fuente"
+        }
+      ],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-1207",
+      "name": "Municipio de Kusapín",
+      "province_code": "12",
+      "district_code": "1207",
+      "email": "municipiodekusapin@gmail.com",
+      "generic_domain": true,
+      "phone": "997-4231/ 997-6381",
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-1202",
+      "name": "Municipio de Mironó",
+      "province_code": "12",
+      "district_code": "1202",
+      "email": null,
+      "generic_domain": false,
+      "phone": "987-2280 / 987-2171 / 987- 2538 / 987-2401",
+      "excluded": [
+        {
+          "email": "sg***@gmail.com",
+          "reason": "repetido para otro distrito (Antón)"
+        }
+      ],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-1203",
+      "name": "Municipio de Müna",
+      "province_code": "12",
+      "district_code": "1203",
+      "email": "municipio.muna.2019@gmail.com",
+      "generic_domain": true,
+      "phone": null,
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-1204",
+      "name": "Municipio de Nole Duima",
+      "province_code": "12",
+      "district_code": "1204",
+      "email": null,
+      "generic_domain": false,
+      "phone": null,
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-1205",
+      "name": "Municipio de Ñürüm",
+      "province_code": "12",
+      "district_code": "1205",
+      "email": "alcaldiamunicipionurum@gmail.com",
+      "generic_domain": true,
+      "phone": null,
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-1209",
+      "name": "Municipio de Santa Catalina o Calovébora (Bledeshia)",
+      "province_code": "12",
+      "district_code": "1209",
+      "email": "municipiosantacatalina1@gmail.com",
+      "generic_domain": true,
+      "phone": null,
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-1101",
+      "name": "Municipio de Cémaco",
+      "province_code": "11",
+      "district_code": "1101",
+      "email": "municipio.cemaco@gmail.com",
+      "generic_domain": true,
+      "phone": null,
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    },
+    {
+      "id": "municipio-1102",
+      "name": "Municipio de Sambú",
+      "province_code": "11",
+      "district_code": "1102",
+      "email": "municipiosambu@gmail.com",
+      "generic_domain": true,
+      "phone": null,
+      "excluded": [],
+      "source_url": "https://amupa.org.pa/wp-content/uploads/2024/10/Directorio-de-Alcaldes-de-Panama-2024-2029.pdf",
+      "checked_at": "2026-09-14"
+    }
+  ],
+  "skipped": []
+}

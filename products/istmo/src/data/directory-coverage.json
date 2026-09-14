@@ -1,0 +1,136 @@
+{
+  "checked_at": "2026-09-14",
+  "total": 109,
+  "with_email": 93,
+  "official": 30,
+  "other_public": 79,
+  "national_entities": 19,
+  "regional_offices": 8,
+  "municipalities": 79,
+  "districts_total": 83,
+  "districts_with_municipal_email": 68,
+  "districts_without_municipal_email": [
+    "Bocas del Toro / Changuinola",
+    "Bocas del Toro / Comarca Naso Tjër Di",
+    "Coclé / Aguadulce",
+    "Colón / Colón",
+    "Colón / Portobelo",
+    "Chiriquí / Barú",
+    "Herrera / Los Pozos",
+    "Panamá / Chimán",
+    "Veraguas / Cañazas",
+    "Veraguas / Santiago",
+    "Comarca Kuna Yala / Comarca Kuna Yala",
+    "Comarca Ngäbe-Buglé / Mironó",
+    "Comarca Ngäbe-Buglé / Nole Duima",
+    "Comarca Ngäbe-Buglé / Kankintú",
+    "Comarca Ngäbe-Buglé / Jirondai"
+  ],
+  "by_area": {
+    "Gubernamental": 4,
+    "Urbanización": 3,
+    "Eventos": 10,
+    "Turismo": 10,
+    "Cultura": 1,
+    "Gastronomía": 9,
+    "Medioambiente": 3,
+    "Deportes": 1,
+    "Emprendimiento": 3,
+    "Otras": 3
+  },
+  "atp_not_imported": [
+    {
+      "province_code": "04",
+      "reason": "La fuente publica 'Borrero@atp.gob,pa', con formato inválido."
+    },
+    {
+      "province_code": "09",
+      "reason": "La fuente publica '@atp.gob.pa' sin nombre de buzón."
+    }
+  ],
+  "rejected": [
+    {
+      "entity": "MIDA",
+      "reason": "Solo publica 37 buzones nominales de funcionarios en su directorio; ninguno identificado como canal de atención."
+    },
+    {
+      "entity": "AMPYME",
+      "reason": "El único correo publicado es el de transparencia."
+    },
+    {
+      "entity": "Asamblea Nacional (wmaster@)",
+      "reason": "Buzón del administrador web."
+    },
+    {
+      "entity": "ATT T, Promtur, ARAP",
+      "reason": "El dominio probado no resolvió; no se incorporan sin fuente verificable."
+    },
+    {
+      "entity": "MarViva",
+      "reason": "El sitio respondió 403 a solicitudes automatizadas; se respeta la restricción."
+    },
+    {
+      "entity": "Oficina del Casco Antiguo, MOP",
+      "reason": "El sitio no respondió en el tiempo límite."
+    },
+    {
+      "entity": "APATEL",
+      "reason": "El correo hallado ('patel.axay16@live.com') no corresponde a la asociación."
+    },
+    {
+      "entity": "Dirección de Planificación Urbana (MUPA)",
+      "reason": "El correo del directorio anterior no aparece hoy en su sitio."
+    }
+  ],
+  "amupa_excluded": [
+    {
+      "municipality": "Municipio de Changuinola",
+      "reason": "formato invalido en la fuente"
+    },
+    {
+      "municipality": "Municipio de Aguadulce",
+      "reason": "buzon de un departamento especifico, no del despacho"
+    },
+    {
+      "municipality": "Municipio de Portobelo",
+      "reason": "formato invalido en la fuente"
+    },
+    {
+      "municipality": "Municipio de Omar Torrijos Herrera",
+      "reason": "buzon de tesoreria, no de atencion"
+    },
+    {
+      "municipality": "Municipio de Barú",
+      "reason": "buzon de compras, no de atencion"
+    },
+    {
+      "municipality": "Municipio de Chitré",
+      "reason": "parece una cuenta personal (el municipio publica otra direccion)"
+    },
+    {
+      "municipality": "Municipio de Los Pozos",
+      "reason": "parece una cuenta personal"
+    },
+    {
+      "municipality": "Municipio de Chimán",
+      "reason": "parece una cuenta personal"
+    },
+    {
+      "municipality": "Municipio de Panamá",
+      "reason": "buzon nominal de una funcionaria; se usan canales institucionales del Municipio de Panama"
+    },
+    {
+      "municipality": "Municipio de Cañazas",
+      "reason": "no identifica a la institucion"
+    },
+    {
+      "municipality": "Municipio de Kankintú",
+      "reason": "formato invalido en la fuente"
+    },
+    {
+      "municipality": "Municipio de Mironó",
+      "reason": "repetido para otro distrito (Antón)"
+    }
+  ],
+  "territory_aliases": 26
+}

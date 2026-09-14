@@ -1,8 +1,8 @@
 import { timingSafeEqual } from "node:crypto";
 import { after } from "next/server";
 import { adminDb } from "@/lib/supabase/server";
-import { researchStep } from "@/lib/research";
-export const maxDuration = 60;
+import { runResearch } from "@/lib/research";
+export const maxDuration = 300;
 export async function POST(req: Request) {
   const expected = process.env.RESEARCH_WORKER_SECRET;
   const provided =
@@ -29,6 +29,6 @@ export async function POST(req: Request) {
     .order("created_at")
     .limit(1)
     .maybeSingle();
-  if (data) after(() => researchStep(data.id));
+  if (data) after(() => runResearch(data.id));
   return Response.json({ scheduled: Boolean(data) });
 }

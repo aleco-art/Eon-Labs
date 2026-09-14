@@ -1,0 +1,386 @@
+[
+  {
+    "id": "miviot",
+    "name": "Ministerio de Vivienda y Ordenamiento Territorial",
+    "type": "Ministerio",
+    "areas": [
+      "Urbanización"
+    ],
+    "site": "https://www.miviot.gob.pa/",
+    "pages": [
+      "https://www.miviot.gob.pa/ponen-a-disposicion-correo-unico-para-atencion-de-usuarios-del-miviot/",
+      "https://www.miviot.gob.pa/direccion-de-ordenamiento-territorial/"
+    ]
+  },
+  {
+    "id": "mop",
+    "name": "Ministerio de Obras Públicas",
+    "type": "Ministerio",
+    "areas": [
+      "Urbanización"
+    ],
+    "site": "https://www.mop.gob.pa/",
+    "pages": [
+      "http://www.mop.gob.pa/index.php/ministerio/servicios/item/1191-directores-del-ministerio"
+    ]
+  },
+  {
+    "id": "miambiente",
+    "name": "Ministerio de Ambiente",
+    "type": "Ministerio",
+    "areas": [
+      "Medioambiente"
+    ],
+    "site": "https://www.miambiente.gob.pa/",
+    "pages": [
+      "https://miambiente.gob.pa/contactenos/"
+    ]
+  },
+  {
+    "id": "aaud",
+    "name": "Autoridad de Aseo Urbano y Domiciliario",
+    "type": "Entidad nacional",
+    "areas": [
+      "Medioambiente"
+    ],
+    "site": "https://www.aaud.gob.pa/",
+    "pages": [
+      "https://www.aaud.gob.pa/contactenos/",
+      "https://www.aaud.gob.pa/contacto/"
+    ]
+  },
+  {
+    "id": "atp",
+    "name": "Autoridad de Turismo de Panamá",
+    "type": "Entidad nacional",
+    "areas": [
+      "Turismo",
+      "Eventos",
+      "Gastronomía"
+    ],
+    "site": "https://www.atp.gob.pa/",
+    "pages": [
+      "https://www.atp.gob.pa/contacto/",
+      "https://www.atp.gob.pa/contactenos/"
+    ]
+  },
+  {
+    "id": "promtur",
+    "name": "Promtur Panamá",
+    "type": "Entidad de promoción turística",
+    "areas": [
+      "Turismo",
+      "Eventos"
+    ],
+    "site": "https://www.promtur.gob.pa/"
+  },
+  {
+    "id": "micultura",
+    "name": "Ministerio de Cultura",
+    "type": "Ministerio",
+    "areas": [
+      "Cultura",
+      "Eventos"
+    ],
+    "site": "https://micultura.gob.pa/"
+  },
+  {
+    "id": "pandeportes",
+    "name": "Instituto Panameño de Deportes (Pandeportes)",
+    "type": "Entidad nacional",
+    "areas": [
+      "Deportes"
+    ],
+    "site": "https://www.pandeportes.gob.pa/",
+    "pages": [
+      "https://pandeportes.gob.pa/contacto/",
+      "https://pandeportes.gob.pa/contactenos/"
+    ]
+  },
+  {
+    "id": "ampyme",
+    "name": "Autoridad de la Micro, Pequeña y Mediana Empresa (AMPYME)",
+    "type": "Entidad nacional",
+    "areas": [
+      "Emprendimiento",
+      "Gastronomía"
+    ],
+    "site": "https://ampyme.gob.pa/"
+  },
+  {
+    "id": "mici",
+    "name": "Ministerio de Comercio e Industrias",
+    "type": "Ministerio",
+    "areas": [
+      "Emprendimiento"
+    ],
+    "site": "https://mici.gob.pa/"
+  },
+  {
+    "id": "mida",
+    "name": "Ministerio de Desarrollo Agropecuario",
+    "type": "Ministerio",
+    "areas": [
+      "Gastronomía",
+      "Emprendimiento"
+    ],
+    "site": "https://mida.gob.pa/"
+  },
+  {
+    "id": "senacyt",
+    "name": "Secretaría Nacional de Ciencia, Tecnología e Innovación",
+    "type": "Entidad nacional",
+    "areas": [
+      "Emprendimiento"
+    ],
+    "site": "https://www.senacyt.gob.pa/"
+  },
+  {
+    "id": "asamblea",
+    "name": "Asamblea Nacional · Participación Ciudadana",
+    "type": "Órgano Legislativo",
+    "areas": [
+      "Gubernamental"
+    ],
+    "site": "https://www.asamblea.gob.pa/"
+  },
+  {
+    "id": "aig311",
+    "name": "Centro de Atención Ciudadana 311",
+    "type": "Portal oficial",
+    "areas": [
+      "Gubernamental",
+      "Otras"
+    ],
+    "site": "https://311.gob.pa/"
+  },
+  {
+    "id": "descentralizacion",
+    "name": "Autoridad Nacional de Descentralización",
+    "type": "Entidad nacional",
+    "areas": [
+      "Gubernamental"
+    ],
+    "site": "https://descentralizacion.gob.pa/"
+  },
+  {
+    "id": "defensoria",
+    "name": "Defensoría del Pueblo",
+    "type": "Entidad nacional",
+    "areas": [
+      "Gubernamental"
+    ],
+    "site": "https://www.defensoria.gob.pa/"
+  },
+  {
+    "id": "attt",
+    "name": "Autoridad del Tránsito y Transporte Terrestre",
+    "type": "Entidad nacional",
+    "areas": [
+      "Urbanización",
+      "Otras"
+    ],
+    "site": "https://www.attt.gob.pa/"
+  },
+  {
+    "id": "meduca",
+    "name": "Ministerio de Educación",
+    "type": "Ministerio",
+    "areas": [
+      "Otras"
+    ],
+    "site": "https://www.meduca.gob.pa/"
+  },
+  {
+    "id": "minsa",
+    "name": "Ministerio de Salud",
+    "type": "Ministerio",
+    "areas": [
+      "Otras"
+    ],
+    "site": "https://www.minsa.gob.pa/",
+    "pages": [
+      "https://www.minsa.gob.pa/contactenos",
+      "https://www.minsa.gob.pa/contacto"
+    ]
+  },
+  {
+    "id": "mides",
+    "name": "Ministerio de Desarrollo Social",
+    "type": "Ministerio",
+    "areas": [
+      "Otras"
+    ],
+    "site": "https://www.mides.gob.pa/",
+    "pages": [
+      "https://www.mides.gob.pa/contactenos/",
+      "https://www.mides.gob.pa/contacto/"
+    ]
+  },
+  {
+    "id": "cascoantiguo",
+    "name": "Oficina del Casco Antiguo",
+    "type": "Entidad nacional",
+    "areas": [
+      "Cultura",
+      "Turismo",
+      "Urbanización"
+    ],
+    "site": "https://www.cascoantiguo.gob.pa/",
+    "district": "0808"
+  },
+  {
+    "id": "panamaviejo",
+    "name": "Patronato Panamá Viejo",
+    "type": "Patronato",
+    "areas": [
+      "Cultura",
+      "Turismo"
+    ],
+    "site": "https://www.patronatopanamaviejo.org/",
+    "district": "0808"
+  },
+  {
+    "id": "mupa",
+    "name": "Municipio de Panamá",
+    "type": "Municipio",
+    "areas": [
+      "Gubernamental",
+      "Urbanización",
+      "Eventos",
+      "Cultura",
+      "Deportes",
+      "Medioambiente",
+      "Otras"
+    ],
+    "site": "https://mupa.gob.pa/",
+    "district": "0808",
+    "pages": [
+      "https://atencion.mupa.gob.pa/oficinavirtual/",
+      "https://atencion.mupa.gob.pa/departamentos/",
+      "https://cultura.mupa.gob.pa/contactenos-2/",
+      "https://turismo.mupa.gob.pa/contacto/",
+      "https://dpu.mupa.gob.pa/",
+      "https://oficinacomercial.mupa.gob.pa/contacto/",
+      "https://deportes.mupa.gob.pa/contactenos/"
+    ]
+  },
+  {
+    "id": "spia",
+    "name": "Sociedad Panameña de Ingenieros y Arquitectos",
+    "type": "Gremio profesional",
+    "areas": [
+      "Urbanización"
+    ],
+    "site": "https://spia.org.pa/"
+  },
+  {
+    "id": "camara",
+    "name": "Cámara de Comercio, Industrias y Agricultura de Panamá",
+    "type": "Gremio empresarial",
+    "areas": [
+      "Emprendimiento",
+      "Eventos"
+    ],
+    "site": "https://www.panacamara.com/"
+  },
+  {
+    "id": "apede",
+    "name": "Asociación Panameña de Ejecutivos de Empresa (APEDE)",
+    "type": "Gremio empresarial",
+    "areas": [
+      "Emprendimiento"
+    ],
+    "site": "https://apede.org/"
+  },
+  {
+    "id": "camtur",
+    "name": "Cámara de Turismo de Panamá",
+    "type": "Gremio empresarial",
+    "areas": [
+      "Turismo"
+    ],
+    "site": "https://camturpanama.com/",
+    "pages": [
+      "https://camturpanama.com/contacto/"
+    ]
+  },
+  {
+    "id": "apatel",
+    "name": "Asociación Panameña de Hoteles (APATEL)",
+    "type": "Gremio empresarial",
+    "areas": [
+      "Turismo",
+      "Eventos"
+    ],
+    "site": "https://apatel.org/"
+  },
+  {
+    "id": "arap",
+    "name": "Asociación de Restaurantes y Afines de Panamá (ARAP)",
+    "type": "Gremio empresarial",
+    "areas": [
+      "Gastronomía"
+    ],
+    "site": "https://arap.com.pa/"
+  },
+  {
+    "id": "cop",
+    "name": "Comité Olímpico de Panamá",
+    "type": "Organización deportiva",
+    "areas": [
+      "Deportes"
+    ],
+    "site": "https://copanama.com/"
+  },
+  {
+    "id": "ancon",
+    "name": "Asociación Nacional para la Conservación de la Naturaleza (ANCON)",
+    "type": "Organización ambiental",
+    "areas": [
+      "Medioambiente"
+    ],
+    "site": "https://ancon.org/"
+  },
+  {
+    "id": "natura",
+    "name": "Fundación Natura",
+    "type": "Organización ambiental",
+    "areas": [
+      "Medioambiente"
+    ],
+    "site": "https://www.naturapanama.org/"
+  },
+  {
+    "id": "audubon",
+    "name": "Sociedad Audubon de Panamá",
+    "type": "Organización ambiental",
+    "areas": [
+      "Medioambiente",
+      "Turismo"
+    ],
+    "site": "https://www.audubonpanama.org/"
+  },
+  {
+    "id": "marviva",
+    "name": "Fundación MarViva",
+    "type": "Organización ambiental",
+    "areas": [
+      "Medioambiente"
+    ],
+    "site": "https://marviva.net/"
+  },
+  {
+    "id": "ciudaddelsaber",
+    "name": "Fundación Ciudad del Saber",
+    "type": "Fundación",
+    "areas": [
+      "Emprendimiento",
+      "Cultura"
+    ],
+    "site": "https://ciudaddelsaber.org/",
+    "pages": [
+      "https://ciudaddelsaber.org/contacto/"
+    ]
+  }
+]

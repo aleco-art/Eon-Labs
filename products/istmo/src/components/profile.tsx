@@ -1,94 +1,64 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { MapPin } from "lucide-react";
 import { browserDb, configured } from "@/lib/supabase/client";
-import { type Profile, type Proposal } from "@/lib/domain";
+import { proposalSelect, type Profile, type Proposal } from "@/lib/domain";
+import { validateFile } from "@/lib/files";
 import { useSession } from "./shell";
 import { Notice } from "./common";
-import { Feed, ProposalCard, proposalSelect } from "./feed";
-import { validateFile } from "@/lib/files";
-import Image from "next/image";
+import { Avatar, Feed, ProposalCard, useInteractions, useToggle } from "./feed";
+
+type Reshare = { created_at: string; proposals: Proposal | null };
+
 export function ProfilePage({ id }: { id: string }) {
   const { user } = useSession();
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [message, setMessage] = useState("");
+  const [profile, setProfile] = useState<Profile | null | undefined>(undefined);
+  const [reshares, setReshares] = useState<Reshare[]>([]);
   const [editing, setEditing] = useState(false);
-  const [reshares, setReshares] = useState<Proposal[]>([]);
+  const [message, setMessage] = useState<{ text: string; tone: "ok" | "error" } | null>(null);
   const [busy, setBusy] = useState(false);
-  async function load() {
+
+  const load = useCallback(async () => {
     if (!configured) return;
     const db = browserDb();
-    const { data } = await db
-      .from("profiles")
-      .select("*")
-      .eq("id", id)
-      .single();
-    setProfile(data);
-    const { data: r } = await db
-      .from("reshares")
-      .select("proposal_id")
-      .eq("user_id", id);
-    if (r?.length) {
-      const { data: p } = await db
-        .from("proposals")
-        .select(proposalSelect)
-        .in(
-          "id",
-          r.map((x) => x.proposal_id),
-        )
-        .eq("hidden", false);
-      setReshares((p as unknown as Proposal[]) ?? []);
-    }
-  }
+    const [p, r] = await Promise.all([
+      db.from("profiles").select("id,name,bio,location,avatar_path").eq("id", id).maybeSingle(),
+      db.from("reshares").select(`created_at,proposals(${proposalSelect})`).eq("user_id", id).order("created_at", { ascending: false }),
+    ]);
+    setProfile(p.data);
+    setReshares(((r.data as unknown as Reshare[]) ?? []).filter((x) => x.proposals));
+  }, [id]);
+
   useEffect(() => {
-    // The profile and reshares are loaded asynchronously from the database.
+    // Profile data comes from the database.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     void load();
-  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
-  if (!profile)
-    return (
-      <div className="empty-state">
-        <h1>Perfil no disponible.</h1>
-      </div>
-    );
-  const avatar =
-    profile.avatar_path && configured
-      ? browserDb().storage.from("avatars").getPublicUrl(profile.avatar_path)
-          .data.publicUrl
-      : null;
+  }, [load]);
+
+  const [mine, setMine] = useInteractions(reshares.map((r) => r.proposals!.id));
+  const toggle = useToggle(setMine, load);
+
+  if (profile === undefined) return <p className="page loading">Cargando perfil…</p>;
+  if (!profile) return <div className="page narrow"><div className="empty"><h1>Perfil no disponible.</h1></div></div>;
+  const own = user?.id === id;
+
   return (
-    <>
-      <div className="profile-header">
-        {avatar ? (
-          <Image
-            unoptimized
-            width={85}
-            height={85}
-            className="profile-avatar"
-            src={avatar}
-            alt="Avatar del perfil"
-          />
-        ) : (
-          <span className="profile-avatar">{profile.name.slice(0, 1)}</span>
-        )}
+    <div className="page">
+      <div className="profile-head">
+        <Avatar name={profile.name} path={profile.avatar_path} />
         <div>
-          <p className="eyebrow">UNA VOZ DE LA COMUNIDAD</p>
-          <h1>{profile.name}</h1>
-          <p className="muted">{profile.location}</p>
+          <p className="eyebrow" style={{ marginBottom: 4 }}>Perfil público</p>
+          <h1 style={{ margin: 0 }}>{profile.name}</h1>
+          {profile.location && <p className="muted" style={{ margin: "4px 0 0" }}><MapPin size={14} style={{ display: "inline" }} /> {profile.location}</p>}
         </div>
       </div>
-      <p>{profile.bio}</p>
-      {user?.id === id && (
-        <button
-          className="button secondary"
-          onClick={() => setEditing(!editing)}
-        >
-          Editar mi perfil
-        </button>
-      )}
-      <Notice message={message} />
-      {editing && (
+      {profile.bio && <p style={{ maxWidth: 720, whiteSpace: "pre-wrap" }}>{profile.bio}</p>}
+      {own && <button className="button secondary small" onClick={() => setEditing(!editing)}>{editing ? "Cerrar edición" : "Editar mi perfil"}</button>}
+      {message && <Notice message={message.text} tone={message.tone} />}
+      {own && editing && (
         <form
-          className="form-card narrow-page"
+          className="card form-card narrow"
+          style={{ marginLeft: 0 }}
           onSubmit={async (e) => {
             e.preventDefault();
             setBusy(true);
@@ -100,82 +70,42 @@ export function ProfilePage({ id }: { id: string }) {
               if (file instanceof File && file.size) {
                 await validateFile(file, true);
                 path = `${id}/${crypto.randomUUID()}`;
-                const { error } = await db.storage
-                  .from("avatars")
-                  .upload(path, file, { contentType: file.type });
+                const { error } = await db.storage.from("avatars").upload(path, file, { contentType: file.type });
                 if (error) throw new Error("No se pudo guardar el avatar.");
               }
-              const { error } = await db
-                .from("profiles")
-                .update({
-                  name: f.get("name"),
-                  bio: f.get("bio"),
-                  location: f.get("location"),
-                  avatar_path: path,
-                })
-                .eq("id", id);
+              const { error } = await db.from("profiles").update({ name: f.get("name"), bio: f.get("bio"), location: f.get("location"), avatar_path: path }).eq("id", id);
               if (error) throw new Error("No se pudo actualizar el perfil.");
-              if (path !== profile.avatar_path && profile.avatar_path)
-                await db.storage.from("avatars").remove([profile.avatar_path]);
+              if (path !== profile.avatar_path && profile.avatar_path) await db.storage.from("avatars").remove([profile.avatar_path]);
               setEditing(false);
-              setMessage("Perfil actualizado.");
+              setMessage({ text: "Perfil actualizado.", tone: "ok" });
               await load();
-            } catch (e) {
-              setMessage(
-                e instanceof Error ? e.message : "No se pudo guardar.",
-              );
+            } catch (err) {
+              setMessage({ text: err instanceof Error ? err.message : "No se pudo guardar.", tone: "error" });
             } finally {
               setBusy(false);
             }
           }}
         >
-          <label>
-            Nombre público
-            <input
-              name="name"
-              required
-              minLength={2}
-              maxLength={80}
-              defaultValue={profile.name}
-            />
-          </label>
-          <label>
-            Biografía
-            <textarea name="bio" maxLength={500} defaultValue={profile.bio} />
-          </label>
-          <label>
-            Ubicación pública (opcional)
-            <input
-              name="location"
-              maxLength={120}
-              defaultValue={profile.location}
-            />
-          </label>
-          <label>
-            Avatar
-            <input
-              type="file"
-              name="avatar"
-              accept="image/png,image/jpeg,image/webp"
-            />
-            <small>Hasta 2 MB. Será público.</small>
-          </label>
-          <button className="button primary" disabled={busy}>
-            Guardar perfil
-          </button>
+          <label className="field">Nombre público<input name="name" required minLength={2} maxLength={80} defaultValue={profile.name} /></label>
+          <label className="field">Biografía<textarea name="bio" maxLength={500} defaultValue={profile.bio} style={{ minHeight: 90 }} /></label>
+          <label className="field">Ubicación pública (opcional)<input name="location" maxLength={120} defaultValue={profile.location} placeholder="Ej.: David, Chiriquí" /></label>
+          <label className="field">Avatar<input type="file" name="avatar" accept="image/png,image/jpeg,image/webp" /><span className="hint">PNG, JPEG o WebP de hasta 2 MB. Será público.</span></label>
+          <p className="hint">Tu correo nunca se muestra en el perfil.</p>
+          <button className="button primary" disabled={busy}>Guardar perfil</button>
         </form>
       )}
-      <div style={{ marginTop: 35 }}>
-        <Feed authorId={id} />
+      <div style={{ marginTop: 30 }}>
+        <Feed authorId={id} title={own ? "Mis propuestas" : "Propuestas publicadas"} />
       </div>
-      <h2 className="section-title">Ideas que ha republicado</h2>
+      <h2 className="section-title">Republicaciones</h2>
+      <p className="muted" style={{ fontSize: "0.92rem" }}>Propuestas de otras personas que {own ? "has" : "ha"} republicado. Se muestran con su autoría original.</p>
       {reshares.length ? (
-        reshares.map((p) => (
-          <ProposalCard key={p.id} proposal={p} onChange={load} />
-        ))
+        <div className="feed-grid">
+          {reshares.map((r) => <ProposalCard key={r.proposals!.id} proposal={r.proposals!} mine={mine} onToggle={toggle} />)}
+        </div>
       ) : (
         <p className="muted">Todavía no hay republicaciones.</p>
       )}
-    </>
+    </div>
   );
 }

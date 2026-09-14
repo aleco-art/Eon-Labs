@@ -1,74 +1,93 @@
 # Istmo
 
-Plataforma ciudadana para publicar propuestas en Panamá, conversar sobre ellas y localizar destinatarios que podrían impulsarlas. Istmo no aprueba ni ejecuta propuestas y no representa a las entidades sugeridas.
+Plataforma ciudadana para Panamá: cualquier persona publica una propuesta, la comunidad la apoya y el autor la envía, desde la propia web, a los responsables del área (municipios, oficinas regionales, entidades nacionales y organizaciones). Istmo no aprueba propuestas, no garantiza su ejecución y no representa a ninguna entidad. El nombre es provisional (`NEXT_PUBLIC_SITE_NAME`).
 
 ## Funciones
 
-- Cuentas independientes con perfiles públicos y datos privados separados.
-- Propuestas por temática, provincia o comarca, distrito y corregimiento.
-- Adjuntos públicos con validación de tipo, firma de archivo y límites de tamaño.
-- Likes únicos, republicaciones vinculadas al original, comentarios y respuestas.
-- Directorio con fuente y fecha de consulta, búsqueda enfocada y modo ampliado.
-- Revisión de destinatarios, mensaje y adjuntos antes de enviar.
-- Estados de correo diferenciados: pendiente, aceptado, entregado, fallido o incierto.
-- Reportes y moderación de contenido separada del mérito de la propuesta.
+- **Cuentas reales** con Supabase Auth: registro con confirmación por correo, inicio y cierre de sesión, recuperación de contraseña. Perfil público con nombre, avatar, biografía y ubicación opcional. El correo nunca es público.
+- **Propuestas** con título, texto, temática, alcance (todo Panamá o ubicación), provincia/comarca → distrito → corregimiento dependientes, y hasta 5 imágenes o PDF públicos (10 MB, tipo y firma de archivo validados).
+- **Feed** con búsqueda sin tildes, filtros por temática, alcance, territorio y fecha, y orden por fecha o popularidad; paginación en servidor.
+- **Interacciones persistentes**: un apoyo por persona (se puede retirar), comentarios y respuestas, republicaciones enlazadas al original con su autoría, enlace para compartir. Los contadores los calcula la base de datos.
+- **Envío a responsables por área**: sugerencias según temática, jurisdicción y calidad del canal; lista persistente por propuesta; alta manual; revisión de destinatarios, asunto, mensaje, enlace y archivos; consentimiento para usar el correo del autor como respuesta; envío individual desde el remitente verificado de la plataforma; estados reales (aceptado, entregado, rebotado, fallido, por confirmar); límites anti-spam. Los portales sin correo se abren con un texto preparado y **no** cuentan como envío.
+- **Seguimiento sin aprobación**: estados «Publicada» y «Compartida con destinatarios»; novedades y respuestas recibidas aportadas por el autor.
+- **Moderación** separada del mérito: reportes de propuestas, comentarios, archivos y datos del directorio; ocultar/restaurar; registro de acciones.
+- **Fuentes y actualización** (`/fuentes`) con registro de procedencia, cobertura, discrepancias y límites.
 
-## Datos de Panamá
+## Stack
 
-Los selectores se generan desde la capa pública de corregimientos del Instituto Geográfico Nacional Tommy Guardia. La descarga consultada el 14 de septiembre de 2026 contiene 730 polígonos y 699 códigos territoriales únicos, en 83 agrupaciones cartográficas de distrito y 13 provincias o comarcas. Consulta `/fuentes` para la metodología y las limitaciones, incluidas Guna Yala y Naso Tjër Di.
+Next.js 16 (App Router, TypeScript), Tailwind CSS 4 + CSS propio (colores de la bandera, DM Sans), Supabase (PostgreSQL con RLS, Auth, Storage), Resend (correo), Vercel.
 
-Regenerar los datos desde la copia de origen incluida:
+## Desarrollo local
 
-```bash
-node scripts/prepare-territories.mjs
-```
-
-## Desarrollo
-
-Requiere Node.js 20 o posterior, Docker y Supabase CLI para las pruebas locales.
+Requisitos: Node.js 20+, Docker y Python 3 con `pdfplumber` solo si vas a regenerar el directorio municipal.
 
 ```bash
 npm install
-npx supabase start
-npx supabase db reset
-npm run dev
+npx supabase start          # Postgres, Auth, Storage y Mailpit en los puertos 554xx
+npx supabase db reset       # aplica supabase/migrations (esquema, territorios, directorio)
+cp .env.example .env.local  # completa las claves que imprime `npx supabase status`
+npm run dev -- -p 3100
 ```
 
-Copia `.env.example` a `.env.local` y añade los valores del proyecto de Supabase. No confirmes envíos reales durante desarrollo.
+- App: http://localhost:3100 · Buzón de pruebas (Mailpit): http://127.0.0.1:55424
+- Con `EMAIL_PROVIDER=smtp` los correos de propuestas y de autenticación se quedan en Mailpit: nada sale a terceros.
 
-## Base de datos y permisos
+## Base de datos
 
-Las migraciones están en `supabase/migrations`. Todas las tablas con datos de usuarios tienen RLS. El navegador recibe únicamente la clave pública; `SUPABASE_SERVICE_ROLE_KEY` queda en el servidor. La prueba `supabase/tests/security.sql` crea dos identidades temporales, comprueba la visibilidad compartida y bloquea la edición ajena y los likes duplicados.
+`supabase/migrations`:
 
-Ejecutarla contra Supabase local:
+| Archivo | Contenido |
+| --- | --- |
+| `001_istmo.sql` | Perfiles, propuestas, interacciones, adjuntos, reportes, envíos, límites, RLS y buckets |
+| `002_territories.sql` | 699 corregimientos del IGN «Tommy Guardia» con códigos |
+| `003_platform_v2.sql` | Corrección de la política de lectura de adjuntos, búsqueda sin tildes, contadores, límites diarios en la base de datos, directorio `responsables`, listas `proposal_recipients`, moderación de archivos y registro |
+| `004_directory_seed.sql` | Directorio generado (109 responsables) y alias territoriales |
 
-```powershell
-Get-Content supabase/tests/security.sql | docker exec -i supabase_db_istmo-local psql -v ON_ERROR_STOP=1 -U postgres -d postgres
-```
+Todas las tablas tienen RLS. El navegador solo usa la clave pública; `SUPABASE_SERVICE_ROLE_KEY` se usa en rutas del servidor para registrar envíos, moderar y ejecutar investigaciones.
 
-## Investigación de contactos
+## Directorio de responsables
 
-La búsqueda usa primero el directorio y una caché de siete días. Con `TAVILY_API_KEY`, ejecuta consultas por temática y jurisdicción, respeta `robots.txt`, limita la extracción a dominios institucionales revisados y bloquea destinos de red privados. Los resultados no corroborados se identifican en pantalla.
-
-- Estándar: hasta 3 consultas, 6 páginas y 120 segundos acumulados.
-- Ampliada: hasta 6 consultas, 12 páginas y 240 segundos acumulados.
-- Tokens de modelo: 0 en esta versión; el filtrado inicial usa reglas y extracción determinista.
-
-Los avances se guardan en `research_jobs`. Para procesar trabajos interrumpidos puede invocarse `scripts/research-worker.mjs` desde un servicio autorizado. No se programa ningún rastreo periódico por defecto.
-
-## Correo
-
-Configura Resend con un dominio y remitente verificados. La aplicación crea un registro antes del envío, usa claves de idempotencia, limita cada cuenta a cinco correos diarios y evita repetir un destinatario en 24 horas. Configura el webhook en `/api/webhooks/resend` para registrar confirmaciones de entrega y rebotes.
-
-## Variables
-
-Consulta `.env.example`. En producción son obligatorias las variables de Supabase, la URL pública y el secreto interno. Tavily y Resend son opcionales hasta que se habiliten sus funciones. Nunca publiques el archivo con valores reales.
-
-## Comprobaciones
+Fuentes y método documentados en `/fuentes`. Para actualizarlo:
 
 ```bash
-npm run lint
-npm run build
+npm run directory:crawl                               # rastreo cortés de los sitios en scripts/directory/seeds.json
+python scripts/directory/amupa.py <PDF de AMUPA>       # municipios desde el directorio de alcaldes
+# revisar evidencias y editar scripts/directory/curated.json
+npm run directory:build                               # genera 004_directory_seed.sql y src/data/directory-coverage.json
 ```
 
-La entrega se verificó además con dos sesiones locales: ambas vieron la misma propuesta; solo la autora recibió controles de edición; likes, republicaciones y comentarios persistieron tras recargar.
+`crawl-results.json` no se versiona: contiene buzones nominales que no se importan.
+
+## Administración
+
+Nombrar moderador (SQL editor de Supabase):
+
+```sql
+insert into public.moderators (user_id)
+select id from auth.users where email = 'persona@dominio.com';
+```
+
+La sección `/moderacion` solo aparece para moderadores. Los datos del directorio reportados pasan a estado `revisar`.
+
+## Pruebas
+
+```bash
+npm run lint && npm run build
+SUPABASE_ANON_KEY=... SUPABASE_SERVICE_ROLE_KEY=... npm run test:rls   # 48 comprobaciones de permisos
+SUPABASE_ANON_KEY=... SUPABASE_SERVICE_ROLE_KEY=... npm run test:e2e   # flujo completo con dos navegadores
+```
+
+Ambas pruebas se niegan a ejecutarse fuera de `localhost`. `test:e2e` necesita la app en el puerto 3100 con `EMAIL_PROVIDER=smtp` y detiene Mailpit unos segundos para comprobar el registro de un envío fallido.
+
+## Despliegue en Vercel
+
+1. Proyecto con **Root Directory** `products/istmo`.
+2. Aplicar las migraciones al proyecto de Supabase (`npx supabase link --project-ref <ref>` y `npx supabase db push`) **antes** de desplegar código que las necesite.
+3. Variables de entorno (Production y Preview): las de `.env.example` con `EMAIL_PROVIDER=resend`.
+4. Supabase → Authentication → URL Configuration: *Site URL* = URL pública; *Redirect URLs* = `https://<dominio>/auth/callback`.
+5. Supabase → Authentication → SMTP: usar el SMTP de Resend (el correo por defecto de Supabase solo entrega a miembros del equipo). Copiar las plantillas de `supabase/templates`.
+6. Resend: verificar el dominio del remitente y crear un webhook a `https://<dominio>/api/webhooks/resend` con los eventos `email.delivered`, `email.bounced` y `email.failed`.
+
+## Límites de uso
+
+Por cuenta y día: 10 propuestas, 60 comentarios, 300 apoyos, 100 republicaciones, 20 novedades, 20 reportes, 60 destinatarios guardados, 20 correos y 10 investigaciones web. Hasta 10 destinatarios por envío y un envío por destinatario y propuesta cada 30 días. Los apoyos nunca generan correos.

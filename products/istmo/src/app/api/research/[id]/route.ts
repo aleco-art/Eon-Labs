@@ -1,8 +1,8 @@
 import { after } from "next/server";
 import { apiError, checkOrigin, requireUser } from "@/lib/api";
 import { adminDb } from "@/lib/supabase/server";
-import { researchStep } from "@/lib/research";
-export const maxDuration = 60;
+import { runResearch } from "@/lib/research";
+export const maxDuration = 300;
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ id: string }> },
@@ -52,7 +52,7 @@ export async function POST(
         })
         .eq("id", id)
         .eq("status", "running");
-    } else if (data.status === "queued") after(() => researchStep(id));
+    } else if (data.status === "queued") after(() => runResearch(id));
     return Response.json({ ok: true });
   } catch (e) {
     return apiError(e);

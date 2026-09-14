@@ -6,22 +6,27 @@ import { Agent, fetch as safeFetch } from "undici";
 import robotsParser from "robots-parser";
 import * as cheerio from "cheerio";
 import { adminDb } from "./supabase/server";
-import { normalize, type Contact } from "./domain";
-import seedContacts from "@/data/contacts.json";
-import territories from "@/data/territories.json";
+import { normalize } from "./domain";
+
+export type Contact = {
+  id: string;
+  name: string;
+  kind: string;
+  email: string | null;
+  url: string;
+  source_url: string;
+  checked_at: string;
+  reason: string;
+  source_type: string;
+};
 export const budgets = {
   standard: { queries: 3, pages: 6, seconds: 120, tokens: 0 },
   deep: { queries: 6, pages: 12, seconds: 240, tokens: 0 },
 };
 const agentName = "IstmoContactResearch";
-// Only reviewed institutional domains are extracted automatically. Other search hits remain candidates.
-const allowedDomains = [
-  "mupa.gob.pa",
-  "pty.gob.pa",
-  "atp.gob.pa",
-  "mici.gob.pa",
-  "spia.org.pa",
-];
+// Pages are only extracted automatically on Panamanian government domains. Other search hits
+// stay as unverified candidates the author must review.
+const allowedDomains = ["gob.pa"];
 export function isPublicAddress(ip: string) {
   if (isIP(ip) === 6)
     return (
@@ -123,24 +128,6 @@ async function extract(url: string) {
       emails.find((e) => !/(ejemplo|example|nombre|apellido)/i.test(e)) ?? null,
   };
 }
-export function rankContacts(
-  proposal: {
-    category: string;
-    province: string | null;
-    district: string | null;
-  },
-  contacts: Contact[] = seedContacts as Contact[],
-) {
-  return contacts
-    .filter(
-      (c) =>
-        c.categories.includes(proposal.category) &&
-        (!c.district || c.district === proposal.district) &&
-        (!c.province || c.province === proposal.province),
-    )
-    .sort((a, b) => Number(Boolean(b.district)) - Number(Boolean(a.district)))
-    .slice(0, 5);
-}
 type Metrics = {
   queries?: number;
   pages?: number;
@@ -159,7 +146,7 @@ export async function researchStep(id: string) {
     .eq("status", "queued")
     .select("*")
     .maybeSingle();
-  if (!job) return;
+  if (!job) return null;
   const start = Date.now();
   const metrics: Metrics = job.metrics ?? {};
   const queries = metrics.queries ?? 0;
@@ -178,16 +165,13 @@ export async function researchStep(id: string) {
       throw new Error(
         "La búsqueda web requiere configuración. Se muestran los contactos del directorio.",
       );
-    const t = territories.find((t) =>
-      p.district
-        ? t.district_code === p.district
-        : t.province_code === p.province,
-    );
-    const place = p.district
-      ? t?.district
-      : p.province
-        ? t?.province
-        : "Panamá";
+    const { data: t } = await db
+      .from("territories")
+      .select("province,district")
+      .eq(p.district ? "district_code" : "province_code", p.district ?? p.province ?? "")
+      .limit(1)
+      .maybeSingle();
+    const place = p.district ? t?.district : p.province ? t?.province : "Panamá";
     // Cache uses public proposal context, never user identity or private correspondence.
     const key = createHash("sha256")
       .update(
@@ -260,10 +244,7 @@ export async function researchStep(id: string) {
         found.push({
           id: createHash("sha256").update(url).digest("hex").slice(0, 24),
           name: title,
-          kind: "Posible destinatario · revisar",
-          categories: [p.category],
-          province: null,
-          district: null,
+          kind: "Resultado web · revisar",
           email: page?.email ?? null,
           url,
           source_url: url,
@@ -324,4 +305,14 @@ export async function researchStep(id: string) {
     })
     .eq("id", id)
     .eq("status", "running");
+  return status;
+}
+
+/** Runs query steps server-side until the job completes, is cancelled or exhausts its budget. */
+export async function runResearch(id: string) {
+  const started = Date.now();
+  for (let step = 0; step < budgets.deep.queries; step++) {
+    const status = await researchStep(id);
+    if (status !== "queued" || Date.now() - started > 240_000) return;
+  }
 }
