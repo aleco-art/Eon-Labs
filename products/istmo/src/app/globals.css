@@ -92,7 +92,7 @@ small { font-size: 0.8125rem; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 .hero-panel { background: var(--blue); color: var(--white); border-radius: 20px; padding: 30px; position: relative; overflow: hidden; }
 .hero-panel::after { content: ""; position: absolute; right: -40px; top: -40px; width: 150px; height: 150px; border-radius: 50%; background: var(--red); opacity: 0.92; }
-.hero-panel .eyebrow { color: #c9d7f2; }
+.hero-panel .eyebrow { color: #c9d7f2; position: relative; z-index: 1; padding-right: 110px; }
 .hero-panel h2 { font-size: 1.7rem; position: relative; z-index: 1; max-width: 290px; margin-bottom: 20px; }
 .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; position: relative; z-index: 1; }
 .steps li { display: grid; grid-template-columns: 32px 1fr; gap: 12px; align-items: start; }
@@ -264,6 +264,9 @@ table.data th, table.data td { text-align: left; padding: 8px 10px; border-botto
   .feed-grid { grid-template-columns: 1fr; }
   .detail, .document, .form-card, .send-panel { padding: 18px; }
   .hero-panel { padding: 24px; }
+  .hero-panel::after { width: 96px; height: 96px; right: -34px; top: -34px; }
+  .hero-panel .eyebrow { padding-right: 56px; }
+  .hero-panel h2 { padding-right: 32px; }
   .recipient { grid-template-columns: auto minmax(0, 1fr); }
   .recipient > :last-child { grid-column: 2; }
   .actions span.label { display: none; }
