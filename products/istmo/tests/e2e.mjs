@@ -269,16 +269,18 @@ await step("destinatarios y envío", async () => {
   const miviot = panel.locator(".recipient", { hasText: "Ministerio de Vivienda y Ordenamiento Territorial" }).first();
   check("Cada sugerencia muestra fuente, tipo y fecha", (await miviot.getByText("Fuente oficial").isVisible()) && (await miviot.getByText(/Consultado el/).isVisible()) && (await miviot.locator(".source a").getAttribute("href"))?.startsWith("https://www.miviot.gob.pa"));
   check("Sugerencia sin correo lo indica", (await panel.getByText("Sin correo publicado").count()) >= 1);
+  await panel.getByRole("tab", { name: /Buscar en internet/ }).click();
   await panel.getByRole("button", { name: "Buscar en la web" }).click();
   const researchNotice = panel.locator(".web-research .notice");
   await researchNotice.waitFor({ timeout: 10000 });
   const researchText = await researchNotice.innerText();
   check("Búsqueda web disponible y explica si falta configuración", process.env.TAVILY_API_KEY ? true : /TAVILY_API_KEY/.test(researchText), researchText);
+  await panel.getByRole("tab", { name: /Directorio de Istmo/ }).click();
   await miviot.getByRole("button", { name: "Añadir" }).click();
   await miviot.getByRole("button", { name: "En tu lista" }).waitFor();
   const spia = panel.locator(".recipient", { hasText: "Sociedad Panameña de Ingenieros" }).first();
   if (await spia.count()) { await spia.getByRole("button", { name: "Añadir" }).click(); await spia.getByRole("button", { name: "En tu lista" }).waitFor(); }
-  await panel.getByRole("button", { name: "Añadir destinatario manualmente" }).click();
+  await panel.getByRole("tab", { name: /Añadir a mano/ }).click();
   await panel.getByLabel("Organización o persona").fill("Junta Comunal de Calidonia (prueba)");
   await panel.getByLabel("Correo profesional público").fill("junta.prueba@example.test");
   await panel.getByRole("button", { name: "Guardar destinatario" }).click();
@@ -332,7 +334,7 @@ await step("destinatarios y envío", async () => {
 await step("fallo del proveedor", async () => {
   await A.goto(proposalUrl);
   const panel = A.locator(".send-panel");
-  await panel.getByRole("button", { name: "Añadir destinatario manualmente" }).click();
+  await panel.getByRole("tab", { name: /Añadir a mano/ }).click();
   await panel.getByLabel("Organización o persona").fill("Destinatario de fallo");
   await panel.getByLabel("Correo profesional público").fill("fallo.prueba@example.test");
   await panel.getByRole("button", { name: "Guardar destinatario" }).click();

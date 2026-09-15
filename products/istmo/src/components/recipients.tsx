@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Check, Copy, ExternalLink, Globe, Mail, Plus, Search, Send, Trash2 } from "lucide-react";
+import { BookUser, Check, Copy, ExternalLink, Globe, Mail, Plus, Search, Send, Trash2, UserPlus } from "lucide-react";
 import { dateLabel, deliveryLabels, type Proposal } from "@/lib/domain";
 import { Notice } from "./common";
 import { useSession } from "./shell";
@@ -63,14 +63,19 @@ function WebResearch({ proposalId, savedEmails, savedUrls, onAdd }: {
 
   const running = activeJob(job);
   return (
-    <div className="subpanel web-research">
-      <h3 style={{ marginTop: 0, display: "flex", alignItems: "center", gap: 8 }}><Globe size={18} aria-hidden="true" /> Buscar más responsables en la web</h3>
-      <p className="hint" style={{ marginTop: -4 }}>
-        Buscamos organizaciones relacionadas con tu propuesta en internet. Los resultados <b>no están verificados</b>: revisa cada fuente antes de añadirla.
+    <div className="web-research">
+      <p className="tab-intro">
+        Úsalo si en el directorio no está quien buscas. Istmo busca primero en <b>sitios del Estado (.gob.pa)</b> y después en organizaciones, gremios y universidades. Descarta redes sociales y medios de comunicación.
       </p>
-      <button className="button secondary small" disabled={busy || running} onClick={start}>
+      <ul className="how-list">
+        <li>Tarda entre 20 y 60 segundos.</li>
+        <li>Los resultados <b>no están verificados</b>. Abre cada fuente y comprueba que sea el canal correcto antes de añadirla.</li>
+        <li>Si detectamos un correo en la página lo mostramos. Si no, se añade su página de contacto.</li>
+      </ul>
+      <button className="button primary small" disabled={busy || running} onClick={start}>
         <Search size={15} /> {running ? `Buscando… ${job?.progress ?? 0}%` : job ? "Buscar de nuevo" : "Buscar en la web"}
       </button>
+      {running && <div className="bar research-bar" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={job?.progress ?? 0}><span style={{ width: `${Math.max(job?.progress ?? 0, 8)}%` }} /></div>}
       {error && <Notice tone="warn" message={error} />}
       {job && !running && job.error && <Notice tone="warn" message={job.error} />}
       {job && !running && !job.results.length && !job.error && <p className="muted" style={{ marginBottom: 0 }}>No encontramos resultados nuevos. Prueba a añadir un contacto manualmente.</p>}
@@ -87,7 +92,7 @@ function WebResearch({ proposalId, savedEmails, savedUrls, onAdd }: {
                   <p className="reason">{c.reason}</p>
                   {c.email ? <div className="channel">{c.email}</div> : <div className="channel none">Sin correo detectado · se añadirá su página como canal</div>}
                   <div className="source">
-                    <span className="badge public">{c.source_type}</span>
+                    <span className={"badge " + (/^Sitio (oficial|del Estado)/.test(c.source_type) ? "official" : "public")}>{c.source_type}</span>
                     <a href={c.url} target="_blank" rel="noreferrer nofollow">{host}</a>
                   </div>
                 </div>
@@ -130,7 +135,7 @@ export function Recipients({ proposal, files, onShared }: { proposal: Proposal; 
   const [email, setEmail] = useState<EmailState | null>(null);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [message, setMessage] = useState<{ text: string; tone: "ok" | "error" | "warn" | "info" } | null>(null);
-  const [showManual, setShowManual] = useState(false);
+  const [tab, setTab] = useState<"directorio" | "web" | "manual">("directorio");
   const [review, setReview] = useState(false);
   const [subject, setSubject] = useState(`Propuesta ciudadana: ${proposal.title}`.slice(0, 200));
   const [body, setBody] = useState(
@@ -242,95 +247,168 @@ export function Recipients({ proposal, files, onShared }: { proposal: Proposal; 
   return (
     <section className="card send-panel" aria-labelledby="enviar-titulo">
       <p className="eyebrow">Solo tú ves esta sección</p>
-      <h2 id="enviar-titulo">Envía tu propuesta a quien le puede interesar</h2>
-      <p className="muted">
-        Te sugerimos responsables según la temática y la ubicación. Tú eliges a quién escribir; la plataforma envía el correo desde su remitente verificado cuando lo confirmas.
+      <h2 id="enviar-titulo">Envía tu propuesta a quien decide</h2>
+      <p className="muted" style={{ marginBottom: 12 }}>
+        Istmo manda un <b>correo individual</b> a cada destinatario que elijas, desde su remitente verificado. Incluye tu mensaje, el texto completo de la propuesta y su respaldo ciudadano. <b>No se envía nada hasta que lo confirmes.</b>
       </p>
+      <ol className="send-overview" aria-label="Pasos para enviar">
+        <li><span>1</span> Elige destinatarios</li>
+        <li><span>2</span> Marca a quién enviar</li>
+        <li><span>3</span> Revisa y confirma</li>
+      </ol>
 
       {email && !email.configured && <Notice tone="warn" message={`El envío por correo requiere configuración: ${email.reason} Puedes preparar tu lista; no se enviará nada.`} />}
       {email?.configured && email.sandbox && <Notice tone="info" message="Modo de prueba: los correos se entregan a un buzón de pruebas y no llegan a los destinatarios reales." />}
       {message && <Notice message={message.text} tone={message.tone} />}
 
-      <h3 style={{ marginTop: 22 }}>Sugeridos para «{proposal.category}»</h3>
-      {loading ? (
-        <p className="loading">Buscando responsables…</p>
-      ) : suggestions.length ? (
-        <div>
-          {suggestions.map((s) => {
-            const added = savedByResponsable.has(s.id);
-            return (
-              <div className="recipient" key={s.id}>
-                <Mail size={18} color={s.email ? "var(--blue)" : "var(--muted)"} aria-hidden="true" style={{ marginTop: 3 }} />
-                <div>
-                  <h4>{s.name}</h4>
-                  <div className="role">{[s.role_title, s.person_name].filter(Boolean).join(" · ")} <span className="badge level">{s.jurisdiction}</span></div>
-                  <p className="reason">{s.reason}</p>
-                  {s.email ? <div className="channel">{s.email}</div> : <div className="channel none">Sin correo publicado · canal web: <a href={s.contact_url ?? s.source_url} target="_blank" rel="noreferrer">abrir</a></div>}
-                  <div className="source">
-                    <SourceBadge kind={s.source_kind} generic={s.generic_domain} />
-                    <span>Consultado el {dateLabel(s.checked_at)}</span>
-                    <a href={s.source_url} target="_blank" rel="noreferrer">{s.source_title ?? "Ver fuente"}</a>
-                  </div>
-                </div>
-                <button className={"button small " + (added ? "secondary" : "primary")} disabled={added} onClick={() => add({ responsableId: s.id })}>
-                  {added ? <><Check size={15} /> En tu lista</> : <><Plus size={15} /> Añadir</>}
-                </button>
-              </div>
-            );
-          })}
-          <p className="hint">¿No encuentras al responsable adecuado? Añádelo manualmente o consulta el <a className="text-button" href="/responsables" target="_blank">directorio completo</a>.</p>
-        </div>
-      ) : (
-        <Notice tone="warn" message="No hay responsables verificados en el directorio para esta temática y ubicación. Puedes añadir un destinatario manualmente." />
-      )}
-
-      <WebResearch
-        proposalId={proposal.id}
-        savedEmails={new Set(saved.map((s) => s.email?.toLowerCase()).filter((e): e is string => Boolean(e)))}
-        savedUrls={new Set(saved.map((s) => s.contact_url).filter((u): u is string => Boolean(u)))}
-        onAdd={add}
-      />
-
-      <div className="subpanel">
-        <h3>Tu lista de destinatarios ({saved.length})</h3>
-        {!saved.length && <p className="muted" style={{ margin: 0 }}>Añade responsables sugeridos o un contacto manual.</p>}
-        {saved.map((s) => (
-          <div className="recipient" key={s.id}>
-            <input type="checkbox" aria-label={`Seleccionar ${s.name}`} checked={selected.has(s.id)} onChange={(e) => setSelected((cur) => { const n = new Set(cur); if (e.target.checked) n.add(s.id); else n.delete(s.id); return n; })} style={{ marginTop: 5, width: 18, height: 18, accentColor: "var(--blue)" }} />
-            <div>
-              <h4>{s.name}</h4>
-              {s.role_title && <div className="role">{s.role_title}</div>}
-              {s.email ? <div className="channel">{s.email}</div> : <div className="channel none">Sin correo: se envía por su portal</div>}
-              <div className="source"><SourceBadge kind={s.source_kind} />{s.source_url && <a href={s.source_url} target="_blank" rel="noreferrer">Fuente</a>}</div>
-            </div>
-            <button className="text-button danger" aria-label={`Quitar ${s.name}`} onClick={() => remove(s.id)}><Trash2 size={16} /></button>
+      <div className="send-step">
+        <div className="step-head">
+          <span className="step-num" aria-hidden="true">1</span>
+          <div>
+            <h3>Elige a quién enviarla</h3>
+            <p className="hint">Puedes combinar las tres opciones. Todo lo que añadas pasa a tu lista del paso 2.</p>
           </div>
-        ))}
-        <button className="text-button" onClick={() => setShowManual(!showManual)} aria-expanded={showManual}>{showManual ? "Cerrar" : "Añadir destinatario manualmente"}</button>
-        {showManual && (
-          <form
-            style={{ marginTop: 12 }}
-            onSubmit={async (e) => {
-              e.preventDefault();
-              const form = e.currentTarget;
-              const f = new FormData(form);
-              const ok = await add({ manual: { name: f.get("name"), role_title: f.get("role_title"), email: f.get("email"), contact_url: f.get("contact_url") } });
-              if (ok) { form.reset(); setShowManual(false); }
-            }}
-          >
-            <div className="form-grid">
-              <label className="field">Organización o persona<input name="name" required minLength={2} maxLength={160} /></label>
-              <label className="field">Cargo o área (opcional)<input name="role_title" maxLength={160} /></label>
-              <label className="field">Correo profesional público<input name="email" type="email" maxLength={254} /></label>
-              <label className="field">Portal o página de contacto<input name="contact_url" type="url" placeholder="https://" maxLength={500} /></label>
-            </div>
-            <p className="hint">Indica un correo o un enlace HTTPS. Usa solo contactos profesionales publicados; la plataforma no los verifica.</p>
-            <button className="button secondary small">Guardar destinatario</button>
-          </form>
+        </div>
+        <div className="source-tabs" role="tablist" aria-label="Formas de encontrar destinatarios">
+          {([
+            ["directorio", <><BookUser size={16} aria-hidden="true" /> Directorio de Istmo{loading ? "" : ` (${suggestions.length})`}</>],
+            ["web", <><Globe size={16} aria-hidden="true" /> Buscar en internet</>],
+            ["manual", <><UserPlus size={16} aria-hidden="true" /> Añadir a mano</>],
+          ] as const).map(([id, label]) => (
+            <button key={id} type="button" role="tab" id={"tab-" + id} aria-controls={"panel-" + id} aria-selected={tab === id} onClick={() => setTab(id)}>
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {tab === "directorio" && (
+          <div className="tab-panel" role="tabpanel" id="panel-directorio" aria-labelledby="tab-directorio">
+            <p className="tab-intro">
+              <b>Recomendado.</b> Responsables con competencia en la temática y en la ubicación de tu propuesta, revisados por Istmo. Cada uno indica su fuente y cuándo se comprobó.
+            </p>
+            <details className="legend">
+              <summary>¿Qué significan las etiquetas?</summary>
+              <ul>
+                <li><span className="badge official">Fuente oficial</span> El contacto aparece en el sitio de la propia entidad.</li>
+                <li><span className="badge public">Otra fuente pública</span> Viene de un directorio público (por ejemplo, AMUPA); conviene corroborarlo.</li>
+                <li><span className="badge level">Alcance</span> Dónde tiene competencia: tu distrito, tu provincia o todo el país.</li>
+                <li><b className="channel none" style={{ fontSize: "0.85rem" }}>Sin correo publicado</b> La entidad solo atiende por su portal; se abre con un texto listo para copiar.</li>
+              </ul>
+            </details>
+            <h4 className="list-title">Sugeridos para «{proposal.category}»</h4>
+            {loading ? (
+              <p className="loading">Buscando responsables…</p>
+            ) : suggestions.length ? (
+              <div>
+                {suggestions.map((s) => {
+                  const added = savedByResponsable.has(s.id);
+                  return (
+                    <div className="recipient" key={s.id}>
+                      <Mail size={18} color={s.email ? "var(--blue)" : "var(--muted)"} aria-hidden="true" style={{ marginTop: 3 }} />
+                      <div>
+                        <h4>{s.name}</h4>
+                        <div className="role">{[s.role_title, s.person_name].filter(Boolean).join(" · ")} <span className="badge level">{s.jurisdiction}</span></div>
+                        <p className="reason">{s.reason}</p>
+                        {s.email ? <div className="channel">{s.email}</div> : <div className="channel none">Sin correo publicado · canal web: <a href={s.contact_url ?? s.source_url} target="_blank" rel="noreferrer">abrir</a></div>}
+                        <div className="source">
+                          <SourceBadge kind={s.source_kind} generic={s.generic_domain} />
+                          <span>Consultado el {dateLabel(s.checked_at)}</span>
+                          <a href={s.source_url} target="_blank" rel="noreferrer">{s.source_title ?? "Ver fuente"}</a>
+                        </div>
+                      </div>
+                      <button className={"button small " + (added ? "secondary" : "primary")} disabled={added} onClick={() => add({ responsableId: s.id })}>
+                        {added ? <><Check size={15} /> En tu lista</> : <><Plus size={15} /> Añadir</>}
+                      </button>
+                    </div>
+                  );
+                })}
+                <p className="hint">
+                  ¿No está quien buscas? Prueba <button type="button" className="text-button" onClick={() => setTab("web")}>Buscar en internet</button>, <button type="button" className="text-button" onClick={() => setTab("manual")}>añádelo a mano</button> o consulta el <a className="text-button" href="/responsables" target="_blank">directorio completo</a>.
+                </p>
+              </div>
+            ) : (
+              <Notice tone="warn" message="No hay responsables verificados en el directorio para esta temática y ubicación. Prueba «Buscar en internet» o «Añadir a mano»." />
+            )}
+          </div>
+        )}
+
+        {tab === "web" && (
+          <div className="tab-panel" role="tabpanel" id="panel-web" aria-labelledby="tab-web">
+            <WebResearch
+              proposalId={proposal.id}
+              savedEmails={new Set(saved.map((s) => s.email?.toLowerCase()).filter((e): e is string => Boolean(e)))}
+              savedUrls={new Set(saved.map((s) => s.contact_url).filter((u): u is string => Boolean(u)))}
+              onAdd={add}
+            />
+          </div>
+        )}
+
+        {tab === "manual" && (
+          <div className="tab-panel" role="tabpanel" id="panel-manual" aria-labelledby="tab-manual">
+            <p className="tab-intro">
+              ¿Conoces el <b>correo profesional</b> o el portal de contacto de alguien que debería ver tu propuesta? Añádelo aquí. Usa solo contactos publicados por la propia organización: Istmo no los verifica y aparecerán como «Añadido por ti».
+            </p>
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const form = e.currentTarget;
+                const f = new FormData(form);
+                const ok = await add({ manual: { name: f.get("name"), role_title: f.get("role_title"), email: f.get("email"), contact_url: f.get("contact_url") } });
+                if (ok) {
+                  form.reset();
+                  setMessage({ text: "Destinatario añadido a tu lista (paso 2).", tone: "ok" });
+                }
+              }}
+            >
+              <div className="form-grid">
+                <label className="field">Organización o persona<input name="name" required minLength={2} maxLength={160} placeholder="Ej.: Junta Comunal de Bella Vista" /></label>
+                <label className="field">Cargo o área (opcional)<input name="role_title" maxLength={160} placeholder="Ej.: Despacho del representante" /></label>
+                <label className="field">Correo profesional público<input name="email" type="email" maxLength={254} placeholder="nombre@entidad.gob.pa" /></label>
+                <label className="field">Portal o página de contacto<input name="contact_url" type="url" placeholder="https://" maxLength={500} /></label>
+              </div>
+              <p className="hint" style={{ marginTop: -6 }}>Indica al menos un correo o un enlace HTTPS.</p>
+              <button className="button secondary small">Guardar destinatario</button>
+            </form>
+          </div>
         )}
       </div>
 
-      <button className="button accent" disabled={!selected.size} onClick={openReview}><Send size={17} /> Revisar envío ({selected.size})</button>
+      <div className="send-step">
+        <div className="step-head">
+          <span className="step-num" aria-hidden="true">2</span>
+          <div>
+            <h3>Marca a quién enviarla</h3>
+            <p className="hint">Solo se envía a los marcados. Tu lista se guarda y puedes volver cuando quieras.</p>
+          </div>
+        </div>
+        <div className="subpanel recipient-list">
+          <h3>Tu lista de destinatarios ({saved.length})</h3>
+          {!saved.length && <p className="muted" style={{ margin: 0 }}>Todavía está vacía. Añade destinatarios en el paso 1.</p>}
+          {saved.map((s) => (
+            <div className="recipient" key={s.id}>
+              <input type="checkbox" aria-label={`Seleccionar ${s.name}`} checked={selected.has(s.id)} onChange={(e) => setSelected((cur) => { const n = new Set(cur); if (e.target.checked) n.add(s.id); else n.delete(s.id); return n; })} style={{ marginTop: 5, width: 18, height: 18, accentColor: "var(--blue)" }} />
+              <div>
+                <h4>{s.name}</h4>
+                {s.role_title && <div className="role">{s.role_title}</div>}
+                {s.email ? <div className="channel">{s.email}</div> : <div className="channel none">Sin correo: se tramita en su portal</div>}
+                <div className="source"><SourceBadge kind={s.source_kind} />{s.source_url && <a href={s.source_url} target="_blank" rel="noreferrer">Fuente</a>}</div>
+              </div>
+              <button className="text-button danger" aria-label={`Quitar ${s.name}`} onClick={() => remove(s.id)}><Trash2 size={16} /></button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="send-step">
+        <div className="step-head">
+          <span className="step-num" aria-hidden="true">3</span>
+          <div>
+            <h3>Revisa y confirma</h3>
+            <p className="hint">Verás el asunto, tu mensaje y lo que se añade automáticamente antes de confirmar.</p>
+          </div>
+        </div>
+        <button className="button accent" disabled={!selected.size} onClick={openReview}><Send size={17} /> Revisar envío ({selected.size})</button>
+      </div>
 
       {review && selected.size > 0 && (
         <div className="review" id="revision-envio">

@@ -24,9 +24,29 @@ export const budgets = {
   deep: { queries: 6, pages: 12, seconds: 240, tokens: 0 },
 };
 const agentName = "IstmoContactResearch";
-// Pages are only extracted automatically on Panamanian government domains. Other search hits
+// Pages are only extracted automatically on Panamanian institutional domains. Other search hits
 // stay as unverified candidates the author must review.
-const allowedDomains = ["gob.pa"];
+const allowedDomains = ["gob.pa", "org.pa", "edu.pa", "ac.pa"];
+// Social networks, video platforms, news media and encyclopaedias are not channels to a responsable.
+const excludedDomains = [
+  "tiktok.com", "instagram.com", "facebook.com", "fb.com", "youtube.com", "youtu.be", "x.com", "twitter.com",
+  "linkedin.com", "pinterest.com", "threads.net", "reddit.com", "wikipedia.org", "tripadvisor.com",
+  "prensa.com", "tvn-2.com", "telemetro.com", "critica.com.pa", "laestrella.com.pa", "panamaamerica.com.pa",
+  "ensegundos.com.pa", "metrolibre.com", "ecotvpanama.com", "radiopanama.com.pa", "newsroom.com.pa",
+];
+const isExcluded = (host: string) => excludedDomains.some((d) => host === d || host.endsWith("." + d));
+const CATEGORY_HINTS: Record<string, string> = {
+  Gubernamental: "gobierno trámite servicio público",
+  Urbanización: "obras públicas urbanismo transporte espacio público",
+  Eventos: "eventos ferias actividades comunitarias",
+  Turismo: "turismo promoción turística",
+  Cultura: "cultura patrimonio artes",
+  Gastronomía: "gastronomía alimentos productores",
+  Medioambiente: "ambiente conservación residuos",
+  Deportes: "deporte instalaciones deportivas",
+  Emprendimiento: "emprendimiento pymes comercio",
+  Otras: "servicio público atención ciudadana",
+};
 export function isPublicAddress(ip: string) {
   if (isIP(ip) === 6)
     return (
@@ -176,7 +196,7 @@ export async function researchStep(id: string) {
     const key = createHash("sha256")
       .update(
         normalize(
-          [p.title, p.body.slice(0, 500), p.category, place, queries].join("|"),
+          ["v2", p.title, p.body.slice(0, 500), p.category, place, queries].join("|"),
         ),
       )
       .digest("hex");
@@ -191,15 +211,16 @@ export async function researchStep(id: string) {
       found = cache.results;
       metrics.cache_hits = (metrics.cache_hits ?? 0) + 1;
     } else {
-      const focus = [
-        "contacto organización",
-        "directorio profesional contacto",
-        "institución competencia formulario",
-        "asociación empresa contacto",
-        "productor organizador contacto",
-        "portal propuestas contacto",
+      // First look only at government sites, then at institutions and organisations in general.
+      const topic = `${p.title.slice(0, 90)} ${CATEGORY_HINTS[p.category] ?? ""}`;
+      const plan = [
+        { q: `institución pública responsable de ${topic} ${place ?? ""} Panamá contacto`, domains: ["gob.pa"] },
+        { q: `${place ?? ""} Panamá ${topic} municipio ministerio autoridad atención ciudadana`, domains: ["gob.pa"] },
+        { q: `organización asociación fundación Panamá ${topic} contacto`, domains: null },
+        { q: `gremio cámara universidad Panamá ${topic} contacto`, domains: null },
+        { q: `${place ?? ""} Panamá ${topic} junta comunal contacto`, domains: null },
+        { q: `Panamá ${topic} programa oficial contacto correo`, domains: null },
       ][queries];
-      const q = `Panamá ${place ?? ""} ${p.category} ${p.title.slice(0, 100)} ${focus}`;
       const response = await fetch("https://api.tavily.com/search", {
         method: "POST",
         headers: {
@@ -207,11 +228,12 @@ export async function researchStep(id: string) {
           Authorization: `Bearer ${process.env.TAVILY_API_KEY}`,
         },
         body: JSON.stringify({
-          query: q,
+          query: plan.q.replace(/\s+/g, " ").trim(),
           search_depth: "basic",
-          max_results: 3,
+          max_results: 5,
           include_raw_content: false,
           include_answer: false,
+          ...(plan.domains ? { include_domains: plan.domains } : { exclude_domains: excludedDomains }),
         }),
         signal: AbortSignal.timeout(10000),
       });
@@ -221,17 +243,18 @@ export async function researchStep(id: string) {
         );
       const payload = await response.json();
       let extracted = 0;
-      for (const hit of (payload.results ?? []).slice(0, 3)) {
+      for (const hit of (payload.results ?? []).slice(0, 5)) {
         const url = String(hit.url ?? "");
         let u: URL;
         try {
           u = new URL(url);
           if (u.protocol !== "https:" || u.username || u.password) continue;
+          if (isExcluded(u.hostname.replace(/^www\./, ""))) continue;
         } catch {
           continue;
         }
         let page: null | { text: string; email: string | null } = null;
-        if (extracted < 2) {
+        if (extracted < 3) {
           try {
             page = await extract(url);
           } catch {
@@ -241,10 +264,11 @@ export async function researchStep(id: string) {
           metrics.pages = (metrics.pages ?? 0) + 1;
         }
         const title = String(hit.title ?? u.hostname).slice(0, 140);
+        const official = /(^|\.)gob\.pa$/.test(u.hostname);
         found.push({
           id: createHash("sha256").update(url).digest("hex").slice(0, 24),
           name: title,
-          kind: "Resultado web · revisar",
+          kind: official ? "Sitio del Estado · revisar" : "Resultado web · revisar",
           email: page?.email ?? null,
           url,
           source_url: url,
@@ -252,9 +276,9 @@ export async function researchStep(id: string) {
           reason: page
             ? "Página consultada. Revisa la competencia y jurisdicción de la organización antes de enviar."
             : "Resultado de búsqueda pendiente de corroboración. Visita la fuente para comprobar pertinencia y contacto.",
-          source_type: page
-            ? "Página pública consultada"
-            : "Resultado web no verificado",
+          source_type: official
+            ? page?.email ? "Sitio oficial" : "Sitio del Estado · sin correo detectado"
+            : page?.email ? "Sitio de la organización" : "Resultado web no verificado",
         });
       }
       await db
