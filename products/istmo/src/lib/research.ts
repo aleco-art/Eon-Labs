@@ -162,6 +162,8 @@ type Metrics = {
   tokens?: number;
   started_at?: number;
   provider_failures?: number;
+  /** Per query: provider status, hits returned and hosts kept, to tune the search without logs. */
+  steps?: { status: number; fallback: boolean; hits: number; kept: string[]; dropped: string[] }[];
 };
 export async function researchStep(id: string) {
   const db = adminDb();
@@ -247,12 +249,16 @@ export async function researchStep(id: string) {
         });
       // Country boosting is optional: if the provider rejects it, search again without it.
       let response = await search({ topic: "general", country: "panama" });
-      if (response.status === 400) response = await search({});
+      const fallback = response.status === 400;
+      if (fallback) response = await search({});
+      const step = { status: response.status, fallback, hits: 0, kept: [] as string[], dropped: [] as string[] };
+      metrics.steps = [...(metrics.steps ?? []), step];
       if (!response.ok)
         throw new Error(
           "El proveedor de búsqueda no respondió. Los resultados guardados siguen disponibles.",
         );
       const payload = await response.json();
+      step.hits = payload.results?.length ?? 0;
       let extracted = 0;
       for (const hit of (payload.results ?? []).slice(0, 8)) {
         const url = String(hit.url ?? "");
@@ -261,8 +267,11 @@ export async function researchStep(id: string) {
           u = new URL(url);
           if (u.protocol !== "https:" || u.username || u.password) continue;
           const host = u.hostname.replace(/^www\./, "");
-          if (isExcluded(host)) continue;
-          if (!aboutPanama(host, `${hit.title ?? ""} ${hit.content ?? ""}`)) continue;
+          if (isExcluded(host) || !aboutPanama(host, `${hit.title ?? ""} ${hit.content ?? ""}`)) {
+            step.dropped.push(host);
+            continue;
+          }
+          step.kept.push(host);
         } catch {
           continue;
         }
