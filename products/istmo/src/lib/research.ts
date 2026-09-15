@@ -33,8 +33,14 @@ const excludedDomains = [
   "linkedin.com", "pinterest.com", "threads.net", "reddit.com", "wikipedia.org", "tripadvisor.com",
   "prensa.com", "tvn-2.com", "telemetro.com", "critica.com.pa", "laestrella.com.pa", "panamaamerica.com.pa",
   "ensegundos.com.pa", "metrolibre.com", "ecotvpanama.com", "radiopanama.com.pa", "newsroom.com.pa",
+  "eldirectorio.co", "paginasamarillas.com.pa", "moovitapp.com", "balanceeconomico.com", "cylex.com.pa", "infoisinfo.com.pa",
 ];
+const GOV_DOMAINS = ["gob.pa", "mop.gob.pa", "mupa.gob.pa", "municipios.gob.pa", "miviot.gob.pa", "transito.gob.pa", "311.gob.pa", "atp.gob.pa", "miambiente.gob.pa", "micultura.gob.pa", "pandeportes.gob.pa", "minsa.gob.pa", "meduca.gob.pa", "mides.gob.pa", "mef.gob.pa", "idaan.gob.pa", "descentralizacion.gob.pa", "mici.gob.pa", "asamblea.gob.pa", "defensoria.gob.pa"];
 const isExcluded = (host: string) => excludedDomains.some((d) => host === d || host.endsWith("." + d));
+// Results must be about Panama: a .pa domain, or a page that names Panama and is not another country's site.
+const FOREIGN_TLD = /\.(cl|uy|co|mx|ar|pe|es|ec|cr|gt|hn|sv|ni|do|ve|bo|py|br|us|uk)$/;
+const aboutPanama = (host: string, text: string) =>
+  host.endsWith(".pa") || (!FOREIGN_TLD.test(host) && !/\.(gob|gov|gub)\.[a-z]{2}$/.test(host) && /panam[aá]/i.test(text));
 const CATEGORY_HINTS: Record<string, string> = {
   Gubernamental: "gobierno trámite servicio público",
   Urbanización: "obras públicas urbanismo transporte espacio público",
@@ -196,7 +202,7 @@ export async function researchStep(id: string) {
     const key = createHash("sha256")
       .update(
         normalize(
-          ["v2", p.title, p.body.slice(0, 500), p.category, place, queries].join("|"),
+          ["v3", p.title, p.body.slice(0, 500), p.category, place, queries].join("|"),
         ),
       )
       .digest("hex");
@@ -214,42 +220,49 @@ export async function researchStep(id: string) {
       // First look only at government sites, then at institutions and organisations in general.
       const topic = `${p.title.slice(0, 90)} ${CATEGORY_HINTS[p.category] ?? ""}`;
       const plan = [
-        { q: `institución pública responsable de ${topic} ${place ?? ""} Panamá contacto`, domains: ["gob.pa"] },
-        { q: `${place ?? ""} Panamá ${topic} municipio ministerio autoridad atención ciudadana`, domains: ["gob.pa"] },
+        { q: `institución pública responsable de ${topic} ${place ?? ""} Panamá contacto`, domains: GOV_DOMAINS },
+        { q: `${place ?? ""} Panamá ${topic} municipio ministerio autoridad atención ciudadana`, domains: GOV_DOMAINS },
         { q: `organización asociación fundación Panamá ${topic} contacto`, domains: null },
         { q: `gremio cámara universidad Panamá ${topic} contacto`, domains: null },
         { q: `${place ?? ""} Panamá ${topic} junta comunal contacto`, domains: null },
         { q: `Panamá ${topic} programa oficial contacto correo`, domains: null },
       ][queries];
-      const response = await fetch("https://api.tavily.com/search", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.TAVILY_API_KEY}`,
-        },
-        body: JSON.stringify({
-          query: plan.q.replace(/\s+/g, " ").trim(),
-          search_depth: "basic",
-          max_results: 5,
-          include_raw_content: false,
-          include_answer: false,
-          ...(plan.domains ? { include_domains: plan.domains } : { exclude_domains: excludedDomains }),
-        }),
-        signal: AbortSignal.timeout(10000),
-      });
+      const search = (extra: Record<string, unknown>) =>
+        fetch("https://api.tavily.com/search", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.TAVILY_API_KEY}`,
+          },
+          body: JSON.stringify({
+            query: plan.q.replace(/\s+/g, " ").trim(),
+            search_depth: "basic",
+            max_results: 8,
+            include_raw_content: false,
+            include_answer: false,
+            ...(plan.domains ? { include_domains: plan.domains } : { exclude_domains: excludedDomains }),
+            ...extra,
+          }),
+          signal: AbortSignal.timeout(10000),
+        });
+      // Country boosting is optional: if the provider rejects it, search again without it.
+      let response = await search({ topic: "general", country: "panama" });
+      if (response.status === 400) response = await search({});
       if (!response.ok)
         throw new Error(
           "El proveedor de búsqueda no respondió. Los resultados guardados siguen disponibles.",
         );
       const payload = await response.json();
       let extracted = 0;
-      for (const hit of (payload.results ?? []).slice(0, 5)) {
+      for (const hit of (payload.results ?? []).slice(0, 8)) {
         const url = String(hit.url ?? "");
         let u: URL;
         try {
           u = new URL(url);
           if (u.protocol !== "https:" || u.username || u.password) continue;
-          if (isExcluded(u.hostname.replace(/^www\./, ""))) continue;
+          const host = u.hostname.replace(/^www\./, "");
+          if (isExcluded(host)) continue;
+          if (!aboutPanama(host, `${hit.title ?? ""} ${hit.content ?? ""}`)) continue;
         } catch {
           continue;
         }
