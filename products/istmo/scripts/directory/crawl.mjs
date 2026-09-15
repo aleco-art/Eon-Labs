@@ -5,7 +5,7 @@ import fs from "node:fs/promises";
 import robotsParser from "robots-parser";
 import * as cheerio from "cheerio";
 
-const UA = "IstmoDirectoryBot/1.0 (+https://istmo-panama.vercel.app/fuentes)";
+const UA = "IstmoDirectoryBot/1.0 (+https://istmoapp.digital/fuentes)";
 const seeds = JSON.parse(await fs.readFile(new URL("./seeds.json", import.meta.url), "utf8"));
 const only = process.argv[2] ? new Set(process.argv[2].split(",")) : null;
 const today = new Date().toISOString().slice(0, 10);

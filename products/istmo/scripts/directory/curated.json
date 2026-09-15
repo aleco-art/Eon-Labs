@@ -1,55 +1,888 @@
 {
   "_about": "Reviewed entries. Every email was read on the source page on checked_at (see crawl-results.json or the cited PDF). Entries without a published institutional email keep only their official contact page.",
   "national": [
-    { "id": "aig-311", "name": "Centro de Atención Ciudadana 311", "entity_type": "Portal oficial del Estado", "role_title": "Atención ciudadana (AIG)", "areas": ["Gubernamental", "Otras"], "email": "info@311.gob.pa", "contact_url": "https://311.gob.pa/", "competence": "Canal único del Estado para presentar quejas, solicitudes, ideas y sugerencias dirigidas a cualquier institución pública.", "source_url": "https://311.gob.pa/contactenos/", "source_title": "311 · Contáctenos", "source_kind": "oficial" },
-    { "id": "asamblea-participacion", "name": "Asamblea Nacional", "entity_type": "Órgano Legislativo", "role_title": "Dirección de Promoción para la Participación Ciudadana", "areas": ["Gubernamental"], "email": "pciudadana@asamblea.gob.pa", "contact_url": "https://www.asamblea.gob.pa/", "phone": "512-8159 / 512-8053", "competence": "Recibe propuestas ciudadanas de ley. Para tramitarlas formalmente exige escrito firmado, exposición de motivos, articulado y copia de cédula.", "source_url": "https://www.asamblea.gob.pa/Uploads/Transparencia/Articulos/Terciario/272/articulo_ID272.pdf", "source_title": "Guía para presentar una propuesta ciudadana (act. 16-abr-2026)", "source_kind": "oficial" },
-    { "id": "descentralizacion", "name": "Autoridad Nacional de Descentralización", "entity_type": "Entidad nacional", "role_title": "Atención ciudadana", "areas": ["Gubernamental", "Urbanización"], "email": "atencion.ciudadana@descentralizacion.gob.pa", "contact_url": "https://descentralizacion.gob.pa/", "competence": "Coordina la descentralización y el apoyo a municipios y juntas comunales, incluidos proyectos de inversión local.", "source_url": "https://descentralizacion.gob.pa/", "source_title": "Autoridad Nacional de Descentralización · Inicio", "source_kind": "oficial" },
-    { "id": "defensoria", "name": "Defensoría del Pueblo", "entity_type": "Entidad nacional", "role_title": "Secretaría", "areas": ["Gubernamental"], "email": "secretaria@defensoria.gob.pa", "contact_url": "https://www.defensoria.gob.pa/", "competence": "Vela por los derechos de las personas frente a la administración pública.", "source_url": "https://www.defensoria.gob.pa/", "source_title": "Defensoría del Pueblo · Inicio", "source_kind": "oficial" },
-    { "id": "miviot-ordenamiento", "name": "Ministerio de Vivienda y Ordenamiento Territorial", "entity_type": "Ministerio", "role_title": "Dirección de Ordenamiento Territorial", "areas": ["Urbanización"], "email": "oterritorial@miviot.gob.pa", "contact_url": "https://www.miviot.gob.pa/direccion-de-ordenamiento-territorial/", "competence": "Planes de ordenamiento territorial, usos de suelo y normas urbanas de alcance nacional.", "source_url": "https://www.miviot.gob.pa/direccion-de-ordenamiento-territorial/", "source_title": "MIVIOT · Dirección de Ordenamiento Territorial", "source_kind": "oficial" },
-    { "id": "atp-inversiones", "name": "Autoridad de Turismo de Panamá", "entity_type": "Entidad nacional", "role_title": "Dirección de Inversiones Turísticas", "areas": ["Turismo", "Eventos", "Gastronomía"], "email": "inversiones@atp.gob.pa", "contact_url": "https://www.atp.gob.pa/", "competence": "Desarrollo y promoción de la actividad turística nacional, incluidos proyectos e inversiones del sector.", "source_url": "https://www.atp.gob.pa/", "source_title": "ATP · Inicio", "source_kind": "oficial" },
-    { "id": "micultura", "name": "Ministerio de Cultura", "entity_type": "Ministerio", "role_title": "Información general", "areas": ["Cultura", "Eventos"], "email": "info@micultura.gob.pa", "contact_url": "https://micultura.gob.pa/", "competence": "Políticas culturales, patrimonio, artes y fomento de actividades culturales.", "source_url": "https://micultura.gob.pa/", "source_title": "Ministerio de Cultura · Inicio", "source_kind": "oficial" },
-    { "id": "mici", "name": "Ministerio de Comercio e Industrias", "entity_type": "Ministerio", "role_title": "Contacto institucional", "areas": ["Emprendimiento"], "email": "contactenos@mici.gob.pa", "contact_url": "https://mici.gob.pa/contacto/", "competence": "Comercio, industria, inversión y apoyo a la actividad empresarial.", "source_url": "https://mici.gob.pa/", "source_title": "MICI · Inicio", "source_kind": "oficial" },
-    { "id": "senacyt", "name": "Secretaría Nacional de Ciencia, Tecnología e Innovación", "entity_type": "Entidad nacional", "role_title": "Información general", "areas": ["Emprendimiento", "Otras"], "email": "info@senacyt.gob.pa", "contact_url": "https://www.senacyt.gob.pa/", "competence": "Fomento de ciencia, tecnología, innovación y emprendimiento innovador.", "source_url": "https://www.senacyt.gob.pa/", "source_title": "SENACYT · Inicio", "source_kind": "oficial" },
-    { "id": "meduca", "name": "Ministerio de Educación", "entity_type": "Ministerio", "role_title": "Información general", "areas": ["Otras"], "email": "info@meduca.gob.pa", "contact_url": "https://www.meduca.gob.pa/", "competence": "Sistema educativo público: escuelas, programas y políticas educativas.", "source_url": "https://www.meduca.gob.pa/", "source_title": "MEDUCA · Inicio", "source_kind": "oficial" },
-    { "id": "miambiente", "name": "Ministerio de Ambiente", "entity_type": "Ministerio", "role_title": "Contacto institucional", "areas": ["Medioambiente"], "email": null, "contact_url": "https://miambiente.gob.pa/contactenos/", "competence": "Gestión ambiental, áreas protegidas, evaluación de impacto ambiental y cambio climático.", "source_url": "https://miambiente.gob.pa/contactenos/", "source_title": "MiAmbiente · Contáctenos", "source_kind": "oficial", "notes": "La página de contacto no publica un correo general." },
-    { "id": "pandeportes", "name": "Instituto Panameño de Deportes (Pandeportes)", "entity_type": "Entidad nacional", "role_title": "Contacto institucional", "areas": ["Deportes"], "email": null, "contact_url": "https://pandeportes.gob.pa/contactenos/", "competence": "Fomento del deporte, instalaciones deportivas y programas comunitarios.", "source_url": "https://pandeportes.gob.pa/contactenos/", "source_title": "Pandeportes · Contáctenos", "source_kind": "oficial", "notes": "La página de contacto no publica un correo general." },
-    { "id": "mupa-comercial", "name": "Municipio de Panamá", "entity_type": "Municipio", "role_title": "Oficina Comercial", "areas": ["Eventos", "Emprendimiento"], "level": "distrital", "province_code": "08", "district_code": "0808", "email": "oficina.comercial@pty.gob.pa", "contact_url": "https://oficinacomercial.mupa.gob.pa/contacto/", "competence": "Alianzas, eventos y proyectos comerciales con la Alcaldía de Panamá.", "source_url": "https://oficinacomercial.mupa.gob.pa/contacto/", "source_title": "Alcaldía de Panamá · Oficina Comercial", "source_kind": "oficial" },
-    { "id": "mupa-correspondencia", "name": "Municipio de Panamá", "entity_type": "Municipio", "role_title": "Oficina de Correspondencia Virtual", "areas": ["Gubernamental", "Urbanización", "Cultura", "Deportes", "Medioambiente", "Otras"], "level": "distrital", "province_code": "08", "district_code": "0808", "email": null, "contact_url": "https://atencion.mupa.gob.pa/oficinavirtual/", "competence": "Recibe correspondencia, sugerencias y solicitudes dirigidas a la Alcaldía de Panamá.", "source_url": "https://atencion.mupa.gob.pa/oficinavirtual/", "source_title": "Alcaldía de Panamá · Oficina de Correspondencia Virtual", "source_kind": "oficial", "notes": "La página muestra un correo truncado; no se completa por inferencia." },
-    { "id": "panama-viejo", "name": "Patronato Panamá Viejo", "entity_type": "Patronato", "role_title": "Información general", "areas": ["Cultura", "Turismo"], "level": "distrital", "province_code": "08", "district_code": "0808", "email": "info@panamaviejo.org", "contact_url": "https://www.patronatopanamaviejo.org/", "competence": "Conservación y gestión del conjunto monumental de Panamá Viejo.", "source_url": "https://www.patronatopanamaviejo.org/", "source_title": "Patronato Panamá Viejo · Inicio", "source_kind": "oficial" },
-    { "id": "spia", "name": "Sociedad Panameña de Ingenieros y Arquitectos", "entity_type": "Gremio profesional", "role_title": "Secretaría", "areas": ["Urbanización"], "email": "spia@spia.org.pa", "contact_url": "https://spia.org.pa/contactenos/", "competence": "Gremio de ingeniería y arquitectura; puede orientar hacia profesionales. No ejecuta propuestas.", "source_url": "https://spia.org.pa/", "source_title": "SPIA · Inicio", "source_kind": "oficial" },
-    { "id": "apede", "name": "Asociación Panameña de Ejecutivos de Empresa (APEDE)", "entity_type": "Gremio empresarial", "role_title": "Información general", "areas": ["Emprendimiento"], "email": "info@apede.org", "contact_url": "https://apede.org/pag/contacto", "competence": "Gremio empresarial con programas de desarrollo empresarial y opinión sobre políticas públicas.", "source_url": "https://apede.org/", "source_title": "APEDE · Inicio", "source_kind": "oficial" },
-    { "id": "camara-comercio", "name": "Cámara de Comercio, Industrias y Agricultura de Panamá", "entity_type": "Gremio empresarial", "role_title": "Contacto", "areas": ["Emprendimiento", "Eventos"], "email": null, "contact_url": "https://www.panacamara.com/contactenos/", "competence": "Gremio empresarial; organiza ferias y eventos de negocios.", "source_url": "https://www.panacamara.com/contactenos/", "source_title": "Cámara de Comercio · Contáctenos", "source_kind": "oficial", "notes": "Solo formulario web." },
-    { "id": "cop", "name": "Comité Olímpico de Panamá", "entity_type": "Organización deportiva", "role_title": "Información general", "areas": ["Deportes"], "email": "info@copanama.com", "contact_url": "https://copanama.com/contacto/", "competence": "Organización del movimiento olímpico y federaciones deportivas.", "source_url": "https://copanama.com/contacto/", "source_title": "COP · Contacto", "source_kind": "oficial" },
-    { "id": "ancon", "name": "Asociación Nacional para la Conservación de la Naturaleza (ANCON)", "entity_type": "Organización ambiental", "role_title": "Información general", "areas": ["Medioambiente"], "email": "ancon@ancon.org", "contact_url": "https://ancon.org/", "competence": "Conservación de ecosistemas y áreas naturales en Panamá.", "source_url": "https://ancon.org/", "source_title": "ANCON · Inicio", "source_kind": "oficial" },
-    { "id": "natura", "name": "Fundación Natura", "entity_type": "Organización ambiental", "role_title": "Información general", "areas": ["Medioambiente"], "email": "info@naturapanama.org", "contact_url": "https://naturapanama.org/", "competence": "Financiamiento y apoyo a proyectos ambientales y comunitarios.", "source_url": "https://naturapanama.org/", "source_title": "Fundación Natura · Inicio", "source_kind": "oficial" },
-    { "id": "audubon", "name": "Sociedad Audubon de Panamá", "entity_type": "Organización ambiental", "role_title": "Información general", "areas": ["Medioambiente", "Turismo"], "email": "info@audubonpanama.org", "contact_url": "https://www.audubonpanama.org/", "competence": "Conservación de aves y hábitats; aviturismo y educación ambiental.", "source_url": "https://www.audubonpanama.org/", "source_title": "Sociedad Audubon de Panamá · Inicio", "source_kind": "oficial" }
+    {
+      "id": "aig-311",
+      "name": "Centro de Atención Ciudadana 311",
+      "entity_type": "Portal oficial del Estado",
+      "role_title": "Atención ciudadana (AIG)",
+      "areas": [
+        "Gubernamental",
+        "Otras"
+      ],
+      "email": "info@311.gob.pa",
+      "contact_url": "https://311.gob.pa/",
+      "competence": "Canal único del Estado para presentar quejas, solicitudes, ideas y sugerencias dirigidas a cualquier institución pública.",
+      "source_url": "https://311.gob.pa/contactenos/",
+      "source_title": "311 · Contáctenos",
+      "source_kind": "oficial"
+    },
+    {
+      "id": "asamblea-participacion",
+      "name": "Asamblea Nacional",
+      "entity_type": "Órgano Legislativo",
+      "role_title": "Dirección de Promoción para la Participación Ciudadana",
+      "areas": [
+        "Gubernamental"
+      ],
+      "email": "pciudadana@asamblea.gob.pa",
+      "contact_url": "https://www.asamblea.gob.pa/",
+      "phone": "512-8159 / 512-8053",
+      "competence": "Recibe propuestas ciudadanas de ley. Para tramitarlas formalmente exige escrito firmado, exposición de motivos, articulado y copia de cédula.",
+      "source_url": "https://www.asamblea.gob.pa/Uploads/Transparencia/Articulos/Terciario/272/articulo_ID272.pdf",
+      "source_title": "Guía para presentar una propuesta ciudadana (act. 16-abr-2026)",
+      "source_kind": "oficial"
+    },
+    {
+      "id": "descentralizacion",
+      "name": "Autoridad Nacional de Descentralización",
+      "entity_type": "Entidad nacional",
+      "role_title": "Atención ciudadana",
+      "areas": [
+        "Gubernamental",
+        "Urbanización"
+      ],
+      "email": "atencion.ciudadana@descentralizacion.gob.pa",
+      "contact_url": "https://descentralizacion.gob.pa/",
+      "competence": "Coordina la descentralización y el apoyo a municipios y juntas comunales, incluidos proyectos de inversión local.",
+      "source_url": "https://descentralizacion.gob.pa/",
+      "source_title": "Autoridad Nacional de Descentralización · Inicio",
+      "source_kind": "oficial"
+    },
+    {
+      "id": "defensoria",
+      "name": "Defensoría del Pueblo",
+      "entity_type": "Entidad nacional",
+      "role_title": "Secretaría",
+      "areas": [
+        "Gubernamental"
+      ],
+      "email": "secretaria@defensoria.gob.pa",
+      "contact_url": "https://www.defensoria.gob.pa/",
+      "competence": "Vela por los derechos de las personas frente a la administración pública.",
+      "source_url": "https://www.defensoria.gob.pa/",
+      "source_title": "Defensoría del Pueblo · Inicio",
+      "source_kind": "oficial"
+    },
+    {
+      "id": "miviot-ordenamiento",
+      "name": "Ministerio de Vivienda y Ordenamiento Territorial",
+      "entity_type": "Ministerio",
+      "role_title": "Dirección de Ordenamiento Territorial",
+      "areas": [
+        "Urbanización"
+      ],
+      "email": "oterritorial@miviot.gob.pa",
+      "contact_url": "https://www.miviot.gob.pa/direccion-de-ordenamiento-territorial/",
+      "competence": "Planes de ordenamiento territorial, usos de suelo y normas urbanas de alcance nacional.",
+      "source_url": "https://www.miviot.gob.pa/direccion-de-ordenamiento-territorial/",
+      "source_title": "MIVIOT · Dirección de Ordenamiento Territorial",
+      "source_kind": "oficial"
+    },
+    {
+      "id": "atp-inversiones",
+      "name": "Autoridad de Turismo de Panamá",
+      "entity_type": "Entidad nacional",
+      "role_title": "Dirección de Inversiones Turísticas",
+      "areas": [
+        "Turismo",
+        "Eventos",
+        "Gastronomía"
+      ],
+      "email": "inversiones@atp.gob.pa",
+      "contact_url": "https://www.atp.gob.pa/",
+      "competence": "Desarrollo y promoción de la actividad turística nacional, incluidos proyectos e inversiones del sector.",
+      "source_url": "https://www.atp.gob.pa/",
+      "source_title": "ATP · Inicio",
+      "source_kind": "oficial"
+    },
+    {
+      "id": "micultura",
+      "name": "Ministerio de Cultura",
+      "entity_type": "Ministerio",
+      "role_title": "Información general",
+      "areas": [
+        "Cultura",
+        "Eventos"
+      ],
+      "email": "info@micultura.gob.pa",
+      "contact_url": "https://micultura.gob.pa/",
+      "competence": "Políticas culturales, patrimonio, artes y fomento de actividades culturales.",
+      "source_url": "https://micultura.gob.pa/",
+      "source_title": "Ministerio de Cultura · Inicio",
+      "source_kind": "oficial"
+    },
+    {
+      "id": "mici",
+      "name": "Ministerio de Comercio e Industrias",
+      "entity_type": "Ministerio",
+      "role_title": "Contacto institucional",
+      "areas": [
+        "Emprendimiento"
+      ],
+      "email": "contactenos@mici.gob.pa",
+      "contact_url": "https://mici.gob.pa/contacto/",
+      "competence": "Comercio, industria, inversión y apoyo a la actividad empresarial.",
+      "source_url": "https://mici.gob.pa/",
+      "source_title": "MICI · Inicio",
+      "source_kind": "oficial"
+    },
+    {
+      "id": "senacyt",
+      "name": "Secretaría Nacional de Ciencia, Tecnología e Innovación",
+      "entity_type": "Entidad nacional",
+      "role_title": "Información general",
+      "areas": [
+        "Emprendimiento",
+        "Otras"
+      ],
+      "email": "info@senacyt.gob.pa",
+      "contact_url": "https://www.senacyt.gob.pa/",
+      "competence": "Fomento de ciencia, tecnología, innovación y emprendimiento innovador.",
+      "source_url": "https://www.senacyt.gob.pa/",
+      "source_title": "SENACYT · Inicio",
+      "source_kind": "oficial"
+    },
+    {
+      "id": "meduca",
+      "name": "Ministerio de Educación",
+      "entity_type": "Ministerio",
+      "role_title": "Información general",
+      "areas": [
+        "Otras"
+      ],
+      "email": "info@meduca.gob.pa",
+      "contact_url": "https://www.meduca.gob.pa/",
+      "competence": "Sistema educativo público: escuelas, programas y políticas educativas.",
+      "source_url": "https://www.meduca.gob.pa/",
+      "source_title": "MEDUCA · Inicio",
+      "source_kind": "oficial"
+    },
+    {
+      "id": "miambiente",
+      "name": "Ministerio de Ambiente",
+      "entity_type": "Ministerio",
+      "role_title": "Contacto institucional",
+      "areas": [
+        "Medioambiente"
+      ],
+      "email": null,
+      "contact_url": "https://miambiente.gob.pa/contactenos/",
+      "competence": "Gestión ambiental, áreas protegidas, evaluación de impacto ambiental y cambio climático.",
+      "source_url": "https://miambiente.gob.pa/contactenos/",
+      "source_title": "MiAmbiente · Contáctenos",
+      "source_kind": "oficial",
+      "notes": "La página de contacto no publica un correo general."
+    },
+    {
+      "id": "pandeportes",
+      "name": "Instituto Panameño de Deportes (Pandeportes)",
+      "entity_type": "Entidad nacional",
+      "role_title": "Contacto institucional",
+      "areas": [
+        "Deportes"
+      ],
+      "email": null,
+      "contact_url": "https://pandeportes.gob.pa/contactenos/",
+      "competence": "Fomento del deporte, instalaciones deportivas y programas comunitarios.",
+      "source_url": "https://pandeportes.gob.pa/contactenos/",
+      "source_title": "Pandeportes · Contáctenos",
+      "source_kind": "oficial",
+      "notes": "La página de contacto no publica un correo general."
+    },
+    {
+      "id": "mupa-comercial",
+      "name": "Municipio de Panamá",
+      "entity_type": "Municipio",
+      "role_title": "Oficina Comercial",
+      "areas": [
+        "Eventos",
+        "Emprendimiento"
+      ],
+      "level": "distrital",
+      "province_code": "08",
+      "district_code": "0808",
+      "email": "oficina.comercial@pty.gob.pa",
+      "contact_url": "https://oficinacomercial.mupa.gob.pa/contacto/",
+      "competence": "Alianzas, eventos y proyectos comerciales con la Alcaldía de Panamá.",
+      "source_url": "https://oficinacomercial.mupa.gob.pa/contacto/",
+      "source_title": "Alcaldía de Panamá · Oficina Comercial",
+      "source_kind": "oficial"
+    },
+    {
+      "id": "mupa-correspondencia",
+      "name": "Municipio de Panamá",
+      "entity_type": "Municipio",
+      "role_title": "Oficina de Correspondencia Virtual",
+      "areas": [
+        "Gubernamental",
+        "Urbanización",
+        "Cultura",
+        "Deportes",
+        "Medioambiente",
+        "Otras"
+      ],
+      "level": "distrital",
+      "province_code": "08",
+      "district_code": "0808",
+      "email": null,
+      "contact_url": "https://atencion.mupa.gob.pa/oficinavirtual/",
+      "competence": "Recibe correspondencia, sugerencias y solicitudes dirigidas a la Alcaldía de Panamá.",
+      "source_url": "https://atencion.mupa.gob.pa/oficinavirtual/",
+      "source_title": "Alcaldía de Panamá · Oficina de Correspondencia Virtual",
+      "source_kind": "oficial",
+      "notes": "La página muestra un correo truncado; no se completa por inferencia."
+    },
+    {
+      "id": "panama-viejo",
+      "name": "Patronato Panamá Viejo",
+      "entity_type": "Patronato",
+      "role_title": "Información general",
+      "areas": [
+        "Cultura",
+        "Turismo"
+      ],
+      "level": "distrital",
+      "province_code": "08",
+      "district_code": "0808",
+      "email": "info@panamaviejo.org",
+      "contact_url": "https://www.patronatopanamaviejo.org/",
+      "competence": "Conservación y gestión del conjunto monumental de Panamá Viejo.",
+      "source_url": "https://www.patronatopanamaviejo.org/",
+      "source_title": "Patronato Panamá Viejo · Inicio",
+      "source_kind": "oficial"
+    },
+    {
+      "id": "spia",
+      "name": "Sociedad Panameña de Ingenieros y Arquitectos",
+      "entity_type": "Gremio profesional",
+      "role_title": "Secretaría",
+      "areas": [
+        "Urbanización"
+      ],
+      "email": "spia@spia.org.pa",
+      "contact_url": "https://spia.org.pa/contactenos/",
+      "competence": "Gremio de ingeniería y arquitectura; puede orientar hacia profesionales. No ejecuta propuestas.",
+      "source_url": "https://spia.org.pa/",
+      "source_title": "SPIA · Inicio",
+      "source_kind": "oficial"
+    },
+    {
+      "id": "apede",
+      "name": "Asociación Panameña de Ejecutivos de Empresa (APEDE)",
+      "entity_type": "Gremio empresarial",
+      "role_title": "Información general",
+      "areas": [
+        "Emprendimiento"
+      ],
+      "email": "info@apede.org",
+      "contact_url": "https://apede.org/pag/contacto",
+      "competence": "Gremio empresarial con programas de desarrollo empresarial y opinión sobre políticas públicas.",
+      "source_url": "https://apede.org/",
+      "source_title": "APEDE · Inicio",
+      "source_kind": "oficial"
+    },
+    {
+      "id": "camara-comercio",
+      "name": "Cámara de Comercio, Industrias y Agricultura de Panamá",
+      "entity_type": "Gremio empresarial",
+      "role_title": "Contacto",
+      "areas": [
+        "Emprendimiento",
+        "Eventos"
+      ],
+      "email": null,
+      "contact_url": "https://www.panacamara.com/contactenos/",
+      "competence": "Gremio empresarial; organiza ferias y eventos de negocios.",
+      "source_url": "https://www.panacamara.com/contactenos/",
+      "source_title": "Cámara de Comercio · Contáctenos",
+      "source_kind": "oficial",
+      "notes": "Solo formulario web."
+    },
+    {
+      "id": "cop",
+      "name": "Comité Olímpico de Panamá",
+      "entity_type": "Organización deportiva",
+      "role_title": "Información general",
+      "areas": [
+        "Deportes"
+      ],
+      "email": "info@copanama.com",
+      "contact_url": "https://copanama.com/contacto/",
+      "competence": "Organización del movimiento olímpico y federaciones deportivas.",
+      "source_url": "https://copanama.com/contacto/",
+      "source_title": "COP · Contacto",
+      "source_kind": "oficial"
+    },
+    {
+      "id": "ancon",
+      "name": "Asociación Nacional para la Conservación de la Naturaleza (ANCON)",
+      "entity_type": "Organización ambiental",
+      "role_title": "Información general",
+      "areas": [
+        "Medioambiente"
+      ],
+      "email": "ancon@ancon.org",
+      "contact_url": "https://ancon.org/",
+      "competence": "Conservación de ecosistemas y áreas naturales en Panamá.",
+      "source_url": "https://ancon.org/",
+      "source_title": "ANCON · Inicio",
+      "source_kind": "oficial"
+    },
+    {
+      "id": "natura",
+      "name": "Fundación Natura",
+      "entity_type": "Organización ambiental",
+      "role_title": "Información general",
+      "areas": [
+        "Medioambiente"
+      ],
+      "email": "info@naturapanama.org",
+      "contact_url": "https://naturapanama.org/",
+      "competence": "Financiamiento y apoyo a proyectos ambientales y comunitarios.",
+      "source_url": "https://naturapanama.org/",
+      "source_title": "Fundación Natura · Inicio",
+      "source_kind": "oficial"
+    },
+    {
+      "id": "audubon",
+      "name": "Sociedad Audubon de Panamá",
+      "entity_type": "Organización ambiental",
+      "role_title": "Información general",
+      "areas": [
+        "Medioambiente",
+        "Turismo"
+      ],
+      "email": "info@audubonpanama.org",
+      "contact_url": "https://www.audubonpanama.org/",
+      "competence": "Conservación de aves y hábitats; aviturismo y educación ambiental.",
+      "source_url": "https://www.audubonpanama.org/",
+      "source_title": "Sociedad Audubon de Panamá · Inicio",
+      "source_kind": "oficial"
+    },
+    {
+      "checked_at": "2026-09-15",
+      "source_kind": "oficial",
+      "id": "sinaproc",
+      "name": "Sistema Nacional de Protección Civil (SINAPROC)",
+      "entity_type": "Entidad nacional",
+      "role_title": "Dirección General",
+      "areas": [
+        "Medioambiente",
+        "Otras"
+      ],
+      "email": "direcciongeneral@sinaproc.gob.pa",
+      "contact_url": "https://www.sinaproc.gob.pa/directorio-telefonico/",
+      "competence": "Gestión de riesgos y desastres, prevención, emergencias y atención a comunidades afectadas.",
+      "source_url": "https://www.sinaproc.gob.pa/directorio-telefonico/",
+      "source_title": "SINAPROC · Directorio telefónico"
+    },
+    {
+      "checked_at": "2026-09-15",
+      "source_kind": "oficial",
+      "id": "mujer",
+      "name": "Ministerio de la Mujer",
+      "entity_type": "Ministerio",
+      "role_title": "Información general",
+      "areas": [
+        "Otras"
+      ],
+      "email": "info@mujer.gob.pa",
+      "contact_url": "https://mujer.gob.pa/contactenos/",
+      "competence": "Políticas públicas de igualdad y derechos de las mujeres, prevención de la violencia y autonomía económica.",
+      "source_url": "https://mujer.gob.pa/contactenos/",
+      "source_title": "Ministerio de la Mujer · Contáctenos"
+    },
+    {
+      "checked_at": "2026-09-15",
+      "source_kind": "oficial",
+      "id": "mef",
+      "name": "Ministerio de Economía y Finanzas",
+      "entity_type": "Ministerio",
+      "role_title": "Contacto institucional",
+      "areas": [
+        "Gubernamental",
+        "Emprendimiento"
+      ],
+      "email": "contacto@mef.gob.pa",
+      "contact_url": "https://www.mef.gob.pa/contactenos/",
+      "competence": "Política económica y fiscal, presupuesto e inversión pública del Estado.",
+      "source_url": "https://www.mef.gob.pa/",
+      "source_title": "MEF · Inicio"
+    },
+    {
+      "checked_at": "2026-09-15",
+      "source_kind": "oficial",
+      "id": "antai",
+      "name": "Autoridad Nacional de Transparencia y Acceso a la Información (ANTAI)",
+      "entity_type": "Entidad nacional",
+      "role_title": "Dirección de Transparencia",
+      "areas": [
+        "Gubernamental"
+      ],
+      "email": "transparencia@antai.gob.pa",
+      "contact_url": "https://antai.gob.pa/contactenos/",
+      "competence": "Transparencia, acceso a la información pública, ética en la función pública y lucha contra la corrupción.",
+      "source_url": "https://antai.gob.pa/contactenos/",
+      "source_title": "ANTAI · Contáctenos"
+    },
+    {
+      "checked_at": "2026-09-15",
+      "source_kind": "oficial",
+      "id": "arap",
+      "name": "Autoridad de los Recursos Acuáticos de Panamá (ARAP)",
+      "entity_type": "Entidad nacional",
+      "role_title": "Información general",
+      "areas": [
+        "Medioambiente"
+      ],
+      "email": "info@arap.gob.pa",
+      "contact_url": "https://arap.gob.pa/contactenos/",
+      "competence": "Administración de recursos acuáticos: pesca, acuicultura y conservación marino-costera.",
+      "source_url": "https://arap.gob.pa/contactenos/",
+      "source_title": "ARAP · Contáctenos"
+    },
+    {
+      "checked_at": "2026-09-15",
+      "source_kind": "oficial",
+      "id": "arap-regional-bocasdeltoro",
+      "name": "Autoridad de los Recursos Acuáticos de Panamá",
+      "entity_type": "Entidad nacional · oficina regional",
+      "role_title": "Dirección Regional de Bocas del Toro",
+      "areas": [
+        "Medioambiente"
+      ],
+      "level": "provincial",
+      "province_code": "01",
+      "email": "regionalbocasdeltoro@arap.gob.pa",
+      "contact_url": "https://arap.gob.pa/oficinas-regionales/",
+      "competence": "Oficina regional de la ARAP en Bocas del Toro: pesca, acuicultura, manglares y recursos marino-costeros.",
+      "source_url": "https://arap.gob.pa/oficinas-regionales/",
+      "source_title": "ARAP · Oficinas regionales"
+    },
+    {
+      "checked_at": "2026-09-15",
+      "source_kind": "oficial",
+      "id": "arap-regional-chiriqui",
+      "name": "Autoridad de los Recursos Acuáticos de Panamá",
+      "entity_type": "Entidad nacional · oficina regional",
+      "role_title": "Dirección Regional de Chiriquí",
+      "areas": [
+        "Medioambiente"
+      ],
+      "level": "provincial",
+      "province_code": "04",
+      "email": "regionalchiriqui@arap.gob.pa",
+      "contact_url": "https://arap.gob.pa/oficinas-regionales/",
+      "competence": "Oficina regional de la ARAP en Chiriquí: pesca, acuicultura, manglares y recursos marino-costeros.",
+      "source_url": "https://arap.gob.pa/oficinas-regionales/",
+      "source_title": "ARAP · Oficinas regionales"
+    },
+    {
+      "checked_at": "2026-09-15",
+      "source_kind": "oficial",
+      "id": "arap-regional-veraguas",
+      "name": "Autoridad de los Recursos Acuáticos de Panamá",
+      "entity_type": "Entidad nacional · oficina regional",
+      "role_title": "Dirección Regional de Veraguas",
+      "areas": [
+        "Medioambiente"
+      ],
+      "level": "provincial",
+      "province_code": "09",
+      "email": "regionalveraguas@arap.gob.pa",
+      "contact_url": "https://arap.gob.pa/oficinas-regionales/",
+      "competence": "Oficina regional de la ARAP en Veraguas: pesca, acuicultura, manglares y recursos marino-costeros.",
+      "source_url": "https://arap.gob.pa/oficinas-regionales/",
+      "source_title": "ARAP · Oficinas regionales"
+    },
+    {
+      "checked_at": "2026-09-15",
+      "source_kind": "oficial",
+      "id": "arap-regional-herrera",
+      "name": "Autoridad de los Recursos Acuáticos de Panamá",
+      "entity_type": "Entidad nacional · oficina regional",
+      "role_title": "Dirección Regional de Herrera",
+      "areas": [
+        "Medioambiente"
+      ],
+      "level": "provincial",
+      "province_code": "06",
+      "email": "regionalherrera@arap.gob.pa",
+      "contact_url": "https://arap.gob.pa/oficinas-regionales/",
+      "competence": "Oficina regional de la ARAP en Herrera: pesca, acuicultura, manglares y recursos marino-costeros.",
+      "source_url": "https://arap.gob.pa/oficinas-regionales/",
+      "source_title": "ARAP · Oficinas regionales"
+    },
+    {
+      "checked_at": "2026-09-15",
+      "source_kind": "oficial",
+      "id": "arap-regional-lossantos",
+      "name": "Autoridad de los Recursos Acuáticos de Panamá",
+      "entity_type": "Entidad nacional · oficina regional",
+      "role_title": "Dirección Regional de Los Santos",
+      "areas": [
+        "Medioambiente"
+      ],
+      "level": "provincial",
+      "province_code": "07",
+      "email": "regionallossantos@arap.gob.pa",
+      "contact_url": "https://arap.gob.pa/oficinas-regionales/",
+      "competence": "Oficina regional de la ARAP en Los Santos: pesca, acuicultura, manglares y recursos marino-costeros.",
+      "source_url": "https://arap.gob.pa/oficinas-regionales/",
+      "source_title": "ARAP · Oficinas regionales"
+    },
+    {
+      "checked_at": "2026-09-15",
+      "source_kind": "oficial",
+      "id": "arap-regional-cocle",
+      "name": "Autoridad de los Recursos Acuáticos de Panamá",
+      "entity_type": "Entidad nacional · oficina regional",
+      "role_title": "Dirección Regional de Coclé",
+      "areas": [
+        "Medioambiente"
+      ],
+      "level": "provincial",
+      "province_code": "02",
+      "email": "regionalcocle@arap.gob.pa",
+      "contact_url": "https://arap.gob.pa/oficinas-regionales/",
+      "competence": "Oficina regional de la ARAP en Coclé: pesca, acuicultura, manglares y recursos marino-costeros.",
+      "source_url": "https://arap.gob.pa/oficinas-regionales/",
+      "source_title": "ARAP · Oficinas regionales"
+    },
+    {
+      "checked_at": "2026-09-15",
+      "source_kind": "oficial",
+      "id": "arap-regional-panamaoeste",
+      "name": "Autoridad de los Recursos Acuáticos de Panamá",
+      "entity_type": "Entidad nacional · oficina regional",
+      "role_title": "Dirección Regional de Panamá Oeste",
+      "areas": [
+        "Medioambiente"
+      ],
+      "level": "provincial",
+      "province_code": "13",
+      "email": "regionalpanamaoeste@arap.gob.pa",
+      "contact_url": "https://arap.gob.pa/oficinas-regionales/",
+      "competence": "Oficina regional de la ARAP en Panamá Oeste: pesca, acuicultura, manglares y recursos marino-costeros.",
+      "source_url": "https://arap.gob.pa/oficinas-regionales/",
+      "source_title": "ARAP · Oficinas regionales"
+    },
+    {
+      "checked_at": "2026-09-15",
+      "source_kind": "oficial",
+      "id": "arap-regional-colon",
+      "name": "Autoridad de los Recursos Acuáticos de Panamá",
+      "entity_type": "Entidad nacional · oficina regional",
+      "role_title": "Dirección Regional de Colón",
+      "areas": [
+        "Medioambiente"
+      ],
+      "level": "provincial",
+      "province_code": "03",
+      "email": "regionalcolon@arap.gob.pa",
+      "contact_url": "https://arap.gob.pa/oficinas-regionales/",
+      "competence": "Oficina regional de la ARAP en Colón: pesca, acuicultura, manglares y recursos marino-costeros.",
+      "source_url": "https://arap.gob.pa/oficinas-regionales/",
+      "source_title": "ARAP · Oficinas regionales"
+    },
+    {
+      "checked_at": "2026-09-15",
+      "source_kind": "oficial",
+      "id": "arap-regional-panamaeste",
+      "name": "Autoridad de los Recursos Acuáticos de Panamá",
+      "entity_type": "Entidad nacional · oficina regional",
+      "role_title": "Dirección Regional de Panamá Este",
+      "areas": [
+        "Medioambiente"
+      ],
+      "level": "provincial",
+      "province_code": "08",
+      "email": "regionalpanamaeste@arap.gob.pa",
+      "contact_url": "https://arap.gob.pa/oficinas-regionales/",
+      "competence": "Oficina regional de la ARAP en Panamá Este: pesca, acuicultura, manglares y recursos marino-costeros.",
+      "source_url": "https://arap.gob.pa/oficinas-regionales/",
+      "source_title": "ARAP · Oficinas regionales"
+    },
+    {
+      "checked_at": "2026-09-15",
+      "source_kind": "oficial",
+      "id": "arap-regional-darien",
+      "name": "Autoridad de los Recursos Acuáticos de Panamá",
+      "entity_type": "Entidad nacional · oficina regional",
+      "role_title": "Dirección Regional de Darién",
+      "areas": [
+        "Medioambiente"
+      ],
+      "level": "provincial",
+      "province_code": "05",
+      "email": "regionaldarien@arap.gob.pa",
+      "contact_url": "https://arap.gob.pa/oficinas-regionales/",
+      "competence": "Oficina regional de la ARAP en Darién: pesca, acuicultura, manglares y recursos marino-costeros.",
+      "source_url": "https://arap.gob.pa/oficinas-regionales/",
+      "source_title": "ARAP · Oficinas regionales"
+    },
+    {
+      "checked_at": "2026-09-15",
+      "source_kind": "oficial",
+      "id": "acodeco",
+      "name": "Autoridad de Protección al Consumidor y Defensa de la Competencia (ACODECO)",
+      "entity_type": "Entidad nacional",
+      "role_title": "Información general",
+      "areas": [
+        "Emprendimiento",
+        "Otras"
+      ],
+      "email": "info@acodeco.gob.pa",
+      "contact_url": "https://www.acodeco.gob.pa/",
+      "competence": "Protección de los derechos de las personas consumidoras y libre competencia en los mercados.",
+      "source_url": "https://www.acodeco.gob.pa/",
+      "source_title": "ACODECO · Inicio"
+    },
+    {
+      "checked_at": "2026-09-15",
+      "source_kind": "oficial",
+      "id": "up",
+      "name": "Universidad de Panamá",
+      "entity_type": "Universidad pública",
+      "role_title": "Secretaría General",
+      "areas": [
+        "Cultura",
+        "Otras"
+      ],
+      "email": "secretaria.general@up.ac.pa",
+      "contact_url": "https://www.up.ac.pa/",
+      "competence": "Universidad pública con docencia, investigación y extensión; puede aportar estudios y voluntariado académico. No ejecuta obras públicas.",
+      "source_url": "https://www.up.ac.pa/",
+      "source_title": "Universidad de Panamá · Inicio"
+    },
+    {
+      "checked_at": "2026-09-15",
+      "source_kind": "oficial",
+      "id": "capac",
+      "name": "Cámara Panameña de la Construcción (CAPAC)",
+      "entity_type": "Gremio empresarial",
+      "role_title": "Información",
+      "areas": [
+        "Urbanización"
+      ],
+      "email": "informacion@capac.org",
+      "contact_url": "https://capac.org/contactenos/",
+      "competence": "Gremio de la construcción; opina sobre normas urbanas e infraestructura y conecta con empresas del sector. No ejecuta obras públicas.",
+      "source_url": "https://capac.org/contactenos/",
+      "source_title": "CAPAC · Contáctenos"
+    },
+    {
+      "checked_at": "2026-09-15",
+      "source_kind": "oficial",
+      "id": "metro",
+      "name": "Metro de Panamá",
+      "entity_type": "Empresa pública",
+      "role_title": "Contacto y atención ciudadana",
+      "areas": [
+        "Urbanización"
+      ],
+      "email": null,
+      "contact_url": "https://elmetrodepanama.com/contactenos-2/",
+      "competence": "Operación y expansión de las líneas del Metro de Panamá y sus estaciones.",
+      "source_url": "https://elmetrodepanama.com/contactenos-2/",
+      "source_title": "Metro de Panamá · Contáctenos",
+      "notes": "Solo formulario web; no publica un correo general."
+    },
+    {
+      "checked_at": "2026-09-15",
+      "source_kind": "oficial",
+      "id": "idaan",
+      "name": "Instituto de Acueductos y Alcantarillados Nacionales (IDAAN)",
+      "entity_type": "Entidad nacional",
+      "role_title": "Atención al cliente",
+      "areas": [
+        "Urbanización",
+        "Otras"
+      ],
+      "email": null,
+      "contact_url": "https://www.idaan.gob.pa/formulario-de-atencion-al-cliente/",
+      "competence": "Agua potable y alcantarillado sanitario en la mayor parte del país.",
+      "source_url": "https://www.idaan.gob.pa/contacto/",
+      "source_title": "IDAAN · Contacto",
+      "notes": "Canal por formulario web; su sitio no publica un correo institucional."
+    },
+    {
+      "checked_at": "2026-09-15",
+      "source_kind": "oficial",
+      "id": "municipio-santiago",
+      "name": "Municipio de Santiago",
+      "entity_type": "Municipio",
+      "role_title": "Alcaldía · sitio oficial",
+      "areas": [
+        "Gubernamental",
+        "Urbanización",
+        "Eventos",
+        "Turismo",
+        "Cultura",
+        "Gastronomía",
+        "Medioambiente",
+        "Deportes",
+        "Emprendimiento",
+        "Otras"
+      ],
+      "level": "distrital",
+      "province_code": "09",
+      "district_code": "0910",
+      "email": null,
+      "contact_url": "https://santiago.municipios.gob.pa/",
+      "competence": "Gobierno local del distrito de Santiago: espacio público, obras y servicios municipales, permisos y actividades comunitarias.",
+      "source_url": "https://santiago.municipios.gob.pa/",
+      "source_title": "Municipio de Santiago · Municipios Digitales",
+      "notes": "El sitio oficial no publica correo; ofrece atención por WhatsApp."
+    }
   ],
   "atp_regional": {
     "source_url": "https://www.atp.gob.pa/oficinas-regionales/",
     "source_title": "ATP · Oficinas Regionales",
     "offices": [
-      { "province_code": "01", "office": "Bocas del Toro (Isla Colón)", "person_name": "Marlenis Itzel Santamaría Cortes", "email": "misantamaria@atp.gob.pa", "phone": "750-0836 / 750-0837 / 750-0838" },
-      { "province_code": "02", "office": "Coclé (Río Hato)", "person_name": "Milagros Judith Rodríguez González", "email": "mjrodriguez@atp.gob.pa", "phone": "906-1021 / 906-1022 / 906-1023" },
-      { "province_code": "07", "office": "Los Santos (Pedasí)", "person_name": "Daniel Elías Pérez Domínguez", "email": "dperezd@atp.gob.pa", "phone": "926-0703 / 04" },
-      { "province_code": "03", "office": "Colón", "person_name": "Keyla Milena Jackson Nieto", "email": "kjackson@atp.gob.pa", "phone": "475-2301 / 475-2302" },
-      { "province_code": "10", "office": "Guna Yala", "person_name": "Alberto R. Gómez de la Guardia", "email": "agomez@atp.gob.pa", "phone": null },
-      { "province_code": "06", "office": "Herrera", "person_name": "Nixia Lasso", "email": "nlasso@atp.gob.pa", "phone": "913-0700 / 913-0292" },
-      { "province_code": "05", "office": "Darién", "person_name": "Glyzmarluck María Othón Suester", "email": "othong@atp.gob.pa", "phone": "287-0394" },
-      { "province_code": "12", "office": "Ngäbe Buglé", "person_name": "María Cristina Camacho", "email": "mcamacho@atp.gob.pa", "phone": "526-7007" }
+      {
+        "province_code": "01",
+        "office": "Bocas del Toro (Isla Colón)",
+        "person_name": "Marlenis Itzel Santamaría Cortes",
+        "email": "misantamaria@atp.gob.pa",
+        "phone": "750-0836 / 750-0837 / 750-0838"
+      },
+      {
+        "province_code": "02",
+        "office": "Coclé (Río Hato)",
+        "person_name": "Milagros Judith Rodríguez González",
+        "email": "mjrodriguez@atp.gob.pa",
+        "phone": "906-1021 / 906-1022 / 906-1023"
+      },
+      {
+        "province_code": "07",
+        "office": "Los Santos (Pedasí)",
+        "person_name": "Daniel Elías Pérez Domínguez",
+        "email": "dperezd@atp.gob.pa",
+        "phone": "926-0703 / 04"
+      },
+      {
+        "province_code": "03",
+        "office": "Colón",
+        "person_name": "Keyla Milena Jackson Nieto",
+        "email": "kjackson@atp.gob.pa",
+        "phone": "475-2301 / 475-2302"
+      },
+      {
+        "province_code": "10",
+        "office": "Guna Yala",
+        "person_name": "Alberto R. Gómez de la Guardia",
+        "email": "agomez@atp.gob.pa",
+        "phone": null
+      },
+      {
+        "province_code": "06",
+        "office": "Herrera",
+        "person_name": "Nixia Lasso",
+        "email": "nlasso@atp.gob.pa",
+        "phone": "913-0700 / 913-0292"
+      },
+      {
+        "province_code": "05",
+        "office": "Darién",
+        "person_name": "Glyzmarluck María Othón Suester",
+        "email": "othong@atp.gob.pa",
+        "phone": "287-0394"
+      },
+      {
+        "province_code": "12",
+        "office": "Ngäbe Buglé",
+        "person_name": "María Cristina Camacho",
+        "email": "mcamacho@atp.gob.pa",
+        "phone": "526-7007"
+      }
     ],
     "not_imported": [
-      { "province_code": "04", "reason": "La fuente publica 'Borrero@atp.gob,pa', con formato inválido." },
-      { "province_code": "09", "reason": "La fuente publica '@atp.gob.pa' sin nombre de buzón." }
+      {
+        "province_code": "04",
+        "reason": "La fuente publica 'Borrero@atp.gob,pa', con formato inválido."
+      },
+      {
+        "province_code": "09",
+        "reason": "La fuente publica '@atp.gob.pa' sin nombre de buzón."
+      }
     ]
   },
   "rejected": [
-    { "entity": "MIDA", "reason": "Solo publica 37 buzones nominales de funcionarios en su directorio; ninguno identificado como canal de atención." },
-    { "entity": "AMPYME", "reason": "El único correo publicado es el de transparencia." },
-    { "entity": "Asamblea Nacional (wmaster@)", "reason": "Buzón del administrador web." },
-    { "entity": "ATT T, Promtur, ARAP", "reason": "El dominio probado no resolvió; no se incorporan sin fuente verificable." },
-    { "entity": "MarViva", "reason": "El sitio respondió 403 a solicitudes automatizadas; se respeta la restricción." },
-    { "entity": "Oficina del Casco Antiguo, MOP", "reason": "El sitio no respondió en el tiempo límite." },
-    { "entity": "APATEL", "reason": "El correo hallado ('patel.axay16@live.com') no corresponde a la asociación." },
-    { "entity": "Dirección de Planificación Urbana (MUPA)", "reason": "El correo del directorio anterior no aparece hoy en su sitio." }
-  ]
+    {
+      "entity": "MIDA",
+      "reason": "Solo publica 37 buzones nominales de funcionarios en su directorio; ninguno identificado como canal de atención."
+    },
+    {
+      "entity": "AMPYME",
+      "reason": "El único correo publicado es el de transparencia."
+    },
+    {
+      "entity": "Asamblea Nacional (wmaster@)",
+      "reason": "Buzón del administrador web."
+    },
+    {
+      "entity": "ATT T, Promtur, ARAP",
+      "reason": "El dominio probado no resolvió; no se incorporan sin fuente verificable."
+    },
+    {
+      "entity": "MarViva",
+      "reason": "El sitio respondió 403 a solicitudes automatizadas; se respeta la restricción."
+    },
+    {
+      "entity": "Oficina del Casco Antiguo, MOP",
+      "reason": "El sitio no respondió en el tiempo límite."
+    },
+    {
+      "entity": "APATEL",
+      "reason": "El correo hallado ('patel.axay16@live.com') no corresponde a la asociación."
+    },
+    {
+      "entity": "Dirección de Planificación Urbana (MUPA)",
+      "reason": "El correo del directorio anterior no aparece hoy en su sitio."
+    },
+    {
+      "entity": "Municipio de Colón (colon.municipios.gob.pa)",
+      "reason": "El sitio redirige al de Penonomé y muestra el correo de ese despacho."
+    },
+    {
+      "entity": "MiBus",
+      "reason": "El sitio respondió 403 a solicitudes automatizadas; se respeta la restricción."
+    },
+    {
+      "entity": "ARAP, ANTAI y MEF (buzones internos)",
+      "reason": "Compras, contabilidad, informática, recursos humanos y soporte no son canales para propuestas."
+    },
+    {
+      "entity": "Ministerio de la Mujer (CAI provinciales)",
+      "reason": "Centros de atención a mujeres en situación de violencia; no son canales para propuestas."
+    },
+    {
+      "entity": "Asamblea Nacional (diputados)",
+      "reason": "El sitio no publica correos de diputados en el HTML consultado; solo el buzón del administrador web."
+    },
+    {
+      "entity": "IDAAN, ASEP, MINGOB, MINSEG, SENNIAF, INADEH, UTP, Biomuseo, Museo del Canal, FEPAFUT, Pandeportes, MiAmbiente, MINSA",
+      "reason": "Sus páginas no publican un correo institucional en el HTML consultado el 2026-09-15."
+    },
+    {
+      "entity": "ATTT (transito.gob.pa) y MITRADEL",
+      "reason": "El sitio no respondió en el tiempo límite."
+    }
+  ],
+  "municipal_sites": {
+    "1202": "https://mirono.municipios.gob.pa/",
+    "1204": "https://noleduima.municipios.gob.pa/",
+    "1206": "https://kankintu.municipios.gob.pa/",
+    "1208": "https://jirondai.municipios.gob.pa/",
+    "_about": "Sitios oficiales (municipios.gob.pa) verificados el 2026-09-15 para municipios cuyo correo no se pudo importar. Se usan como canal web.",
+    "0102": "https://changuinola.municipios.gob.pa/",
+    "0201": "https://aguadulce.municipios.gob.pa/",
+    "0304": "https://portobelo.municipios.gob.pa/",
+    "0402": "https://baru.municipios.gob.pa/",
+    "0603": "https://lospozos.municipios.gob.pa/",
+    "0806": "https://chiman.municipios.gob.pa/",
+    "0903": "https://canazas.municipios.gob.pa/"
+  }
 }

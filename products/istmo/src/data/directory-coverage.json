@@ -1,12 +1,12 @@
 {
-  "checked_at": "2026-09-14",
-  "total": 109,
-  "with_email": 93,
-  "official": 30,
+  "checked_at": "2026-09-15",
+  "total": 130,
+  "with_email": 111,
+  "official": 51,
   "other_public": 79,
-  "national_entities": 19,
-  "regional_offices": 8,
-  "municipalities": 79,
+  "national_entities": 29,
+  "regional_offices": 18,
+  "municipalities": 80,
   "districts_total": 83,
   "districts_with_municipal_email": 68,
   "districts_without_municipal_email": [
@@ -27,16 +27,16 @@
     "Comarca Ngäbe-Buglé / Jirondai"
   ],
   "by_area": {
-    "Gubernamental": 4,
-    "Urbanización": 3,
+    "Gubernamental": 6,
+    "Urbanización": 4,
     "Eventos": 10,
     "Turismo": 10,
-    "Cultura": 1,
+    "Cultura": 2,
     "Gastronomía": 9,
-    "Medioambiente": 3,
+    "Medioambiente": 15,
     "Deportes": 1,
-    "Emprendimiento": 3,
-    "Otras": 3
+    "Emprendimiento": 5,
+    "Otras": 7
   },
   "atp_not_imported": [
     {
@@ -80,6 +80,34 @@
     {
       "entity": "Dirección de Planificación Urbana (MUPA)",
       "reason": "El correo del directorio anterior no aparece hoy en su sitio."
+    },
+    {
+      "entity": "Municipio de Colón (colon.municipios.gob.pa)",
+      "reason": "El sitio redirige al de Penonomé y muestra el correo de ese despacho."
+    },
+    {
+      "entity": "MiBus",
+      "reason": "El sitio respondió 403 a solicitudes automatizadas; se respeta la restricción."
+    },
+    {
+      "entity": "ARAP, ANTAI y MEF (buzones internos)",
+      "reason": "Compras, contabilidad, informática, recursos humanos y soporte no son canales para propuestas."
+    },
+    {
+      "entity": "Ministerio de la Mujer (CAI provinciales)",
+      "reason": "Centros de atención a mujeres en situación de violencia; no son canales para propuestas."
+    },
+    {
+      "entity": "Asamblea Nacional (diputados)",
+      "reason": "El sitio no publica correos de diputados en el HTML consultado; solo el buzón del administrador web."
+    },
+    {
+      "entity": "IDAAN, ASEP, MINGOB, MINSEG, SENNIAF, INADEH, UTP, Biomuseo, Museo del Canal, FEPAFUT, Pandeportes, MiAmbiente, MINSA",
+      "reason": "Sus páginas no publican un correo institucional en el HTML consultado el 2026-09-15."
+    },
+    {
+      "entity": "ATTT (transito.gob.pa) y MITRADEL",
+      "reason": "El sitio no respondió en el tiempo límite."
     }
   ],
   "amupa_excluded": [

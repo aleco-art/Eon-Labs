@@ -31,12 +31,15 @@ for (const m of amupa.municipalities) {
   rows.push({
     id: m.id, name: m.name, entity_type: "Municipio", role_title: "Alcaldía · despacho municipal", person_name: null,
     areas: ALL_AREAS, level: "distrital", province_code: m.province_code, district_code: m.district_code,
-    email: m.email, generic_domain: m.generic_domain, contact_url: null, phone: m.phone,
+    email: m.email, generic_domain: m.generic_domain, contact_url: m.email ? null : curated.municipal_sites?.[m.district_code] ?? null, phone: m.phone,
     competence: `Gobierno local del distrito de ${d.district}: espacio público, obras y servicios municipales, permisos y actividades comunitarias.`,
     source_url: m.source_url, source_title: "AMUPA · Directorio de Alcaldes de Panamá 2024-2029 (oct. 2024)", source_kind: "otra_publica",
     checked_at: m.checked_at,
-    notes: [m.generic_domain ? "Correo con dominio genérico publicado por AMUPA." : null, "Pendiente de corroborar en un sitio oficial del municipio."].filter(Boolean).join(" "),
-    status: m.email ? "activo" : "revisar",
+    notes: [
+      m.generic_domain ? "Correo con dominio genérico publicado por AMUPA." : null,
+      !m.email && curated.municipal_sites?.[m.district_code] ? "Sin correo importable; se enlaza su sitio oficial en municipios.gob.pa." : "Pendiente de corroborar en un sitio oficial del municipio.",
+    ].filter(Boolean).join(" "),
+    status: m.email || curated.municipal_sites?.[m.district_code] ? "activo" : "revisar",
   });
 }
 
@@ -84,7 +87,7 @@ await fs.writeFile(new URL("supabase/migrations/004_directory_seed.sql", root), 
 const districtCodes = [...districts.keys()];
 const withMunicipalEmail = new Set(rows.filter((r) => r.level === "distrital" && r.email && r.entity_type === "Municipio").map((r) => r.district_code));
 const coverage = {
-  checked_at: CHECKED,
+  checked_at: rows.map((r) => r.checked_at).sort().at(-1),
   total: rows.length,
   with_email: rows.filter((r) => r.email).length,
   official: rows.filter((r) => r.source_kind === "oficial").length,

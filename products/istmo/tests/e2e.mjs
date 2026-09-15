@@ -269,6 +269,11 @@ await step("destinatarios y envío", async () => {
   const miviot = panel.locator(".recipient", { hasText: "Ministerio de Vivienda y Ordenamiento Territorial" }).first();
   check("Cada sugerencia muestra fuente, tipo y fecha", (await miviot.getByText("Fuente oficial").isVisible()) && (await miviot.getByText(/Consultado el/).isVisible()) && (await miviot.locator(".source a").getAttribute("href"))?.startsWith("https://www.miviot.gob.pa"));
   check("Sugerencia sin correo lo indica", (await panel.getByText("Sin correo publicado").count()) >= 1);
+  await panel.getByRole("button", { name: "Buscar en la web" }).click();
+  const researchNotice = panel.locator(".web-research .notice");
+  await researchNotice.waitFor({ timeout: 10000 });
+  const researchText = await researchNotice.innerText();
+  check("Búsqueda web disponible y explica si falta configuración", process.env.TAVILY_API_KEY ? true : /TAVILY_API_KEY/.test(researchText), researchText);
   await miviot.getByRole("button", { name: "Añadir" }).click();
   await miviot.getByRole("button", { name: "En tu lista" }).waitFor();
   const spia = panel.locator(".recipient", { hasText: "Sociedad Panameña de Ingenieros" }).first();
@@ -409,7 +414,7 @@ await step("directorio", async () => {
   await P.goto(BASE + "/responsables");
   await P.getByText(/responsables ·/).waitFor({ timeout: 15000 });
   const line = await P.locator(".results-line").innerText();
-  check("Directorio carga desde la base de datos", /^109 responsables/.test(line), line);
+  check("Directorio carga desde la base de datos", /^130 responsables/.test(line), line);
   await P.getByLabel("Área").selectOption("Deportes");
   await P.getByLabel("Provincia").selectOption({ label: "Chiriquí" });
   const names = await P.locator(".entry h3").allTextContents();

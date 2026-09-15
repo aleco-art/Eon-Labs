@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Check, Copy, ExternalLink, Mail, Plus, Send, Trash2 } from "lucide-react";
+import { Check, Copy, ExternalLink, Globe, Mail, Plus, Search, Send, Trash2 } from "lucide-react";
 import { dateLabel, deliveryLabels, type Proposal } from "@/lib/domain";
 import { Notice } from "./common";
 import { useSession } from "./shell";
@@ -18,6 +18,94 @@ type Saved = {
 type Delivery = { id: string; recipient: string; recipient_name: string | null; status: string; error: string | null; created_at: string; provider: string | null };
 type EmailState = { configured: true; sandbox: boolean; provider: string } | { configured: false; reason: string };
 type SendResult = { recipientId: string; name: string; status: string; message: string };
+type WebContact = { id: string; name: string; email: string | null; url: string; reason: string; source_type: string; checked_at: string };
+type ResearchJob = { id: string; status: "queued" | "running" | "complete" | "partial" | "failed" | "cancelled"; progress: number; results: WebContact[]; error: string | null };
+
+const activeJob = (job: ResearchJob | null) => job?.status === "queued" || job?.status === "running";
+
+/** Optional web search (Tavily) for extra recipients. Results are unverified until the author reviews them. */
+function WebResearch({ proposalId, savedEmails, savedUrls, onAdd }: {
+  proposalId: string;
+  savedEmails: Set<string>;
+  savedUrls: Set<string>;
+  onAdd: (payload: object) => Promise<boolean>;
+}) {
+  const [job, setJob] = useState<ResearchJob | null>(null);
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (!job || !activeJob(job)) return;
+    const timer = setInterval(async () => {
+      try {
+        const next = await api<ResearchJob>("/api/research/" + job.id);
+        setJob(next);
+        // A queued step whose worker stopped is resumed by asking the server again.
+        if (next.status === "queued") await api("/api/research/" + job.id, { method: "POST" });
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "No se pudo consultar la búsqueda.");
+      }
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [job]);
+
+  async function start() {
+    setBusy(true);
+    setError("");
+    try {
+      setJob(await api<ResearchJob>("/api/research", { method: "POST", body: JSON.stringify({ proposalId, depth: "standard" }) }));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "No se pudo iniciar la búsqueda.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const running = activeJob(job);
+  return (
+    <div className="subpanel web-research">
+      <h3 style={{ marginTop: 0, display: "flex", alignItems: "center", gap: 8 }}><Globe size={18} aria-hidden="true" /> Buscar más responsables en la web</h3>
+      <p className="hint" style={{ marginTop: -4 }}>
+        Buscamos organizaciones relacionadas con tu propuesta en internet. Los resultados <b>no están verificados</b>: revisa cada fuente antes de añadirla.
+      </p>
+      <button className="button secondary small" disabled={busy || running} onClick={start}>
+        <Search size={15} /> {running ? `Buscando… ${job?.progress ?? 0}%` : job ? "Buscar de nuevo" : "Buscar en la web"}
+      </button>
+      {error && <Notice tone="warn" message={error} />}
+      {job && !running && job.error && <Notice tone="warn" message={job.error} />}
+      {job && !running && !job.results.length && !job.error && <p className="muted" style={{ marginBottom: 0 }}>No encontramos resultados nuevos. Prueba a añadir un contacto manualmente.</p>}
+      {job && job.results.length > 0 && (
+        <div style={{ marginTop: 10 }}>
+          {job.results.map((c) => {
+            const added = (c.email && savedEmails.has(c.email.toLowerCase())) || savedUrls.has(c.url);
+            const host = new URL(c.url).hostname.replace(/^www\./, "");
+            return (
+              <div className="recipient" key={c.id}>
+                <Globe size={18} color="var(--muted)" aria-hidden="true" style={{ marginTop: 3 }} />
+                <div>
+                  <h4>{c.name}</h4>
+                  <p className="reason">{c.reason}</p>
+                  {c.email ? <div className="channel">{c.email}</div> : <div className="channel none">Sin correo detectado · se añadirá su página como canal</div>}
+                  <div className="source">
+                    <span className="badge public">{c.source_type}</span>
+                    <a href={c.url} target="_blank" rel="noreferrer nofollow">{host}</a>
+                  </div>
+                </div>
+                <button
+                  className={"button small " + (added ? "secondary" : "primary")}
+                  disabled={Boolean(added)}
+                  onClick={() => onAdd({ manual: { name: c.name.slice(0, 160), role_title: "Resultado web · revisar", email: c.email ?? "", contact_url: c.url } })}
+                >
+                  {added ? <><Check size={15} /> En tu lista</> : <><Plus size={15} /> Añadir</>}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function SourceBadge({ kind, generic }: { kind: Source; generic?: boolean }) {
   if (kind === "oficial") return <span className="badge official">Fuente oficial</span>;
@@ -195,6 +283,13 @@ export function Recipients({ proposal, files, onShared }: { proposal: Proposal; 
       ) : (
         <Notice tone="warn" message="No hay responsables verificados en el directorio para esta temática y ubicación. Puedes añadir un destinatario manualmente." />
       )}
+
+      <WebResearch
+        proposalId={proposal.id}
+        savedEmails={new Set(saved.map((s) => s.email?.toLowerCase()).filter((e): e is string => Boolean(e)))}
+        savedUrls={new Set(saved.map((s) => s.contact_url).filter((u): u is string => Boolean(u)))}
+        onAdd={add}
+      />
 
       <div className="subpanel">
         <h3>Tu lista de destinatarios ({saved.length})</h3>

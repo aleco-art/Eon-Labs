@@ -382,5 +382,578 @@
     "pages": [
       "https://ciudaddelsaber.org/contacto/"
     ]
+  },
+  {
+    "id": "muni-santiago",
+    "name": "Municipio de Santiago",
+    "type": "Municipio",
+    "areas": [
+      "Gubernamental",
+      "Urbanización",
+      "Eventos",
+      "Cultura",
+      "Deportes",
+      "Medioambiente",
+      "Otras"
+    ],
+    "site": "https://santiago.municipios.gob.pa/",
+    "pages": [
+      "https://santiago.municipios.gob.pa/contacto/",
+      "https://santiago.municipios.gob.pa/municipio/"
+    ]
+  },
+  {
+    "id": "muni-colon",
+    "name": "Municipio de Colón",
+    "type": "Municipio",
+    "areas": [
+      "Gubernamental",
+      "Urbanización",
+      "Eventos",
+      "Cultura",
+      "Deportes",
+      "Medioambiente",
+      "Otras"
+    ],
+    "site": "https://colon.municipios.gob.pa/",
+    "pages": [
+      "https://colon.municipios.gob.pa/contacto/",
+      "https://colon.municipios.gob.pa/municipio/"
+    ]
+  },
+  {
+    "id": "muni-changuinola",
+    "name": "Municipio de Changuinola",
+    "type": "Municipio",
+    "areas": [
+      "Gubernamental",
+      "Urbanización",
+      "Eventos",
+      "Cultura",
+      "Deportes",
+      "Medioambiente",
+      "Otras"
+    ],
+    "site": "https://changuinola.municipios.gob.pa/",
+    "pages": [
+      "https://changuinola.municipios.gob.pa/contacto/",
+      "https://changuinola.municipios.gob.pa/municipio/"
+    ]
+  },
+  {
+    "id": "muni-aguadulce",
+    "name": "Municipio de Aguadulce",
+    "type": "Municipio",
+    "areas": [
+      "Gubernamental",
+      "Urbanización",
+      "Eventos",
+      "Cultura",
+      "Deportes",
+      "Medioambiente",
+      "Otras"
+    ],
+    "site": "https://aguadulce.municipios.gob.pa/",
+    "pages": [
+      "https://aguadulce.municipios.gob.pa/contacto/",
+      "https://aguadulce.municipios.gob.pa/municipio/"
+    ]
+  },
+  {
+    "id": "muni-portobelo",
+    "name": "Municipio de Portobelo",
+    "type": "Municipio",
+    "areas": [
+      "Gubernamental",
+      "Urbanización",
+      "Eventos",
+      "Cultura",
+      "Deportes",
+      "Medioambiente",
+      "Otras"
+    ],
+    "site": "https://portobelo.municipios.gob.pa/",
+    "pages": [
+      "https://portobelo.municipios.gob.pa/contacto/",
+      "https://portobelo.municipios.gob.pa/municipio/"
+    ]
+  },
+  {
+    "id": "muni-baru",
+    "name": "Municipio de Barú",
+    "type": "Municipio",
+    "areas": [
+      "Gubernamental",
+      "Urbanización",
+      "Eventos",
+      "Cultura",
+      "Deportes",
+      "Medioambiente",
+      "Otras"
+    ],
+    "site": "https://baru.municipios.gob.pa/",
+    "pages": [
+      "https://baru.municipios.gob.pa/contacto/",
+      "https://baru.municipios.gob.pa/municipio/"
+    ]
+  },
+  {
+    "id": "muni-lospozos",
+    "name": "Municipio de Los Pozos",
+    "type": "Municipio",
+    "areas": [
+      "Gubernamental",
+      "Urbanización",
+      "Eventos",
+      "Cultura",
+      "Deportes",
+      "Medioambiente",
+      "Otras"
+    ],
+    "site": "https://lospozos.municipios.gob.pa/",
+    "pages": [
+      "https://lospozos.municipios.gob.pa/contacto/",
+      "https://lospozos.municipios.gob.pa/municipio/"
+    ]
+  },
+  {
+    "id": "muni-chiman",
+    "name": "Municipio de Chimán",
+    "type": "Municipio",
+    "areas": [
+      "Gubernamental",
+      "Urbanización",
+      "Eventos",
+      "Cultura",
+      "Deportes",
+      "Medioambiente",
+      "Otras"
+    ],
+    "site": "https://chiman.municipios.gob.pa/",
+    "pages": [
+      "https://chiman.municipios.gob.pa/contacto/",
+      "https://chiman.municipios.gob.pa/municipio/"
+    ]
+  },
+  {
+    "id": "muni-canazas",
+    "name": "Municipio de Cañazas",
+    "type": "Municipio",
+    "areas": [
+      "Gubernamental",
+      "Urbanización",
+      "Eventos",
+      "Cultura",
+      "Deportes",
+      "Medioambiente",
+      "Otras"
+    ],
+    "site": "https://canazas.municipios.gob.pa/",
+    "pages": [
+      "https://canazas.municipios.gob.pa/contacto/",
+      "https://canazas.municipios.gob.pa/municipio/"
+    ]
+  },
+  {
+    "id": "muni-kankintu",
+    "name": "Municipio de Kankintú",
+    "type": "Municipio",
+    "areas": [
+      "Gubernamental",
+      "Urbanización",
+      "Eventos",
+      "Cultura",
+      "Deportes",
+      "Medioambiente",
+      "Otras"
+    ],
+    "site": "https://kankintu.municipios.gob.pa/",
+    "pages": [
+      "https://kankintu.municipios.gob.pa/contacto/",
+      "https://kankintu.municipios.gob.pa/municipio/"
+    ]
+  },
+  {
+    "id": "muni-mirono",
+    "name": "Municipio de Mironó",
+    "type": "Municipio",
+    "areas": [
+      "Gubernamental",
+      "Urbanización",
+      "Eventos",
+      "Cultura",
+      "Deportes",
+      "Medioambiente",
+      "Otras"
+    ],
+    "site": "https://mirono.municipios.gob.pa/",
+    "pages": [
+      "https://mirono.municipios.gob.pa/contacto/",
+      "https://mirono.municipios.gob.pa/municipio/"
+    ]
+  },
+  {
+    "id": "muni-noleduima",
+    "name": "Municipio de Nole Duima",
+    "type": "Municipio",
+    "areas": [
+      "Gubernamental",
+      "Urbanización",
+      "Eventos",
+      "Cultura",
+      "Deportes",
+      "Medioambiente",
+      "Otras"
+    ],
+    "site": "https://noleduima.municipios.gob.pa/",
+    "pages": [
+      "https://noleduima.municipios.gob.pa/contacto/",
+      "https://noleduima.municipios.gob.pa/municipio/"
+    ]
+  },
+  {
+    "id": "muni-jirondai",
+    "name": "Municipio de Jirondai",
+    "type": "Municipio",
+    "areas": [
+      "Gubernamental",
+      "Urbanización",
+      "Eventos",
+      "Cultura",
+      "Deportes",
+      "Medioambiente",
+      "Otras"
+    ],
+    "site": "https://jirondai.municipios.gob.pa/",
+    "pages": [
+      "https://jirondai.municipios.gob.pa/contacto/",
+      "https://jirondai.municipios.gob.pa/municipio/"
+    ]
+  },
+  {
+    "id": "amupa",
+    "name": "Asociación de Municipios de Panamá (AMUPA)",
+    "type": "Asociación de municipios",
+    "areas": [
+      "Gubernamental"
+    ],
+    "site": "https://amupa.org.pa/",
+    "pages": [
+      "https://amupa.org.pa/contacto/"
+    ]
+  },
+  {
+    "id": "idaan",
+    "name": "Instituto de Acueductos y Alcantarillados Nacionales (IDAAN)",
+    "type": "Entidad nacional",
+    "areas": [
+      "Urbanización",
+      "Otras"
+    ],
+    "site": "https://www.idaan.gob.pa/",
+    "pages": [
+      "https://www.idaan.gob.pa/contacto/"
+    ]
+  },
+  {
+    "id": "metro",
+    "name": "Metro de Panamá",
+    "type": "Empresa pública",
+    "areas": [
+      "Urbanización"
+    ],
+    "site": "https://elmetrodepanama.com/",
+    "pages": [
+      "https://elmetrodepanama.com/contactenos-2/"
+    ]
+  },
+  {
+    "id": "mibus",
+    "name": "MiBus (Transporte Masivo de Panamá)",
+    "type": "Empresa pública",
+    "areas": [
+      "Urbanización"
+    ],
+    "site": "https://www.mibus.com.pa/",
+    "pages": [
+      "https://www.mibus.com.pa/preguntas-frecuentes/",
+      "https://www.mibus.com.pa/blog-post/usa-correctamente-los-canales-de-servicio-al-cliente/"
+    ]
+  },
+  {
+    "id": "transito",
+    "name": "Autoridad del Tránsito y Transporte Terrestre (ATTT)",
+    "type": "Entidad nacional",
+    "areas": [
+      "Urbanización",
+      "Otras"
+    ],
+    "site": "https://www.transito.gob.pa/"
+  },
+  {
+    "id": "asep",
+    "name": "Autoridad Nacional de los Servicios Públicos (ASEP)",
+    "type": "Entidad nacional",
+    "areas": [
+      "Urbanización",
+      "Otras"
+    ],
+    "site": "https://www.asep.gob.pa/"
+  },
+  {
+    "id": "acodeco",
+    "name": "Autoridad de Protección al Consumidor (ACODECO)",
+    "type": "Entidad nacional",
+    "areas": [
+      "Emprendimiento",
+      "Otras"
+    ],
+    "site": "https://www.acodeco.gob.pa/"
+  },
+  {
+    "id": "sinaproc",
+    "name": "Sistema Nacional de Protección Civil (SINAPROC)",
+    "type": "Entidad nacional",
+    "areas": [
+      "Medioambiente",
+      "Otras"
+    ],
+    "site": "https://www.sinaproc.gob.pa/"
+  },
+  {
+    "id": "senniaf",
+    "name": "Secretaría Nacional de Niñez, Adolescencia y Familia (SENNIAF)",
+    "type": "Entidad nacional",
+    "areas": [
+      "Otras"
+    ],
+    "site": "https://www.senniaf.gob.pa/"
+  },
+  {
+    "id": "mitradel",
+    "name": "Ministerio de Trabajo y Desarrollo Laboral",
+    "type": "Ministerio",
+    "areas": [
+      "Emprendimiento",
+      "Otras"
+    ],
+    "site": "https://www.mitradel.gob.pa/"
+  },
+  {
+    "id": "mujer",
+    "name": "Ministerio de la Mujer",
+    "type": "Ministerio",
+    "areas": [
+      "Otras"
+    ],
+    "site": "https://mujer.gob.pa/"
+  },
+  {
+    "id": "mingob",
+    "name": "Ministerio de Gobierno",
+    "type": "Ministerio",
+    "areas": [
+      "Gubernamental"
+    ],
+    "site": "https://www.mingob.gob.pa/"
+  },
+  {
+    "id": "minseg",
+    "name": "Ministerio de Seguridad Pública",
+    "type": "Ministerio",
+    "areas": [
+      "Otras"
+    ],
+    "site": "https://www.minseg.gob.pa/"
+  },
+  {
+    "id": "mef",
+    "name": "Ministerio de Economía y Finanzas",
+    "type": "Ministerio",
+    "areas": [
+      "Gubernamental",
+      "Emprendimiento"
+    ],
+    "site": "https://www.mef.gob.pa/"
+  },
+  {
+    "id": "antai",
+    "name": "Autoridad Nacional de Transparencia y Acceso a la Información (ANTAI)",
+    "type": "Entidad nacional",
+    "areas": [
+      "Gubernamental"
+    ],
+    "site": "https://www.antai.gob.pa/"
+  },
+  {
+    "id": "arap-gob",
+    "name": "Autoridad de los Recursos Acuáticos de Panamá (ARAP)",
+    "type": "Entidad nacional",
+    "areas": [
+      "Medioambiente",
+      "Gastronomía"
+    ],
+    "site": "https://arap.gob.pa/"
+  },
+  {
+    "id": "inadeh",
+    "name": "Instituto Nacional de Formación Profesional (INADEH)",
+    "type": "Entidad nacional",
+    "areas": [
+      "Emprendimiento",
+      "Otras"
+    ],
+    "site": "https://www.inadeh.edu.pa/"
+  },
+  {
+    "id": "up",
+    "name": "Universidad de Panamá",
+    "type": "Universidad pública",
+    "areas": [
+      "Cultura",
+      "Otras"
+    ],
+    "site": "https://www.up.ac.pa/"
+  },
+  {
+    "id": "utp",
+    "name": "Universidad Tecnológica de Panamá",
+    "type": "Universidad pública",
+    "areas": [
+      "Emprendimiento",
+      "Urbanización",
+      "Otras"
+    ],
+    "site": "https://utp.ac.pa/"
+  },
+  {
+    "id": "biomuseo",
+    "name": "Biomuseo",
+    "type": "Museo",
+    "areas": [
+      "Cultura",
+      "Medioambiente",
+      "Turismo"
+    ],
+    "site": "https://biomuseo.org/"
+  },
+  {
+    "id": "museodelcanal",
+    "name": "Museo del Canal Interoceánico",
+    "type": "Museo",
+    "areas": [
+      "Cultura",
+      "Turismo"
+    ],
+    "site": "https://museodelcanal.com/"
+  },
+  {
+    "id": "capac",
+    "name": "Cámara Panameña de la Construcción (CAPAC)",
+    "type": "Gremio empresarial",
+    "areas": [
+      "Urbanización"
+    ],
+    "site": "https://capac.org/"
+  },
+  {
+    "id": "fepafut",
+    "name": "Federación Panameña de Fútbol",
+    "type": "Organización deportiva",
+    "areas": [
+      "Deportes"
+    ],
+    "site": "https://fepafut.com/"
+  },
+  {
+    "id": "visitpanama",
+    "name": "Promtur Panamá (Visit Panamá)",
+    "type": "Entidad de promoción turística",
+    "areas": [
+      "Turismo",
+      "Eventos"
+    ],
+    "site": "https://www.visitpanama.com/"
+  },
+  {
+    "id": "asamblea-diputados",
+    "name": "Asamblea Nacional · Diputados",
+    "type": "Órgano Legislativo",
+    "areas": [
+      "Gubernamental"
+    ],
+    "site": "https://www.asamblea.gob.pa/",
+    "pages": [
+      "https://www.asamblea.gob.pa/Diputados",
+      "https://www.asamblea.gob.pa/Page/diputados?Menu-Type=NavBar",
+      "https://asamblea.gob.pa/contactanos"
+    ]
+  },
+  {
+    "id": "minsa-contacto",
+    "name": "Ministerio de Salud",
+    "type": "Ministerio",
+    "areas": [
+      "Otras"
+    ],
+    "site": "https://www.minsa.gob.pa/",
+    "pages": [
+      "https://www.minsa.gob.pa/contacto",
+      "https://www.minsa.gob.pa/informacion-salud/directorio-telefonico"
+    ]
+  },
+  {
+    "id": "pandeportes-2",
+    "name": "Instituto Panameño de Deportes (Pandeportes)",
+    "type": "Entidad nacional",
+    "areas": [
+      "Deportes"
+    ],
+    "site": "https://pandeportes.gob.pa/",
+    "pages": [
+      "https://pandeportes.gob.pa/contactenos/",
+      "https://pandeportes.gob.pa/transparencia/"
+    ]
+  },
+  {
+    "id": "miambiente-2",
+    "name": "Ministerio de Ambiente",
+    "type": "Ministerio",
+    "areas": [
+      "Medioambiente"
+    ],
+    "site": "https://miambiente.gob.pa/",
+    "pages": [
+      "https://miambiente.gob.pa/transparencia/",
+      "https://miambiente.gob.pa/direcciones-regionales/"
+    ]
+  },
+  {
+    "id": "micultura-2",
+    "name": "Ministerio de Cultura",
+    "type": "Ministerio",
+    "areas": [
+      "Cultura",
+      "Eventos"
+    ],
+    "site": "https://micultura.gob.pa/",
+    "pages": [
+      "https://micultura.gob.pa/contacto/",
+      "https://micultura.gob.pa/transparencia/"
+    ]
+  },
+  {
+    "id": "descentralizacion-2",
+    "name": "Autoridad Nacional de Descentralización",
+    "type": "Entidad nacional",
+    "areas": [
+      "Gubernamental",
+      "Urbanización"
+    ],
+    "site": "https://descentralizacion.gob.pa/",
+    "pages": [
+      "https://descentralizacion.gob.pa/transparencia",
+      "https://www.descentralizacion.gob.pa/about"
+    ]
   }
 ]
