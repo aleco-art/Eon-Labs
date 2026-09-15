@@ -124,6 +124,7 @@ export function proposalEmail(input: {
   replyToAuthor: boolean;
   siteName: string;
   support: Support;
+  proposal: { title: string; body: string; category: string; place: string };
 }) {
   const disclaimer = `${input.siteName} es una plataforma ciudadana independiente. No representa a ninguna entidad, no aprueba propuestas ni garantiza su ejecución. Este mensaje lo envió ${input.authorName}, autor de la propuesta, tras revisarlo y confirmarlo. Las cifras de respaldo corresponden al momento del envío y cada una proviene de una cuenta distinta.`;
   const reply = input.replyToAuthor
@@ -134,7 +135,9 @@ export function proposalEmail(input: {
     : "";
   const support = supportLines(input.support);
   const supportText = `Respaldo ciudadano en ${input.siteName}: ${supportSentence(input.support)}.`;
-  const text = `${supportText}\n\n${input.message}\n\nPropuesta pública: ${input.proposalUrl}${files}\n\n${reply}\n\n—\n${disclaimer}`;
+  const p = input.proposal;
+  const proposalText = `LA PROPUESTA\n«${p.title}»\n${p.category} · ${p.place}\n\n${p.body}`;
+  const text = `${supportText}\n\n${input.message}\n\n—\n${proposalText}\n\nPropuesta pública: ${input.proposalUrl}${files}\n\n${reply}\n\n—\n${disclaimer}`;
   const html = `<!doctype html><html lang="es"><body style="margin:0;background:#f4f6fb;font-family:Arial,Helvetica,sans-serif;color:#10213f">
 <div style="max-width:600px;margin:0 auto;padding:24px">
 <div style="height:6px;background:linear-gradient(90deg,#0a3a82 0 50%,#d21034 50% 100%);border-radius:6px 6px 0 0"></div>
@@ -148,6 +151,12 @@ ${support.map((s, i) => `<td style="text-align:center;padding:4px 6px;${i ? "bor
 </tr></table>
 </div>
 <div style="white-space:pre-wrap;font-size:15px;line-height:1.6">${escape(input.message)}</div>
+<div style="border:1px solid #dbe2ee;border-left:4px solid #0a3a82;border-radius:12px;padding:18px 20px;margin:22px 0 0;background:#ffffff">
+<p style="margin:0 0 6px;font-size:12px;letter-spacing:.06em;color:#d21034;font-weight:bold">LA PROPUESTA</p>
+<h2 style="margin:0 0 6px;font-size:19px;line-height:1.35;color:#10213f">${escape(p.title)}</h2>
+<p style="margin:0 0 14px;font-size:13px;color:#5b6780">${escape(p.category)} · ${escape(p.place)}</p>
+<div style="white-space:pre-wrap;font-size:15px;line-height:1.65;color:#10213f">${escape(p.body)}</div>
+</div>
 <p style="margin:24px 0"><a href="${escape(input.proposalUrl)}" style="display:inline-block;background:#0a3a82;color:#fff;padding:12px 18px;border-radius:10px;text-decoration:none;font-weight:bold">Ver la propuesta pública</a></p>
 ${input.files.length ? `<p style="margin:0 0 6px;font-weight:bold">Archivos y fotos</p><ul style="margin:0 0 18px;padding-left:18px">${input.files.map((f) => `<li><a href="${escape(f.url)}" style="color:#0a3a82">${escape(f.name)}</a></li>`).join("")}</ul>` : ""}
 <p style="font-size:14px;color:#3b4a66">${escape(reply)}</p>

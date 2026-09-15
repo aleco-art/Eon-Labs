@@ -46,7 +46,7 @@ export function Recipients({ proposal, files, onShared }: { proposal: Proposal; 
   const [review, setReview] = useState(false);
   const [subject, setSubject] = useState(`Propuesta ciudadana: ${proposal.title}`.slice(0, 200));
   const [body, setBody] = useState(
-    `Buenos días:\n\nLes escribo para compartir una propuesta que publiqué y que puede ser de su interés:\n\n«${proposal.title}»\n\n${proposal.body}\n\nQuedo atento a cualquier comentario o a la persona indicada para darle seguimiento.\n\nSaludos cordiales.`.slice(0, 15000),
+    `Buenos días:\n\nLes escribo para compartir una propuesta ciudadana que publiqué y que puede ser de su interés. Debajo encontrarán el texto completo y el respaldo que ha recibido de la comunidad.\n\nQuedo atento a cualquier comentario o a la persona indicada para darle seguimiento.\n\nSaludos cordiales.`,
   );
   const [fileIds, setFileIds] = useState<string[]>([]);
   const [replyTo, setReplyTo] = useState(false);
@@ -148,7 +148,8 @@ export function Recipients({ proposal, files, onShared }: { proposal: Proposal; 
     n(proposal.reshare_count, "republicación", "republicaciones"),
   ];
   const support = `${supportParts.slice(0, -1).join(", ")} y ${supportParts.at(-1)}`;
-  const portalText = `${subject}\n\nRespaldo ciudadano: ${support}.\n\n${body}\n\nPropuesta pública: ${proposalUrl}`;
+  const proposalBlock = `LA PROPUESTA\n«${proposal.title}»\n${proposal.category}\n\n${proposal.body}`;
+  const portalText = `${subject}\n\nRespaldo ciudadano: ${support}.\n\n${body}\n\n—\n${proposalBlock}\n\nPropuesta pública: ${proposalUrl}`;
 
   return (
     <section className="card send-panel" aria-labelledby="enviar-titulo">
@@ -263,7 +264,7 @@ export function Recipients({ proposal, files, onShared }: { proposal: Proposal; 
             <>
               <label className="field">Asunto<input value={subject} maxLength={200} onChange={(e) => setSubject(e.target.value)} /></label>
               <label className="field">Mensaje<textarea value={body} maxLength={15000} rows={10} onChange={(e) => setBody(e.target.value)} /></label>
-              <p className="hint" style={{ marginTop: -8 }}>Se añadirá el enlace público: <b style={{ overflowWrap: "anywhere" }}>{proposalUrl}</b>, y una nota que aclara que la plataforma no representa a ninguna entidad.</p>
+              <p className="hint" style={{ marginTop: -8 }}>Debajo de tu mensaje se añadirán siempre el <b>texto completo de la propuesta</b> (título, temática, ubicación y descripción), el enlace público: <b style={{ overflowWrap: "anywhere" }}>{proposalUrl}</b>, y una nota que aclara que la plataforma no representa a ninguna entidad.</p>
               <div className="notice info support-note">
                 <b>El correo destacará el respaldo ciudadano actual:</b> {support}. Las cifras se toman en el momento del envío.
                 {!proposal.signatures_enabled && !proposal.signature_count && <> Si activas la <a href="#firmas">recogida de firmas</a> antes de enviar, también se incluirán.</>}
@@ -285,7 +286,7 @@ export function Recipients({ proposal, files, onShared }: { proposal: Proposal; 
               </label>
               <details style={{ margin: "10px 0" }}>
                 <summary className="text-button">Vista previa del texto</summary>
-                <div className="preview">{`Para: (cada destinatario por separado)\nAsunto: ${subject}\n\nRespaldo ciudadano: ${support}.\n\n${body}\n\nPropuesta pública: ${proposalUrl}`}</div>
+                <div className="preview">{`Para: (cada destinatario por separado)\nAsunto: ${subject}\n\nRespaldo ciudadano: ${support}.\n\n${body}\n\n—\n${proposalBlock}\n\nPropuesta pública: ${proposalUrl}`}</div>
               </details>
               <label className="check">
                 <input type="checkbox" checked={confirmed} onChange={(e) => setConfirmed(e.target.checked)} />

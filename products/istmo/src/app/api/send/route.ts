@@ -25,6 +25,20 @@ const keyFor = (batch: string, recipient: string) => {
 };
 const RESEND_WINDOW_DAYS = 30;
 
+/** Readable location for the email: corregimiento, district and province names, or all of Panama. */
+async function placeName(
+  db: ReturnType<typeof adminDb>,
+  p: { province: string | null; district: string | null; corregimiento: string | null },
+) {
+  if (!p.province) return "Todo Panamá";
+  let q = db.from("territories").select("name,district,province").eq("province_code", p.province);
+  if (p.district) q = q.eq("district_code", p.district);
+  if (p.corregimiento) q = q.eq("code", p.corregimiento);
+  const { data } = await q.limit(1).maybeSingle();
+  if (!data) return "Panamá";
+  return [p.corregimiento ? data.name : null, p.district ? data.district : null, data.province].filter(Boolean).join(", ");
+}
+
 export async function POST(req: Request) {
   try {
     checkOrigin(req);
@@ -38,7 +52,7 @@ export async function POST(req: Request) {
 
     const { data: proposal } = await db
       .from("proposals")
-      .select("id,title,shared_at,like_count,comment_count,reshare_count,signature_count,signature_goal,signatures_enabled,profiles!proposals_author_id_fkey(name)")
+      .select("id,title,body,category,province,district,corregimiento,shared_at,like_count,comment_count,reshare_count,signature_count,signature_goal,signatures_enabled,profiles!proposals_author_id_fkey(name)")
       .eq("id", input.proposalId)
       .eq("author_id", user.id)
       .eq("hidden", false)
@@ -55,6 +69,7 @@ export async function POST(req: Request) {
     if ((files?.length ?? 0) !== input.attachmentIds.length) throw new Error("Algún archivo no está disponible.");
 
     const admin = adminDb();
+    const place = await placeName(admin, proposal);
     const authorName = (proposal.profiles as unknown as { name: string } | null)?.name ?? "Autor de la propuesta";
     const proposalUrl = new URL("/propuesta/" + proposal.id, base).href;
     const { text, html } = proposalEmail({
@@ -66,6 +81,7 @@ export async function POST(req: Request) {
       files: (files ?? []).map((f) => ({ name: f.name, url: new URL("/api/archivo/" + f.id, base).href })),
       replyToAuthor: input.replyToAuthor,
       siteName: siteName(),
+      proposal: { title: proposal.title, body: proposal.body, category: proposal.category, place },
       support: {
         signatures: proposal.signature_count,
         signatureGoal: proposal.signature_goal,
