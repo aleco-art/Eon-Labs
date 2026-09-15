@@ -84,6 +84,36 @@ export async function sendEmail(message: EmailMessage): Promise<EmailResult> {
 const escape = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 
+export type Support = { signatures: number; signatureGoal: number | null; signaturesEnabled: boolean; likes: number; comments: number; reshares: number };
+
+const plural = (n: number, one: string, many: string) => `${n.toLocaleString("es-PA")} ${n === 1 ? one : many}`;
+
+/** Public backing at send time, as rows for the email. Signatures only appear if collected. */
+export function supportLines(s: Support) {
+  const lines: { value: string; label: string }[] = [];
+  if (s.signaturesEnabled || s.signatures > 0)
+    lines.push({
+      value: s.signatures.toLocaleString("es-PA"),
+      label: (s.signatures === 1 ? "firma" : "firmas") + (s.signatureGoal ? ` de ${s.signatureGoal.toLocaleString("es-PA")}` : ""),
+    });
+  lines.push(
+    { value: s.likes.toLocaleString("es-PA"), label: s.likes === 1 ? "apoyo" : "apoyos" },
+    { value: s.comments.toLocaleString("es-PA"), label: s.comments === 1 ? "comentario" : "comentarios" },
+    { value: s.reshares.toLocaleString("es-PA"), label: s.reshares === 1 ? "republicación" : "republicaciones" },
+  );
+  return lines;
+}
+
+export function supportSentence(s: Support) {
+  const parts = [
+    ...(s.signaturesEnabled || s.signatures > 0 ? [plural(s.signatures, "firma", "firmas") + (s.signatureGoal ? ` (meta: ${s.signatureGoal.toLocaleString("es-PA")})` : "")] : []),
+    plural(s.likes, "apoyo", "apoyos"),
+    plural(s.comments, "comentario", "comentarios"),
+    plural(s.reshares, "republicación", "republicaciones"),
+  ];
+  return `${parts.slice(0, -1).join(", ")} y ${parts.at(-1)}`;
+}
+
 export function proposalEmail(input: {
   recipientName: string;
   authorName: string;
@@ -93,24 +123,33 @@ export function proposalEmail(input: {
   files: { name: string; url: string }[];
   replyToAuthor: boolean;
   siteName: string;
+  support: Support;
 }) {
-  const disclaimer = `${input.siteName} es una plataforma ciudadana independiente. No representa a ninguna entidad, no aprueba propuestas ni garantiza su ejecución. Este mensaje lo envió ${input.authorName}, autor de la propuesta, tras revisarlo y confirmarlo.`;
+  const disclaimer = `${input.siteName} es una plataforma ciudadana independiente. No representa a ninguna entidad, no aprueba propuestas ni garantiza su ejecución. Este mensaje lo envió ${input.authorName}, autor de la propuesta, tras revisarlo y confirmarlo. Las cifras de respaldo corresponden al momento del envío y cada una proviene de una cuenta distinta.`;
   const reply = input.replyToAuthor
     ? `Si responde a este correo, su respuesta llegará directamente a ${input.authorName}.`
     : `${input.authorName} no compartió su correo. Puede comentar la propuesta en su página pública.`;
   const files = input.files.length
-    ? "\n\nArchivos de apoyo:\n" + input.files.map((f) => `- ${f.name}: ${f.url}`).join("\n")
+    ? "\n\nArchivos y fotos:\n" + input.files.map((f) => `- ${f.name}: ${f.url}`).join("\n")
     : "";
-  const text = `${input.message}\n\nPropuesta pública: ${input.proposalUrl}${files}\n\n${reply}\n\n—\n${disclaimer}`;
+  const support = supportLines(input.support);
+  const supportText = `Respaldo ciudadano en ${input.siteName}: ${supportSentence(input.support)}.`;
+  const text = `${supportText}\n\n${input.message}\n\nPropuesta pública: ${input.proposalUrl}${files}\n\n${reply}\n\n—\n${disclaimer}`;
   const html = `<!doctype html><html lang="es"><body style="margin:0;background:#f4f6fb;font-family:Arial,Helvetica,sans-serif;color:#10213f">
 <div style="max-width:600px;margin:0 auto;padding:24px">
 <div style="height:6px;background:linear-gradient(90deg,#0a3a82 0 50%,#d21034 50% 100%);border-radius:6px 6px 0 0"></div>
 <div style="background:#fff;border:1px solid #dbe2ee;border-top:0;border-radius:0 0 12px 12px;padding:28px">
 <p style="margin:0 0 6px;font-size:12px;letter-spacing:.08em;color:#d21034;font-weight:bold">PROPUESTA CIUDADANA</p>
 <h1 style="margin:0 0 18px;font-size:22px;line-height:1.3;color:#0a3a82">${escape(input.subject)}</h1>
+<div style="background:#f4f6fb;border:1px solid #dbe2ee;border-radius:12px;padding:14px 16px;margin:0 0 20px">
+<p style="margin:0 0 10px;font-size:12px;letter-spacing:.06em;color:#5b6780;font-weight:bold">RESPALDO CIUDADANO EN ${escape(input.siteName.toUpperCase())}</p>
+<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse"><tr>
+${support.map((s, i) => `<td style="text-align:center;padding:4px 6px;${i ? "border-left:1px solid #dbe2ee;" : ""}"><div style="font-size:22px;font-weight:bold;color:${i === 0 && s.label.startsWith("firma") ? "#d21034" : "#0a3a82"}">${escape(s.value)}</div><div style="font-size:12px;color:#3b4a66">${escape(s.label)}</div></td>`).join("")}
+</tr></table>
+</div>
 <div style="white-space:pre-wrap;font-size:15px;line-height:1.6">${escape(input.message)}</div>
 <p style="margin:24px 0"><a href="${escape(input.proposalUrl)}" style="display:inline-block;background:#0a3a82;color:#fff;padding:12px 18px;border-radius:10px;text-decoration:none;font-weight:bold">Ver la propuesta pública</a></p>
-${input.files.length ? `<p style="margin:0 0 6px;font-weight:bold">Archivos de apoyo</p><ul style="margin:0 0 18px;padding-left:18px">${input.files.map((f) => `<li><a href="${escape(f.url)}" style="color:#0a3a82">${escape(f.name)}</a></li>`).join("")}</ul>` : ""}
+${input.files.length ? `<p style="margin:0 0 6px;font-weight:bold">Archivos y fotos</p><ul style="margin:0 0 18px;padding-left:18px">${input.files.map((f) => `<li><a href="${escape(f.url)}" style="color:#0a3a82">${escape(f.name)}</a></li>`).join("")}</ul>` : ""}
 <p style="font-size:14px;color:#3b4a66">${escape(reply)}</p>
 <hr style="border:0;border-top:1px solid #dbe2ee;margin:20px 0">
 <p style="font-size:12px;color:#5b6780;line-height:1.5">${escape(disclaimer)}</p>

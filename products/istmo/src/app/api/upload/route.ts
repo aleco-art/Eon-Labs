@@ -1,5 +1,6 @@
 import { checkOrigin, requireUser, apiError, limit } from "@/lib/api";
 import { validateFile } from "@/lib/files";
+import { documentLimit, photoLimit } from "@/lib/domain";
 import { z } from "zod";
 export async function POST(req: Request) {
   try {
@@ -9,6 +10,9 @@ export async function POST(req: Request) {
     const f = await req.formData();
     const file = f.get("file");
     if (!(file instanceof File)) throw new Error("Selecciona un archivo.");
+    const kind = z.enum(["foto", "documento"]).catch("documento").parse(f.get("kind"));
+    if (kind === "foto" && !file.type.startsWith("image/"))
+      throw new Error("Las fotos deben ser PNG, JPEG o WebP.");
     await validateFile(file);
     const proposalId = z.uuid().parse(f.get("proposalId"));
     const { data: p } = await db
@@ -21,9 +25,11 @@ export async function POST(req: Request) {
     const { count } = await db
       .from("attachments")
       .select("id", { count: "exact", head: true })
-      .eq("proposal_id", proposalId);
-    if ((count ?? 0) >= 5)
-      throw new Error("Esta propuesta ya tiene cinco archivos.");
+      .eq("proposal_id", proposalId)
+      .eq("kind", kind);
+    const max = kind === "foto" ? photoLimit : documentLimit;
+    if ((count ?? 0) >= max)
+      throw new Error(kind === "foto" ? `Esta propuesta ya tiene ${photoLimit} fotos.` : `Esta propuesta ya tiene ${documentLimit} archivos.`);
     const ext = (
       {
         "image/png": "png",
@@ -46,6 +52,7 @@ export async function POST(req: Request) {
         name: file.name.slice(0, 180),
         mime: file.type,
         size: file.size,
+        kind,
       });
     if (metadataError) {
       await db.storage.from("proposal-files").remove([path]);

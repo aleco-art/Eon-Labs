@@ -5,7 +5,7 @@ import Link from "next/link";
 import { AuthGate, emptyTerritory, Notice, TerritorySelect, type TerritoryValue } from "./common";
 import { useSession } from "./shell";
 import { browserDb } from "@/lib/supabase/client";
-import { categories } from "@/lib/domain";
+import { categories, documentLimit, photoLimit } from "@/lib/domain";
 import { validateFile } from "@/lib/files";
 
 export function ProposalForm({ id }: { id?: string }) {
@@ -16,6 +16,9 @@ export function ProposalForm({ id }: { id?: string }) {
   const [category, setCategory] = useState<string>("");
   const [scope, setScope] = useState<"nacional" | "local">("local");
   const [territory, setTerritory] = useState<TerritoryValue>(emptyTerritory);
+  const [signatures, setSignatures] = useState(false);
+  const [goal, setGoal] = useState("");
+  const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
   const [loaded, setLoaded] = useState(!id);
@@ -25,7 +28,7 @@ export function ProposalForm({ id }: { id?: string }) {
     if (!id || !user) return;
     browserDb()
       .from("proposals")
-      .select("title,body,category,province,district,corregimiento")
+      .select("title,body,category,province,district,corregimiento,signatures_enabled,signature_goal")
       .eq("id", id)
       .eq("author_id", user.id)
       .maybeSingle()
@@ -34,6 +37,8 @@ export function ProposalForm({ id }: { id?: string }) {
         setTitle(data.title);
         setBody(data.body);
         setCategory(data.category);
+        setSignatures(data.signatures_enabled);
+        setGoal(data.signature_goal ? String(data.signature_goal) : "");
         setScope(data.province ? "local" : "nacional");
         setTerritory({ province: data.province ?? "", district: data.district ?? "", corregimiento: data.corregimiento ?? "" });
         setLoaded(true);
@@ -47,9 +52,19 @@ export function ProposalForm({ id }: { id?: string }) {
     if (scope === "local" && !territory.province) return setMessage("Elige al menos la provincia o comarca, o marca «Todo Panamá».");
     setBusy(true);
     try {
-      const files = (new FormData(e.currentTarget).getAll("files") as File[]).filter((f) => f.size);
-      if (files.length > 5) throw new Error("Puedes adjuntar hasta 5 archivos.");
+      const form = new FormData(e.currentTarget);
+      const photos = (form.getAll("photos") as File[]).filter((f) => f.size);
+      const files = (form.getAll("files") as File[]).filter((f) => f.size);
+      if (photos.length > photoLimit) throw new Error(`Puedes subir hasta ${photoLimit} fotos.`);
+      if (files.length > documentLimit) throw new Error(`Puedes adjuntar hasta ${documentLimit} archivos.`);
+      for (const f of photos) {
+        if (!f.type.startsWith("image/")) throw new Error("Las fotos deben ser PNG, JPEG o WebP.");
+        await validateFile(f);
+      }
       for (const f of files) await validateFile(f);
+      const goalNumber = signatures && goal ? Number(goal) : null;
+      if (goalNumber !== null && (!Number.isInteger(goalNumber) || goalNumber < 10 || goalNumber > 1000000))
+        throw new Error("La meta de firmas debe ser un número entre 10 y 1.000.000.");
       const db = browserDb();
       const payload = {
         title: title.trim(),
@@ -58,6 +73,8 @@ export function ProposalForm({ id }: { id?: string }) {
         province: scope === "local" ? territory.province || null : null,
         district: scope === "local" ? territory.district || null : null,
         corregimiento: scope === "local" ? territory.corregimiento || null : null,
+        signatures_enabled: signatures,
+        signature_goal: goalNumber,
       };
       const result = id
         ? await db.from("proposals").update(payload).eq("id", id).eq("author_id", user.id).select("id").single()
@@ -65,9 +82,11 @@ export function ProposalForm({ id }: { id?: string }) {
       if (result.error)
         throw new Error(result.error.code === "P0001" ? result.error.message : "No se pudo guardar la propuesta. Revisa los campos e inténtalo de nuevo.");
       let failed = 0;
-      for (const file of files) {
+      const uploads = [...photos.map((file) => ({ file, kind: "foto" })), ...files.map((file) => ({ file, kind: "documento" }))];
+      for (const { file, kind } of uploads) {
         const upload = new FormData();
         upload.set("file", file);
+        upload.set("kind", kind);
         upload.set("proposalId", result.data.id);
         const r = await fetch("/api/upload", { method: "POST", body: upload });
         if (!r.ok) failed++;
@@ -117,14 +136,49 @@ export function ProposalForm({ id }: { id?: string }) {
                 <TerritorySelect value={territory} allLabel="Elige provincia o comarca" onChange={setTerritory} />
               </div>
             )}
-            {!id && (
-              <label className="field">
-                Archivos de apoyo (opcional)
-                <input type="file" name="files" accept="image/png,image/jpeg,image/webp,application/pdf" multiple />
-                <span className="hint">Hasta 5 imágenes (PNG, JPEG, WebP) o PDF de 10 MB cada uno. <b>Serán visibles para cualquier persona</b> junto con tu propuesta.</span>
+            <fieldset className="subpanel signature-setup">
+              <label className="check" style={{ margin: 0 }}>
+                <input type="checkbox" name="signatures" checked={signatures} onChange={(e) => setSignatures(e.target.checked)} />
+                <span><b>Recoger firmas</b> para demostrar cuántas personas respaldan la propuesta. Cada persona firma una sola vez con su cuenta.</span>
               </label>
+              {signatures && (
+                <label className="field" style={{ margin: "12px 0 0" }}>
+                  Meta de firmas (opcional)
+                  <input type="number" name="goal" min={10} max={1000000} step={1} value={goal} onChange={(e) => setGoal(e.target.value)} placeholder="Ej.: 500" />
+                  <span className="hint">Se mostrará una barra de progreso. El número de firmas se incluirá en los correos a los responsables.</span>
+                </label>
+              )}
+            </fieldset>
+            {!id && (
+              <>
+                <label className="field">
+                  Fotos de la propuesta (opcional)
+                  <input
+                    type="file"
+                    name="photos"
+                    accept="image/png,image/jpeg,image/webp"
+                    multiple
+                    onChange={(e) => {
+                      photoPreviews.forEach((u) => URL.revokeObjectURL(u));
+                      setPhotoPreviews(Array.from(e.target.files ?? []).slice(0, photoLimit).map((f) => URL.createObjectURL(f)));
+                    }}
+                  />
+                  <span className="hint">Hasta {photoLimit} fotos (PNG, JPEG o WebP) de 10 MB cada una. La primera será la portada. <b>Serán públicas.</b></span>
+                </label>
+                {photoPreviews.length > 0 && (
+                  <div className="photo-previews" aria-label="Vista previa de las fotos">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    {photoPreviews.map((u, i) => <img key={u} src={u} alt={`Foto ${i + 1}`} />)}
+                  </div>
+                )}
+                <label className="field">
+                  Archivos de apoyo (opcional)
+                  <input type="file" name="files" accept="image/png,image/jpeg,image/webp,application/pdf" multiple />
+                  <span className="hint">Hasta {documentLimit} documentos PDF o imágenes (planos, estudios, cartas) de 10 MB cada uno. <b>Serán visibles para cualquier persona</b> junto con tu propuesta.</span>
+                </label>
+              </>
             )}
-            {id && <p className="hint">Para añadir o quitar archivos, usa la sección de archivos en la página de la propuesta.</p>}
+            {id && <p className="hint">Para añadir o quitar fotos y archivos, usa sus secciones en la página de la propuesta.</p>}
             <label className="check">
               <input type="checkbox" required />
               <span>Entiendo que la propuesta y sus archivos serán públicos, y que la plataforma no la aprueba ni garantiza su ejecución. He leído los <Link href="/terminos">términos</Link>.</span>

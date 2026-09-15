@@ -140,7 +140,15 @@ export function Recipients({ proposal, files, onShared }: { proposal: Proposal; 
     }
   }
 
-  const portalText = `${subject}\n\n${body}\n\nPropuesta pública: ${proposalUrl}`;
+  const n = (v: number, one: string, many: string) => `${v.toLocaleString("es-PA")} ${v === 1 ? one : many}`;
+  const supportParts = [
+    ...(proposal.signatures_enabled || proposal.signature_count > 0 ? [n(proposal.signature_count, "firma", "firmas")] : []),
+    n(proposal.like_count, "apoyo", "apoyos"),
+    n(proposal.comment_count, "comentario", "comentarios"),
+    n(proposal.reshare_count, "republicación", "republicaciones"),
+  ];
+  const support = `${supportParts.slice(0, -1).join(", ")} y ${supportParts.at(-1)}`;
+  const portalText = `${subject}\n\nRespaldo ciudadano: ${support}.\n\n${body}\n\nPropuesta pública: ${proposalUrl}`;
 
   return (
     <section className="card send-panel" aria-labelledby="enviar-titulo">
@@ -256,9 +264,13 @@ export function Recipients({ proposal, files, onShared }: { proposal: Proposal; 
               <label className="field">Asunto<input value={subject} maxLength={200} onChange={(e) => setSubject(e.target.value)} /></label>
               <label className="field">Mensaje<textarea value={body} maxLength={15000} rows={10} onChange={(e) => setBody(e.target.value)} /></label>
               <p className="hint" style={{ marginTop: -8 }}>Se añadirá el enlace público: <b style={{ overflowWrap: "anywhere" }}>{proposalUrl}</b>, y una nota que aclara que la plataforma no representa a ninguna entidad.</p>
+              <div className="notice info support-note">
+                <b>El correo destacará el respaldo ciudadano actual:</b> {support}. Las cifras se toman en el momento del envío.
+                {!proposal.signatures_enabled && !proposal.signature_count && <> Si activas la <a href="#firmas">recogida de firmas</a> antes de enviar, también se incluirán.</>}
+              </div>
               {files.length > 0 && (
                 <fieldset style={{ border: 0, padding: 0, margin: "10px 0" }}>
-                  <legend style={{ fontWeight: 600 }}>Archivos que quieres compartir (se envían como enlace)</legend>
+                  <legend style={{ fontWeight: 600 }}>Fotos y archivos que quieres compartir (se envían como enlace)</legend>
                   {files.map((f) => (
                     <label className="check" key={f.id}>
                       <input type="checkbox" checked={fileIds.includes(f.id)} onChange={(e) => setFileIds(e.target.checked ? [...fileIds, f.id] : fileIds.filter((x) => x !== f.id))} />
@@ -273,7 +285,7 @@ export function Recipients({ proposal, files, onShared }: { proposal: Proposal; 
               </label>
               <details style={{ margin: "10px 0" }}>
                 <summary className="text-button">Vista previa del texto</summary>
-                <div className="preview">{`Para: (cada destinatario por separado)\nAsunto: ${subject}\n\n${body}\n\nPropuesta pública: ${proposalUrl}`}</div>
+                <div className="preview">{`Para: (cada destinatario por separado)\nAsunto: ${subject}\n\nRespaldo ciudadano: ${support}.\n\n${body}\n\nPropuesta pública: ${proposalUrl}`}</div>
               </details>
               <label className="check">
                 <input type="checkbox" checked={confirmed} onChange={(e) => setConfirmed(e.target.checked)} />

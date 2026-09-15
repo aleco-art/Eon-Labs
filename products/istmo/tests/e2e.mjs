@@ -85,8 +85,12 @@ await step("crear propuesta", async () => {
   const corr = await A.getByLabel("Corregimiento", { exact: true }).locator("option").allTextContents();
   check("Corregimientos con alias de búsqueda", corr.some((c) => c.startsWith("La Exposición o Calidonia")), corr.length + " opciones");
   await A.getByLabel("Corregimiento", { exact: true }).selectOption({ index: corr.findIndex((c) => c.startsWith("La Exposición o Calidonia")) });
-  await A.locator('input[type="file"]').setInputFiles([`${OUT}/apoyo.png`, `${OUT}/plano.pdf`]);
-  await A.locator("form .check input").check();
+  await A.getByLabel(/Recoger firmas/).check();
+  await A.getByLabel("Meta de firmas (opcional)").fill("50");
+  await A.locator('input[name="photos"]').setInputFiles([`${OUT}/apoyo.png`]);
+  check("Vista previa de la foto antes de publicar", (await A.locator(".photo-previews img").count()) === 1);
+  await A.locator('input[name="files"]').setInputFiles([`${OUT}/apoyo.png`, `${OUT}/plano.pdf`]);
+  await A.getByLabel(/Entiendo que la propuesta/).check();
   await A.getByRole("button", { name: "Publicar propuesta" }).click();
   await A.waitForURL(/\/propuesta\/[0-9a-f-]{36}$/, { timeout: 20000 });
   proposalUrl = A.url();
@@ -94,6 +98,12 @@ await step("crear propuesta", async () => {
   check("Propuesta publicada sin errores de adjuntos", !proposalUrl.includes("adjuntos"), proposalUrl);
   await A.locator(".file a").first().waitFor();
   check("Dos adjuntos listados", (await A.locator(".file a").count()) === 2);
+  await A.locator(".photo-main img").waitFor();
+  await A.waitForFunction(() => document.querySelector(".photo-main img")?.naturalWidth > 0, null, { timeout: 15000 });
+  check("La foto se muestra en la propuesta, separada de los archivos", (await A.locator(".photo-thumb").count()) === 1);
+  const { data: kinds } = await admin.from("attachments").select("kind");
+  check("Una foto y dos documentos guardados", kinds.filter((k) => k.kind === "foto").length === 1 && kinds.filter((k) => k.kind === "documento").length === 2, JSON.stringify(kinds));
+  check("Recogida de firmas activa con meta", await A.getByText("0 firmas de 50").isVisible());
 });
 
 await step("adjuntos", async () => {
@@ -139,6 +149,24 @@ await step("interacciones", async () => {
   check("Retirar y volver a apoyar deja un solo like", count === 1, count);
 });
 
+await step("firmas", async () => {
+  await B.goto(proposalUrl);
+  const box = B.locator("#firmas");
+  await box.getByRole("button", { name: /Firmar la propuesta/ }).waitFor({ timeout: 15000 });
+  const nameInput = box.getByLabel("Nombre con el que firmas");
+  for (let i = 0; i < 20 && !(await nameInput.inputValue()); i++) await wait(250);
+  check("El nombre del perfil se propone para firmar", (await nameInput.inputValue()) === users.B.name, await nameInput.inputValue());
+  await box.getByLabel("¿Por qué firmas? (opcional)").fill("Camino por ahí todos los días");
+  await box.getByRole("button", { name: /Firmar la propuesta/ }).click();
+  await box.getByText("Tu firma quedó registrada").waitFor({ timeout: 10000 });
+  await B.reload();
+  await B.locator("#firmas").getByText(/Firmaste el/).waitFor({ timeout: 15000 });
+  check("La firma persiste tras recargar", await B.locator("#firmas .signers").getByText(users.B.name).isVisible());
+  check("Barra de progreso con la firma", await B.locator("#firmas").getByText("1 firma de 50").isVisible());
+  const { data } = await admin.from("proposals").select("signature_count").eq("title", "Corredor peatonal arbolado en Calidonia").single();
+  check("Contador de firmas en la base de datos", data.signature_count === 1, JSON.stringify(data));
+});
+
 await step("respuestas", async () => {
   await A.reload();
   await A.getByRole("button", { name: "Responder" }).first().click();
@@ -161,6 +189,21 @@ await step("perfil y republicación", async () => {
   await B.getByRole("heading", { name: "Republicaciones" }).waitFor();
   const card = B.locator(".proposal-card", { hasText: "Corredor peatonal arbolado en Calidonia" });
   check("Perfil de B muestra la republicación con la autoría de A", (await card.count()) === 1 && (await card.getByText("Ana Pérez").isVisible()));
+  await B.getByRole("button", { name: "Editar mi perfil" }).click();
+  await B.getByLabel("A qué te dedicas (opcional)").fill("Ingeniero civil");
+  await B.getByLabel("Biografía").fill("Vecino de Calidonia. Me interesa la movilidad a pie.");
+  await B.getByLabel("Teléfono o WhatsApp").fill("+507 6000-0000");
+  await B.getByLabel("Correo de contacto").fill("beto.contacto@example.test");
+  await B.getByLabel("Instagram").fill("@beto.rios");
+  await B.getByRole("button", { name: "Guardar perfil" }).click();
+  await B.getByText("Perfil actualizado.").waitFor({ timeout: 10000 });
+  await B.reload();
+  await B.locator(".contact-list").waitFor({ timeout: 15000 });
+  const contact = await B.locator(".contact-list").innerText();
+  check("Perfil muestra ocupación y contacto opcionales", /Ingeniero civil/.test(contact) && /\+507 6000-0000/.test(contact) && /@beto\.rios/.test(contact) && /beto\.contacto@example\.test/.test(contact), contact);
+  check("Biografía visible en el perfil", await B.getByText("Vecino de Calidonia. Me interesa la movilidad a pie.").isVisible());
+  const anonProfile = await fetch(`${SB_URL}/rest/v1/profiles?id=eq.${users.B.id}&select=*`, { headers: { apikey: process.env.SUPABASE_ANON_KEY } }).then((r) => r.json());
+  check("El correo de la cuenta no aparece en el perfil público", !JSON.stringify(anonProfile).includes(users.B.email), Object.keys(anonProfile[0] ?? {}).join(","));
 });
 
 await step("filtros", async () => {
@@ -170,11 +213,16 @@ await step("filtros", async () => {
   await B.getByLabel("Temática").selectOption("Gastronomía");
   await B.getByLabel("Provincia o comarca", { exact: true }).selectOption({ label: "Chiriquí" });
   await B.getByLabel("Distrito", { exact: true }).selectOption({ label: "Boquete" });
-  await B.locator("form .check input").check();
+  await B.getByLabel(/Entiendo que la propuesta/).check();
   await B.getByRole("button", { name: "Publicar propuesta" }).click();
   await B.waitForURL(/\/propuesta\//);
   await A.goto(BASE + "/");
   const cards = A.locator(".feed-grid .proposal-card h3");
+  await cards.first().waitFor();
+  const coverCard = A.locator(".proposal-card", { hasText: "Calidonia" });
+  await coverCard.locator(".card-cover img").waitFor({ timeout: 10000 }).catch(() => {});
+  check("Tarjeta del feed con foto de portada y progreso de firmas", (await coverCard.locator(".card-cover img").count()) === 1 && (await coverCard.locator(".signature-progress").count()) === 1);
+  check("Tarjeta sin fotos no muestra portada", (await A.locator(".proposal-card", { hasText: "Boquete" }).locator(".card-cover").count()) === 0);
   const titles = async () => { await wait(900); return cards.allTextContents(); };
   await A.getByLabel("Buscar propuestas").fill("gastronomico");
   let t = await titles();
@@ -252,6 +300,7 @@ await step("destinatarios y envío", async () => {
   check("Envío aceptado por el proveedor para cada destinatario", statuses.length === savedCount && statuses.every((s) => s.includes("Aceptado")), statuses.join(" | "));
   const msg = await mailTo("junta.prueba@example.test", "Propuesta ciudadana");
   check("El correo llega al buzón de pruebas con el enlace público", msg && msg.HTML.includes(proposalUrl) && /no representa a ninguna entidad/i.test(msg.Text), msg?.Subject);
+  check("El correo destaca firmas, apoyos, comentarios y republicaciones", /Respaldo ciudadano en Istmo: 1 firma \(meta: 50\), 1 apoyo, 2 comentarios y 1 republicación\./.test(msg?.Text ?? "") && /RESPALDO CIUDADANO/.test(msg?.HTML ?? ""), (msg?.Text ?? "").split("\n")[0]);
   check("Remitente de la plataforma y respuesta al autor (con consentimiento)", msg?.From?.Address === "propuestas@istmo.test" && msg?.ReplyTo?.[0]?.Address === users.A.email, JSON.stringify({ from: msg?.From, replyTo: msg?.ReplyTo }));
   const miviotMail = await mailTo("oterritorial@miviot.gob.pa", "Propuesta ciudadana");
   check("El correo al responsable real queda capturado localmente (no sale a internet)", Boolean(miviotMail), miviotMail?.Subject);

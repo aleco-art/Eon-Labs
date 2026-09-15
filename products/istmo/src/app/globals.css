@@ -234,8 +234,63 @@ table.data { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
 table.data th, table.data td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
 
 /* Profile */
+.profile-card { padding: 26px; margin-bottom: 14px; }
 .profile-head { display: flex; gap: 18px; align-items: center; margin-bottom: 18px; }
 .profile-head .avatar { width: 84px; height: 84px; font-size: 2rem; }
+.profile-head h1 { overflow-wrap: anywhere; }
+.profile-bio { max-width: 720px; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 1.02rem; }
+.contact-list { list-style: none; padding: 0; margin: 0 0 18px; display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 0.92rem; }
+.contact-list li { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); min-width: 0; }
+.contact-list svg { color: var(--blue); flex-shrink: 0; }
+.contact-list a { color: var(--blue); font-weight: 600; overflow-wrap: anywhere; }
+.contact-list a:hover { text-decoration: underline; }
+fieldset.subpanel { min-width: 0; }
+
+/* Photos */
+.photos { margin: 18px 0 6px; }
+.photo-main { display: block; border-radius: 14px; overflow: hidden; background: var(--blue-50); aspect-ratio: 16 / 10; max-width: 100%; }
+.photo-main img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo-strip { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.photo-thumb { position: relative; }
+.photo-thumb > button:first-child { display: block; width: 76px; height: 58px; border-radius: 10px; overflow: hidden; border: 2px solid transparent; background: var(--blue-50); }
+.photo-thumb > button[aria-pressed="true"] { border-color: var(--blue); }
+.photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo-remove { position: absolute; top: -6px; right: -6px; width: 22px; height: 22px; border-radius: 50%; background: var(--red); color: var(--white); display: grid; place-items: center; box-shadow: var(--shadow); }
+.photo-add { position: relative; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: 76px; height: 58px; border: 2px dashed #c9d3e3; border-radius: 10px; color: var(--blue); font-size: 0.72rem; font-weight: 700; cursor: pointer; text-align: center; }
+.photo-add:hover { border-color: var(--blue); background: var(--blue-50); }
+.photo-add.busy { opacity: 0.6; cursor: progress; }
+.photo-add input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.photo-add:has(input:focus-visible) { outline: 3px solid var(--red); outline-offset: 2px; }
+.photo-previews { display: flex; flex-wrap: wrap; gap: 8px; margin: -6px 0 16px; }
+.photo-previews img { width: 88px; height: 66px; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); }
+.proposal-card.has-cover { padding-top: 0; overflow: hidden; }
+.card-cover { display: block; margin: 0 -20px 4px; aspect-ratio: 16 / 9; background: var(--blue-50); overflow: hidden; }
+.card-cover img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s ease; }
+.card-cover:hover img { transform: scale(1.03); }
+
+/* Signatures */
+.signature-setup { border-color: var(--blue-100); background: var(--blue-50); }
+.signatures { padding: 24px; margin-top: 22px; border-top: 5px solid var(--blue); }
+.signatures h2 { margin-bottom: 12px; }
+.signatures h3 { display: flex; align-items: center; gap: 8px; font-size: 1rem; }
+.signatures.off { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between; border-top-width: 1px; }
+.signatures.off p { margin: 0; font-size: 0.9rem; }
+.signature-progress { margin: 4px 0 14px; }
+.signature-numbers { font-size: 1rem; margin-bottom: 6px; }
+.signature-numbers b { font-size: 1.6rem; color: var(--red); margin-right: 2px; }
+.signature-progress .bar { height: 10px; background: var(--blue-50); border-radius: 999px; overflow: hidden; }
+.signature-progress .bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--blue), var(--red)); border-radius: 999px; }
+.signature-progress.compact { margin: 0; }
+.signature-progress.compact .signature-numbers { font-size: 0.85rem; margin-bottom: 4px; }
+.signature-progress.compact .signature-numbers b { font-size: 1rem; }
+.signature-progress.compact .bar { height: 6px; }
+.sign-form { margin-top: 8px; }
+.signed { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: center; }
+.signers { list-style: none; padding: 0; margin: 0; display: grid; gap: 2px; }
+.signers li { padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 0.9rem; }
+.signers li p { margin: 2px 0 0; color: var(--muted); font-style: italic; overflow-wrap: anywhere; }
+.signers a { color: var(--blue); }
+.support-note a { text-decoration: underline; }
 
 /* Footer */
 .site-footer { border-top: 1px solid var(--line); background: var(--white); }

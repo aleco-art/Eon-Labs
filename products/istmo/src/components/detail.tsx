@@ -2,19 +2,21 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, FileText, Heart, MapPin, MessageCircle, Paperclip, Repeat2 } from "lucide-react";
+import { ArrowLeft, FileText, Heart, MapPin, MessageCircle, Paperclip, PenLine, Repeat2 } from "lucide-react";
 import { browserDb, configured } from "@/lib/supabase/client";
-import { dateLabel, proposalSelect, type Proposal } from "@/lib/domain";
+import { dateLabel, documentLimit, proposalSelect, type Proposal } from "@/lib/domain";
 import { placeLabel, useTerritories } from "@/lib/territories";
 import { validateFile } from "@/lib/files";
 import { useSession } from "./shell";
 import { AuthGate, Notice, ReportButton } from "./common";
 import { Avatar, ShareButton, useInteractions, useToggle } from "./feed";
 import { Recipients } from "./recipients";
+import { Photos } from "./photos";
+import { Signatures } from "./signatures";
 
 type Comment = { id: string; author_id: string; body: string; parent_id: string | null; created_at: string; profiles: { name: string; avatar_path: string | null } | null };
 type Update = { id: string; body: string; kind: "actualizacion" | "respuesta"; responder: string | null; created_at: string };
-type Attachment = { id: string; name: string; owner_id: string; path: string; mime: string; size: number };
+type Attachment = { id: string; name: string; owner_id: string; path: string; mime: string; size: number; kind: "foto" | "documento" };
 
 export function Detail({ id }: { id: string }) {
   const router = useRouter();
@@ -39,7 +41,7 @@ export function Detail({ id }: { id: string }) {
       db.from("proposals").select(proposalSelect).eq("id", id).maybeSingle(),
       db.from("comments").select("id,author_id,body,parent_id,created_at,profiles!comments_author_id_fkey(name,avatar_path)").eq("proposal_id", id).eq("hidden", false).order("created_at"),
       db.from("updates").select("id,body,kind,responder,created_at").eq("proposal_id", id).order("created_at", { ascending: false }),
-      db.from("attachments").select("id,name,owner_id,path,mime,size").eq("proposal_id", id).eq("hidden", false).order("created_at"),
+      db.from("attachments").select("id,name,owner_id,path,mime,size,kind").eq("proposal_id", id).eq("hidden", false).order("created_at"),
     ]);
     setProposal(p.data as unknown as Proposal | null);
     setComments((c.data as unknown as Comment[]) ?? []);
@@ -98,6 +100,8 @@ export function Detail({ id }: { id: string }) {
     setBusy(false);
   }
 
+  const photos = files.filter((f) => f.kind === "foto");
+  const documents = files.filter((f) => f.kind !== "foto");
   const roots = comments.filter((c) => !c.parent_id);
   const repliesOf = (cid: string) => comments.filter((c) => c.parent_id === cid);
 
@@ -116,13 +120,21 @@ export function Detail({ id }: { id: string }) {
           <Link href={"/perfil/" + proposal.author_id}>{proposal.profiles?.name ?? "Persona usuaria"}</Link>
           <span className={"status" + (proposal.shared_at ? " shared" : "")}>{proposal.shared_at ? "Compartida con destinatarios" : "Publicada"}</span>
         </div>
+        <Photos
+          proposalId={proposal.id}
+          photos={photos}
+          isAuthor={isAuthor}
+          userId={user?.id}
+          onChange={refresh}
+          onMessage={(text, tone) => setMessage({ text, tone })}
+        />
         <div className="detail-body">{proposal.body}</div>
 
-        {(files.length > 0 || isAuthor) && (
+        {(documents.length > 0 || isAuthor) && (
           <section aria-label="Archivos de apoyo">
             <h3 style={{ display: "flex", gap: 6, alignItems: "center" }}><Paperclip size={16} /> Archivos de apoyo</h3>
             <div className="files">
-              {files.map((f) => (
+              {documents.map((f) => (
                 <span className="file" key={f.id}>
                   <FileText size={15} aria-hidden="true" />
                   <a href={"/api/archivo/" + f.id} target="_blank" rel="noreferrer">{f.name}</a>
@@ -145,9 +157,9 @@ export function Detail({ id }: { id: string }) {
                   )}
                 </span>
               ))}
-              {!files.length && <p className="hint">Sin archivos.</p>}
+              {!documents.length && <p className="hint">Sin archivos.</p>}
             </div>
-            {isAuthor && files.length < 5 && (
+            {isAuthor && documents.length < documentLimit && (
               <label className="field" style={{ marginTop: 10 }}>
                 Añadir archivo
                 <input
@@ -161,6 +173,7 @@ export function Detail({ id }: { id: string }) {
                       await validateFile(file);
                       const form = new FormData();
                       form.set("file", file);
+                      form.set("kind", "documento");
                       form.set("proposalId", proposal.id);
                       const r = await fetch("/api/upload", { method: "POST", body: form });
                       const data = await r.json();
@@ -182,6 +195,9 @@ export function Detail({ id }: { id: string }) {
           <button aria-pressed={liked} aria-label={liked ? "Retirar apoyo" : "Apoyar"} onClick={() => act("likes", liked)}>
             <Heart size={18} /> {proposal.like_count} <span className="label">Apoyos</span>
           </button>
+          {(proposal.signatures_enabled || proposal.signature_count > 0) && (
+            <a href="#firmas"><PenLine size={18} /> {proposal.signature_count} <span className="label">Firmas</span></a>
+          )}
           <a href="#conversacion"><MessageCircle size={18} /> {proposal.comment_count} <span className="label">Comentarios</span></a>
           <button aria-pressed={reshared} aria-label={reshared ? "Quitar republicación" : "Republicar"} onClick={() => act("reshares", reshared)}>
             <Repeat2 size={18} /> {proposal.reshare_count} <span className="label">Republicar</span>
@@ -222,6 +238,8 @@ export function Detail({ id }: { id: string }) {
           </div>
         )}
       </article>
+
+      <Signatures proposal={proposal} isAuthor={isAuthor} onChange={refresh} />
 
       {isAuthor && <Recipients proposal={proposal} files={files} onShared={refresh} />}
 

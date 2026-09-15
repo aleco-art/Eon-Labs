@@ -3,7 +3,8 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Heart, MapPin, MessageCircle, Repeat2, Search, Share2 } from "lucide-react";
 import { browserDb, configured } from "@/lib/supabase/client";
-import { categories, dateLabel, normalize, proposalSelect, type Proposal } from "@/lib/domain";
+import { categories, dateLabel, normalize, photoUrl, proposalSelect, type Proposal } from "@/lib/domain";
+import { SignatureProgress } from "./signatures";
 import { placeLabel, useTerritories } from "@/lib/territories";
 import { useSession } from "./shell";
 import { emptyTerritory, Notice, TerritorySelect, type TerritoryValue } from "./common";
@@ -40,16 +41,40 @@ export function useInteractions(ids: string[]) {
   return [user ? mine : { likes: new Set<string>(), reshares: new Set<string>() }, setMine] as const;
 }
 
+/** First photo of each proposal, used as the card cover. */
+export function useCovers(ids: string[]) {
+  const [covers, setCovers] = useState<Map<string, string>>(new Map());
+  const key = ids.join(",");
+  useEffect(() => {
+    if (!configured || !ids.length) return;
+    browserDb()
+      .from("attachments")
+      .select("id,proposal_id")
+      .in("proposal_id", ids)
+      .eq("kind", "foto")
+      .eq("hidden", false)
+      .order("created_at")
+      .then(({ data }) => {
+        const map = new Map<string, string>();
+        for (const row of data ?? []) if (!map.has(row.proposal_id)) map.set(row.proposal_id, row.id);
+        setCovers(map);
+      });
+  }, [key]); // eslint-disable-line react-hooks/exhaustive-deps
+  return covers;
+}
+
 export function ProposalCard({
   proposal,
   mine,
   onToggle,
   compact = false,
+  cover,
 }: {
   proposal: Proposal;
   mine: Mine;
   onToggle: (kind: "likes" | "reshares", id: string, active: boolean) => Promise<string | null>;
   compact?: boolean;
+  cover?: string;
 }) {
   const { territories } = useTerritories();
   const [message, setMessage] = useState("");
@@ -62,7 +87,13 @@ export function ProposalCard({
     setBusy(false);
   }
   return (
-    <article className="card proposal-card">
+    <article className={"card proposal-card" + (cover ? " has-cover" : "")}>
+      {cover && (
+        <Link className="card-cover" href={"/propuesta/" + proposal.id} tabIndex={-1} aria-hidden="true">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={photoUrl(cover)} alt="" loading="lazy" />
+        </Link>
+      )}
       <div className="meta">
         <span className="tag">{proposal.category}</span>
         <span><MapPin size={14} aria-hidden="true" />{placeLabel(territories, proposal.province, proposal.district, proposal.corregimiento)}</span>
@@ -70,6 +101,7 @@ export function ProposalCard({
       </div>
       <h3><Link href={"/propuesta/" + proposal.id}>{proposal.title}</Link></h3>
       {!compact && <p className="excerpt">{proposal.body}</p>}
+      {(proposal.signatures_enabled || proposal.signature_count > 0) && <SignatureProgress proposal={proposal} compact />}
       <div className="author">
         <Avatar name={proposal.profiles?.name} path={proposal.profiles?.avatar_path} />
         <Link href={"/perfil/" + proposal.author_id}>{proposal.profiles?.name ?? "Persona usuaria"}</Link>
@@ -201,6 +233,7 @@ export function Feed({ authorId, title = "Propuestas de la comunidad" }: { autho
   }, [refresh]);
 
   const [mine, setMine] = useInteractions(items.map((p) => p.id));
+  const covers = useCovers(items.map((p) => p.id));
   const toggle = useToggle(setMine, refresh);
   const resetPage = () => setLimit(PAGE);
 
@@ -252,7 +285,7 @@ export function Feed({ authorId, title = "Propuestas de la comunidad" }: { autho
         <>
           <p className="results-line" aria-live="polite">{total} {total === 1 ? "propuesta" : "propuestas"}</p>
           <div className="feed-grid">
-            {items.map((p) => <ProposalCard key={p.id} proposal={p} mine={mine} onToggle={toggle} />)}
+            {items.map((p) => <ProposalCard key={p.id} proposal={p} mine={mine} onToggle={toggle} cover={covers.get(p.id)} />)}
           </div>
           {items.length < total && (
             <p style={{ textAlign: "center", marginTop: 20 }}>

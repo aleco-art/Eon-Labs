@@ -38,7 +38,7 @@ export async function POST(req: Request) {
 
     const { data: proposal } = await db
       .from("proposals")
-      .select("id,title,shared_at,profiles!proposals_author_id_fkey(name)")
+      .select("id,title,shared_at,like_count,comment_count,reshare_count,signature_count,signature_goal,signatures_enabled,profiles!proposals_author_id_fkey(name)")
       .eq("id", input.proposalId)
       .eq("author_id", user.id)
       .eq("hidden", false)
@@ -66,6 +66,14 @@ export async function POST(req: Request) {
       files: (files ?? []).map((f) => ({ name: f.name, url: new URL("/api/archivo/" + f.id, base).href })),
       replyToAuthor: input.replyToAuthor,
       siteName: siteName(),
+      support: {
+        signatures: proposal.signature_count,
+        signatureGoal: proposal.signature_goal,
+        signaturesEnabled: proposal.signatures_enabled,
+        likes: proposal.like_count,
+        comments: proposal.comment_count,
+        reshares: proposal.reshare_count,
+      },
     });
 
     const results: { recipientId: string; name: string; status: string; message: string }[] = [];

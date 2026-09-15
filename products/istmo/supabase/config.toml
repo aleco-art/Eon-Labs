@@ -244,11 +244,11 @@ otp_expiry = 3600
 
 # Uncomment to customize email template
 [auth.email.template.confirmation]
-subject = "Confirma tu cuenta"
+subject = "Confirma tu cuenta en Istmo"
 content_path = "./supabase/templates/confirmation.html"
 
 [auth.email.template.recovery]
-subject = "Restablece tu contraseña"
+subject = "Restablece tu contraseña de Istmo"
 content_path = "./supabase/templates/recovery.html"
 
 # [auth.email.template.invite]

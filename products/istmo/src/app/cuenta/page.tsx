@@ -51,11 +51,11 @@ export default function Account() {
         const { data, error } = await db.auth.signUp({ email, password, options: { data: { name: String(f.get("name")).trim() }, emailRedirectTo: callback("/perfil") } });
         if (error) throw error;
         if (data.session) router.push("/");
-        else setMessage({ text: "Te enviamos un correo para confirmar tu cuenta. Abre el enlace para empezar.", tone: "ok" });
+        else setMessage({ text: `Te enviamos un correo para confirmar tu cuenta a ${email}. Llega de «Istmo» con el asunto «Confirma tu cuenta en Istmo». Abre el enlace para empezar; si no lo ves en unos minutos, revisa la carpeta de spam o promociones.`, tone: "ok" });
       } else if (mode === "reset") {
         const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: callback("/cuenta?modo=nueva-clave") });
         if (error) throw error;
-        setMessage({ text: "Si existe una cuenta con ese correo, recibirás un enlace para restablecer la contraseña.", tone: "ok" });
+        setMessage({ text: "Si existe una cuenta con ese correo, recibirás un enlace de «Istmo» para restablecer la contraseña. Revisa también spam o promociones.", tone: "ok" });
       } else if (mode === "password") {
         const { error } = await db.auth.updateUser({ password });
         if (error) throw error;

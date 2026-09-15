@@ -4,11 +4,11 @@ Plataforma ciudadana para Panamá: cualquier persona publica una propuesta, la c
 
 ## Funciones
 
-- **Cuentas reales** con Supabase Auth: registro con confirmación por correo, inicio y cierre de sesión, recuperación de contraseña. Perfil público con nombre, avatar, biografía y ubicación opcional. El correo nunca es público.
-- **Propuestas** con título, texto, temática, alcance (todo Panamá o ubicación), provincia/comarca → distrito → corregimiento dependientes, y hasta 5 imágenes o PDF públicos (10 MB, tipo y firma de archivo validados).
+- **Cuentas reales** con Supabase Auth: registro con confirmación por correo, inicio y cierre de sesión, recuperación de contraseña. Perfil público con nombre, foto, biografía, ocupación, ubicación y datos de contacto opcionales (correo de contacto, teléfono, web, Instagram, LinkedIn). El correo de la cuenta nunca es público. Los correos de confirmación y recuperación salen con la marca de Istmo por el SMTP de Resend.
+- **Propuestas** con título, texto, temática, alcance (todo Panamá o ubicación), provincia/comarca → distrito → corregimiento dependientes, hasta 6 fotos (la primera es la portada en el feed) y hasta 5 archivos de apoyo, todos públicos (10 MB, tipo y firma de archivo validados).
 - **Feed** con búsqueda sin tildes, filtros por temática, alcance, territorio y fecha, y orden por fecha o popularidad; paginación en servidor.
-- **Interacciones persistentes**: un apoyo por persona (se puede retirar), comentarios y respuestas, republicaciones enlazadas al original con su autoría, enlace para compartir. Los contadores los calcula la base de datos.
-- **Envío a responsables por área**: sugerencias según temática, jurisdicción y calidad del canal; lista persistente por propuesta; alta manual; revisión de destinatarios, asunto, mensaje, enlace y archivos; consentimiento para usar el correo del autor como respuesta; envío individual desde el remitente verificado de la plataforma; estados reales (aceptado, entregado, rebotado, fallido, por confirmar); límites anti-spam. Los portales sin correo se abren con un texto preparado y **no** cuentan como envío.
+- **Interacciones persistentes**: un apoyo por persona (se puede retirar), comentarios y respuestas, republicaciones enlazadas al original con su autoría, enlace para compartir y **recogida de firmas** opcional (una por cuenta, pública o anónima, con motivo y meta con barra de progreso). Los contadores los calcula la base de datos.
+- **Envío a responsables por área**: sugerencias según temática, jurisdicción y calidad del canal; lista persistente por propuesta; alta manual; revisión de destinatarios, asunto, mensaje, enlace y archivos; el correo destaca el respaldo ciudadano en el momento del envío (firmas, apoyos, comentarios y republicaciones); consentimiento para usar el correo del autor como respuesta; envío individual desde el remitente verificado de la plataforma; estados reales (aceptado, entregado, rebotado, fallido, por confirmar); límites anti-spam. Los portales sin correo se abren con un texto preparado y **no** cuentan como envío.
 - **Seguimiento sin aprobación**: estados «Publicada» y «Compartida con destinatarios»; novedades y respuestas recibidas aportadas por el autor.
 - **Moderación** separada del mérito: reportes de propuestas, comentarios, archivos y datos del directorio; ocultar/restaurar; registro de acciones.
 - **Fuentes y actualización** (`/fuentes`) con registro de procedencia, cobertura, discrepancias y límites.
@@ -42,6 +42,7 @@ npm run dev -- -p 3100
 | `002_territories.sql` | 699 corregimientos del IGN «Tommy Guardia» con códigos |
 | `003_platform_v2.sql` | Corrección de la política de lectura de adjuntos, búsqueda sin tildes, contadores, límites diarios en la base de datos, directorio `responsables`, listas `proposal_recipients`, moderación de archivos y registro |
 | `004_directory_seed.sql` | Directorio generado (109 responsables) y alias territoriales |
+| `005_launch_features.sql` | Contacto opcional en perfiles, firmas con contador y meta, fotos separadas de los documentos, permisos de inserción por columna |
 
 Todas las tablas tienen RLS. El navegador solo usa la clave pública; `SUPABASE_SERVICE_ROLE_KEY` se usa en rutas del servidor para registrar envíos, moderar y ejecutar investigaciones.
 
@@ -90,4 +91,4 @@ Ambas pruebas se niegan a ejecutarse fuera de `localhost`. `test:e2e` necesita l
 
 ## Límites de uso
 
-Por cuenta y día: 10 propuestas, 60 comentarios, 300 apoyos, 100 republicaciones, 20 novedades, 20 reportes, 60 destinatarios guardados, 20 correos y 10 investigaciones web. Hasta 10 destinatarios por envío y un envío por destinatario y propuesta cada 30 días. Los apoyos nunca generan correos.
+Por cuenta y día: 10 propuestas, 60 comentarios, 300 apoyos, 100 republicaciones, 300 firmas, 20 novedades, 20 reportes, 60 destinatarios guardados, 20 correos y 10 investigaciones web. Hasta 10 destinatarios por envío y un envío por destinatario y propuesta cada 30 días. Los apoyos nunca generan correos.

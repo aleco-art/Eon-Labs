@@ -18,7 +18,15 @@ export type Profile = {
   bio: string;
   location: string;
   avatar_path: string | null;
+  occupation: string | null;
+  contact_email: string | null;
+  phone: string | null;
+  website: string | null;
+  instagram: string | null;
+  linkedin: string | null;
 };
+
+export const profileSelect = "id,name,bio,location,avatar_path,occupation,contact_email,phone,website,instagram,linkedin";
 
 export type Proposal = {
   id: string;
@@ -35,11 +43,19 @@ export type Proposal = {
   like_count: number;
   reshare_count: number;
   comment_count: number;
+  signatures_enabled: boolean;
+  signature_goal: number | null;
+  signature_count: number;
   profiles: Pick<Profile, "id" | "name" | "avatar_path"> | null;
 };
 
 export const proposalSelect =
-  "id,author_id,title,body,category,province,district,corregimiento,created_at,updated_at,shared_at,like_count,reshare_count,comment_count,profiles!proposals_author_id_fkey(id,name,avatar_path)";
+  "id,author_id,title,body,category,province,district,corregimiento,created_at,updated_at,shared_at,like_count,reshare_count,comment_count,signatures_enabled,signature_goal,signature_count,profiles!proposals_author_id_fkey(id,name,avatar_path)";
+
+export const photoLimit = 6;
+export const documentLimit = 5;
+/** Inline URL for a photo; documents use the same route without `inline` to download. */
+export const photoUrl = (attachmentId: string) => `/api/archivo/${attachmentId}?inline=1`;
 
 export const normalize = (s: string) =>
   s
