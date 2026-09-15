@@ -36,10 +36,9 @@ const excludedDomains = [
   "eldirectorio.co", "paginasamarillas.com.pa", "moovitapp.com", "balanceeconomico.com", "cylex.com.pa", "infoisinfo.com.pa",
 ];
 const isExcluded = (host: string) => excludedDomains.some((d) => host === d || host.endsWith("." + d));
-// Results must be about Panama: a .pa domain, or a page that names Panama and is not another country's site.
-const FOREIGN_TLD = /\.(cl|uy|co|mx|ar|pe|es|ec|cr|gt|hn|sv|ni|do|ve|bo|py|br|us|uk)$/;
-const aboutPanama = (host: string, text: string) =>
-  host.endsWith(".pa") || (!FOREIGN_TLD.test(host) && !/\.(gob|gov|gub)\.[a-z]{2}$/.test(host) && /panam[aá]/i.test(text));
+// Only Panamanian domains (.pa) are kept: in measured searches the noise was foreign sites,
+// classifieds and international documents, and a responsable for a Panamanian proposal lives on .pa.
+const aboutPanama = (host: string) => host.endsWith(".pa");
 const CATEGORY_HINTS: Record<string, string> = {
   Gubernamental: "gobierno trámite servicio público",
   Urbanización: "obras públicas urbanismo transporte espacio público",
@@ -203,7 +202,7 @@ export async function researchStep(id: string) {
     const key = createHash("sha256")
       .update(
         normalize(
-          ["v5", p.title, p.body.slice(0, 500), p.category, place, queries].join("|"),
+          ["v6", p.title, p.body.slice(0, 500), p.category, place, queries].join("|"),
         ),
       )
       .digest("hex");
@@ -218,15 +217,17 @@ export async function researchStep(id: string) {
       found = cache.results;
       metrics.cache_hits = (metrics.cache_hits ?? 0) + 1;
     } else {
-      // Short queries: one on government sites first, then institutions and organisations in general.
+      // Queries about competence find institutions; queries about the title mostly find articles.
+      // Measured on 15-sep-2026: competence queries returned .gob.pa sites, title queries news and classifieds.
       const short = p.title.slice(0, 80);
+      const hint = CATEGORY_HINTS[p.category] ?? p.category;
       const plan = [
-        { q: `${short} Panamá`, domains: ["gob.pa"] },
-        { q: `${short} ${place ?? ""} Panamá institución responsable`, domains: null },
-        { q: `${p.category} ${short} Panamá organización contacto`, domains: null },
-        { q: `${CATEGORY_HINTS[p.category] ?? p.category} ${place ?? ""} Panamá autoridad`, domains: ["gob.pa"] },
-        { q: `${short} Panamá asociación gremio universidad`, domains: null },
-        { q: `${short} ${place ?? ""} Panamá junta comunal municipio`, domains: null },
+        { q: `${hint} ${place ?? ""} Panamá autoridad`, domains: null },
+        { q: `${short} ${place ?? ""} Panamá`, domains: null },
+        { q: `${hint} Panamá asociación fundación organización`, domains: null },
+        { q: `${short} Panamá ministerio municipio`, domains: null },
+        { q: `${hint} Panamá universidad gremio cámara`, domains: null },
+        { q: `${short} ${place ?? ""} Panamá junta comunal`, domains: null },
       ][queries];
       const search = (extra: Record<string, unknown>) =>
         fetch("https://api.tavily.com/search", {
@@ -238,7 +239,7 @@ export async function researchStep(id: string) {
           body: JSON.stringify({
             query: plan.q.replace(/\s+/g, " ").trim(),
             search_depth: "basic",
-            max_results: 8,
+            max_results: 10,
             include_raw_content: false,
             include_answer: false,
             ...(plan.domains ? { include_domains: plan.domains } : { exclude_domains: excludedDomains }),
@@ -259,14 +260,14 @@ export async function researchStep(id: string) {
       const payload = await response.json();
       step.hits = payload.results?.length ?? 0;
       let extracted = 0;
-      for (const hit of (payload.results ?? []).slice(0, 8)) {
+      for (const hit of (payload.results ?? []).slice(0, 10)) {
         const url = String(hit.url ?? "");
         let u: URL;
         try {
           u = new URL(url);
           if (u.protocol !== "https:" || u.username || u.password) continue;
           const host = u.hostname.replace(/^www\./, "");
-          if (isExcluded(host) || !aboutPanama(host, `${hit.title ?? ""} ${hit.content ?? ""}`)) {
+          if (isExcluded(host) || !aboutPanama(host)) {
             step.dropped.push(host);
             continue;
           }
