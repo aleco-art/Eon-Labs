@@ -455,7 +455,10 @@ export function Recipients({ proposal, files, onShared }: { proposal: Proposal; 
               )}
               <label className="check">
                 <input type="checkbox" checked={replyTo} onChange={(e) => setReplyTo(e.target.checked)} />
-                <span>Autorizo usar mi correo <b>{user?.email}</b> como dirección de respuesta, para que los destinatarios puedan contestarme directamente. Si no lo marcas, tu correo no se compartirá.</span>
+                <span>
+                  Autorizo usar mi correo <b>{user?.email}</b> como dirección de respuesta <b>(recomendado)</b>. Así, si un destinatario contesta, la respuesta te llega directamente y puedes darle seguimiento. Solo lo verán los destinatarios de este envío.
+                  {!replyTo && <em className="reply-warning"> Si no lo marcas, tu correo no se comparte y las respuestas llegan al buzón de Istmo, que te las reenviará; tardarán más en llegarte.</em>}
+                </span>
               </label>
               <details style={{ margin: "10px 0" }}>
                 <summary className="text-button">Vista previa del texto</summary>

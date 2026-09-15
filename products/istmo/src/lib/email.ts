@@ -129,7 +129,7 @@ export function proposalEmail(input: {
   const disclaimer = `${input.siteName} es una plataforma ciudadana independiente. No representa a ninguna entidad, no aprueba propuestas ni garantiza su ejecución. Este mensaje lo envió ${input.authorName}, autor de la propuesta, tras revisarlo y confirmarlo. Las cifras de respaldo corresponden al momento del envío y cada una proviene de una cuenta distinta.`;
   const reply = input.replyToAuthor
     ? `Si responde a este correo, su respuesta llegará directamente a ${input.authorName}.`
-    : `${input.authorName} no compartió su correo. Puede comentar la propuesta en su página pública.`;
+    : `Si responde a este correo, el equipo de ${input.siteName} hará llegar su respuesta a ${input.authorName}. También puede comentar la propuesta en su página pública.`;
   const files = input.files.length
     ? "\n\nArchivos y fotos:\n" + input.files.map((f) => `- ${f.name}: ${f.url}`).join("\n")
     : "";

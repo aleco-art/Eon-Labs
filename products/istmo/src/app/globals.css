@@ -316,6 +316,7 @@ fieldset.subpanel { min-width: 0; }
 .research-bar { height: 6px; background: var(--blue-50); border-radius: 999px; overflow: hidden; margin-top: 10px; max-width: 320px; }
 .research-bar span { display: block; height: 100%; background: var(--blue); transition: width 0.4s ease; }
 .recipient-list { margin-top: 0; }
+.reply-warning { display: block; margin-top: 4px; font-style: normal; color: var(--amber-700); }
 
 /* Footer */
 .site-footer { border-top: 1px solid var(--line); background: var(--white); }
