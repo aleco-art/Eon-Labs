@@ -204,7 +204,7 @@ export async function researchStep(id: string) {
     const key = createHash("sha256")
       .update(
         normalize(
-          ["v3", p.title, p.body.slice(0, 500), p.category, place, queries].join("|"),
+          ["v4", p.title, p.body.slice(0, 500), p.category, place, queries].join("|"),
         ),
       )
       .digest("hex");
