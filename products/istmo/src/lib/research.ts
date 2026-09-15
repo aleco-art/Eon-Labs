@@ -285,7 +285,9 @@ export async function researchStep(id: string) {
           extracted++;
           metrics.pages = (metrics.pages ?? 0) + 1;
         }
-        const title = String(hit.title ?? u.hostname).slice(0, 140);
+        const rawTitle = String(hit.title ?? u.hostname);
+        const isDocument = /^\s*\[pdf\]/i.test(rawTitle) || /\.pdf$/i.test(u.pathname);
+        const title = (isDocument ? "Documento: " : "") + rawTitle.replace(/^\s*\[pdf\]\s*/i, "").slice(0, 130);
         const official = /(^|\.)gob\.pa$/.test(u.hostname);
         found.push({
           id: createHash("sha256").update(url).digest("hex").slice(0, 24),
