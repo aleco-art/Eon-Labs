@@ -196,7 +196,18 @@ export function Recipients({ proposal, files, onShared }: { proposal: Proposal; 
     }
   }
 
+  // The author's last answer about the copy is remembered in this browser so they don't tick it on
+  // every send. The consent still travels with each send and can be undone before confirming.
+  const consentKey = () => (user ? "istmo.copia-al-autor." + user.id : null);
+  function chooseReplyTo(value: boolean) {
+    setReplyTo(value);
+    const key = consentKey();
+    if (key) try { window.localStorage.setItem(key, value ? "si" : "no"); } catch {}
+  }
+
   function openReview() {
+    const key = consentKey();
+    if (key) try { setReplyTo(window.localStorage.getItem(key) === "si"); } catch {}
     setReview(true);
     setResults(null);
     setConfirmed(false);
@@ -454,7 +465,7 @@ export function Recipients({ proposal, files, onShared }: { proposal: Proposal; 
                 </fieldset>
               )}
               <label className="check">
-                <input type="checkbox" checked={replyTo} onChange={(e) => setReplyTo(e.target.checked)} />
+                <input type="checkbox" checked={replyTo} onChange={(e) => chooseReplyTo(e.target.checked)} />
                 <span>
                   Autorizo usar mi correo <b>{user?.email}</b> para el seguimiento <b>(recomendado)</b>. Irá en copia (CC) y como dirección de respuesta: recibes una copia de cada correo tal como salió y cualquier respuesta del destinatario te llega directamente. Solo lo verán los destinatarios de este envío.
                   {!replyTo && <em className="reply-warning"> Si no lo marcas, tu correo no se comparte, no recibes copia y las respuestas llegan al buzón de Istmo, que te las reenviará; tardarán más en llegarte.</em>}
