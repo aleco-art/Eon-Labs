@@ -32,6 +32,12 @@ export async function POST(req: Request) {
       .eq("provider_id", emailId)
       .in("status", ["pending", "accepted", "unknown"]);
   } else if (event.type === "email.bounced") {
+    // The author is copied on their own sends: a bounce from that copy must not report the
+    // responsable as unreachable. Only mark the delivery when the bounce names its recipient.
+    const bounced = ((event.data as { to?: string[] }).to ?? []).map((a) => a.toLowerCase());
+    const { data: delivery } = await db.from("deliveries").select("id,recipient").eq("provider_id", emailId).maybeSingle();
+    if (delivery && bounced.length && !bounced.includes(delivery.recipient.toLowerCase()))
+      return Response.json({ received: true });
     await db
       .from("deliveries")
       .update({ status: "bounced", error: "El servidor del destinatario rechazó el correo (rebote).", updated_at: now })
