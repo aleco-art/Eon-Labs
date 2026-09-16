@@ -149,6 +149,7 @@ export async function POST(req: Request) {
         text,
         html,
         replyTo: input.replyToAuthor && user.email ? user.email : undefined,
+        cc: input.replyToAuthor && user.email ? user.email : undefined,
         idempotencyKey,
       });
       const now = new Date().toISOString();

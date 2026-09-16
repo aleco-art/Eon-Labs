@@ -456,13 +456,13 @@ export function Recipients({ proposal, files, onShared }: { proposal: Proposal; 
               <label className="check">
                 <input type="checkbox" checked={replyTo} onChange={(e) => setReplyTo(e.target.checked)} />
                 <span>
-                  Autorizo usar mi correo <b>{user?.email}</b> como dirección de respuesta <b>(recomendado)</b>. Así, si un destinatario contesta, la respuesta te llega directamente y puedes darle seguimiento. Solo lo verán los destinatarios de este envío.
-                  {!replyTo && <em className="reply-warning"> Si no lo marcas, tu correo no se comparte y las respuestas llegan al buzón de Istmo, que te las reenviará; tardarán más en llegarte.</em>}
+                  Autorizo usar mi correo <b>{user?.email}</b> para el seguimiento <b>(recomendado)</b>. Irá en copia (CC) y como dirección de respuesta: recibes una copia de cada correo tal como salió y cualquier respuesta del destinatario te llega directamente. Solo lo verán los destinatarios de este envío.
+                  {!replyTo && <em className="reply-warning"> Si no lo marcas, tu correo no se comparte, no recibes copia y las respuestas llegan al buzón de Istmo, que te las reenviará; tardarán más en llegarte.</em>}
                 </span>
               </label>
               <details style={{ margin: "10px 0" }}>
                 <summary className="text-button">Vista previa del texto</summary>
-                <div className="preview">{`Para: (cada destinatario por separado)\nAsunto: ${subject}\n\nRespaldo ciudadano: ${support}.\n\n${body}\n\n—\n${proposalBlock}\n\nPropuesta pública: ${proposalUrl}`}</div>
+                <div className="preview">{`Para: (cada destinatario por separado)${replyTo && user?.email ? `\nCopia (CC): ${user.email}` : ""}\nAsunto: ${subject}\n\nRespaldo ciudadano: ${support}.\n\n${body}\n\n—\n${proposalBlock}\n\nPropuesta pública: ${proposalUrl}`}</div>
               </details>
               <label className="check">
                 <input type="checkbox" checked={confirmed} onChange={(e) => setConfirmed(e.target.checked)} />

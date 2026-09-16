@@ -8,6 +8,8 @@ export type EmailMessage = {
   text: string;
   html: string;
   replyTo?: string;
+  /** Author's own address, kept in copy so replies to all reach them and they keep a receipt. */
+  cc?: string;
   idempotencyKey: string;
 };
 export type EmailResult =
@@ -49,6 +51,8 @@ export async function sendEmail(message: EmailMessage): Promise<EmailResult> {
   const mode = emailMode();
   if (!mode.configured) return { ok: false, error: mode.reason, uncertain: false };
   const to = mode.redirectTo ?? message.to;
+  // Outside production every copy goes to the test inbox: a real author must never be written to.
+  const cc = mode.redirectTo ? undefined : message.cc;
   const subject = mode.redirectTo ? `[Prueba para ${message.to}] ${message.subject}` : message.subject;
   if (mode.provider === "smtp") {
     try {
@@ -59,7 +63,7 @@ export async function sendEmail(message: EmailMessage): Promise<EmailResult> {
       });
       const info = await transport.sendMail({
         from: mode.from, to, subject, text: message.text, html: message.html,
-        replyTo: message.replyTo,
+        replyTo: message.replyTo, cc,
         headers: { "X-Istmo-Idempotency-Key": message.idempotencyKey },
       });
       return { ok: true, providerId: "smtp:" + info.messageId };
@@ -69,7 +73,7 @@ export async function sendEmail(message: EmailMessage): Promise<EmailResult> {
   }
   try {
     const { data, error } = await new Resend(process.env.RESEND_API_KEY).emails.send(
-      { from: mode.from, to: [to], subject, text: message.text, html: message.html, ...(message.replyTo ? { replyTo: message.replyTo } : {}) },
+      { from: mode.from, to: [to], subject, text: message.text, html: message.html, ...(message.replyTo ? { replyTo: message.replyTo } : {}), ...(cc ? { cc: [cc] } : {}) },
       { idempotencyKey: message.idempotencyKey },
     );
     if (error) return { ok: false, error: "El proveedor de correo rechazó el envío.", uncertain: false };
@@ -128,7 +132,7 @@ export function proposalEmail(input: {
 }) {
   const disclaimer = `${input.siteName} es una plataforma ciudadana independiente. No representa a ninguna entidad, no aprueba propuestas ni garantiza su ejecución. Este mensaje lo envió ${input.authorName}, autor de la propuesta, tras revisarlo y confirmarlo. Las cifras de respaldo corresponden al momento del envío y cada una proviene de una cuenta distinta.`;
   const reply = input.replyToAuthor
-    ? `Si responde a este correo, su respuesta llegará directamente a ${input.authorName}.`
+    ? `${input.authorName} está en copia de este correo, así que su respuesta le llegará directamente.`
     : `Si responde a este correo, el equipo de ${input.siteName} hará llegar su respuesta a ${input.authorName}. También puede comentar la propuesta en su página pública.`;
   const files = input.files.length
     ? "\n\nArchivos y fotos:\n" + input.files.map((f) => `- ${f.name}: ${f.url}`).join("\n")

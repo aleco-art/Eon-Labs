@@ -309,7 +309,8 @@ await step("destinatarios y envío", async () => {
   check("El correo llega al buzón de pruebas con el enlace público", msg && msg.HTML.includes(proposalUrl) && /no representa a ninguna entidad/i.test(msg.Text), msg?.Subject);
   check("El correo incluye siempre el texto completo de la propuesta con temática y ubicación", /LA PROPUESTA/.test(msg?.Text ?? "") && (msg?.Text ?? "").includes("Propongo convertir un tramo de calle en corredor peatonal") && /Urbanización · La Exposición o Calidonia, Panamá, Panamá/.test(msg?.Text ?? "") && (msg?.HTML ?? "").includes("LA PROPUESTA"), (msg?.Text ?? "").slice(0, 300));
   check("El correo destaca firmas, apoyos, comentarios y republicaciones", /Respaldo ciudadano en Istmo: 1 firma \(meta: 50\), 1 apoyo, 2 comentarios y 1 republicación\./.test(msg?.Text ?? "") && /RESPALDO CIUDADANO/.test(msg?.HTML ?? ""), (msg?.Text ?? "").split("\n")[0]);
-  check("Remitente de la plataforma y respuesta al autor (con consentimiento)", msg?.From?.Address === "propuestas@istmo.test" && msg?.ReplyTo?.[0]?.Address === users.A.email, JSON.stringify({ from: msg?.From, replyTo: msg?.ReplyTo }));
+  check("Remitente de la plataforma, respuesta y copia al autor (con consentimiento)", msg?.From?.Address === "propuestas@istmo.test" && msg?.ReplyTo?.[0]?.Address === users.A.email && msg?.Cc?.[0]?.Address === users.A.email, JSON.stringify({ from: msg?.From, replyTo: msg?.ReplyTo, cc: msg?.Cc }));
+  check("El correo avisa al responsable de que el autor está en copia", /está en copia de este correo/.test(msg?.Text ?? ""), (msg?.Text ?? "").slice(-400));
   const miviotMail = await mailTo("oterritorial@miviot.gob.pa", "Propuesta ciudadana");
   check("El correo al responsable real queda capturado localmente (no sale a internet)", Boolean(miviotMail), miviotMail?.Subject);
   await A.reload();
