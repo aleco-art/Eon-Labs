@@ -1,6 +1,8 @@
 // End-to-end checks against a LOCAL stack: `npx supabase start` + `npm run dev -- -p 3100`
 // with EMAIL_PROVIDER=smtp pointing at the local Mailpit. Never run against production.
 // Usage: node tests/e2e.mjs   (env: BASE_URL, MAILPIT_URL, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, OUT_DIR)
+// Run it on a freshly reset database: `npx supabase db reset` first, and never straight after tests/rls.mjs,
+// whose rows survive the run and break the counter and filter checks here.
 import fs from "node:fs";
 import { execSync } from "node:child_process";
 import { chromium, devices } from "@playwright/test";
