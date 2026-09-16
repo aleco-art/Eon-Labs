@@ -61,6 +61,25 @@ small { font-size: 0.8125rem; }
 .account-link { white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; padding: 8px 10px; border-radius: 10px; color: var(--blue); }
 .account-link:hover { background: var(--blue-50); }
 .menu-button { display: none; padding: 8px; border-radius: 10px; color: var(--blue); }
+
+/* Notifications bell */
+.notif { position: relative; display: flex; }
+.notif-button { position: relative; display: inline-flex; align-items: center; justify-content: center; min-width: 40px; min-height: 40px; border-radius: 10px; color: var(--blue); }
+.notif-button:hover { background: var(--blue-50); }
+.notif-dot { position: absolute; top: 2px; right: 2px; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 9px; background: var(--red); color: var(--white); font-size: 0.68rem; font-weight: 700; line-height: 18px; text-align: center; }
+.notif-backdrop { position: fixed; inset: 0; z-index: 40; cursor: default; }
+.notif-panel { position: absolute; top: calc(100% + 10px); right: 0; z-index: 41; width: 340px; max-width: calc(100vw - 24px); background: var(--white); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 18px 40px rgba(15, 29, 51, 0.16); padding: 6px; }
+.notif-title { margin: 0; padding: 10px 12px 8px; font-size: 0.75rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.notif-empty { margin: 0; padding: 4px 12px 14px; font-size: 0.9rem; color: var(--muted); line-height: 1.5; }
+.notif-list { list-style: none; margin: 0; padding: 0; max-height: 60vh; overflow-y: auto; }
+.notif-list a { display: block; padding: 10px 12px; border-radius: 10px; color: var(--ink); }
+.notif-list a:hover { background: var(--blue-50); }
+.notif-list li[data-unread] a { background: var(--red-50); }
+.notif-list li[data-unread] a:hover { background: var(--blue-50); }
+.notif-line { display: block; font-size: 0.92rem; font-weight: 600; }
+.notif-what { display: block; font-size: 0.85rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.notif-when { display: block; font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+.notif-foot { display: block; padding: 10px 12px; border-top: 1px solid var(--line); margin-top: 4px; font-size: 0.85rem; font-weight: 600; color: var(--blue); }
 .mobile-drawer { display: none; }
 
 /* Buttons */

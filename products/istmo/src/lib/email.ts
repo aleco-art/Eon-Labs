@@ -4,6 +4,8 @@ import nodemailer from "nodemailer";
 
 export type EmailMessage = {
   to: string;
+  /** Verified sender to use instead of EMAIL_FROM, for notices to our own users. */
+  from?: string;
   subject: string;
   text: string;
   html: string;
@@ -51,6 +53,7 @@ export async function sendEmail(message: EmailMessage): Promise<EmailResult> {
   const mode = emailMode();
   if (!mode.configured) return { ok: false, error: mode.reason, uncertain: false };
   const to = mode.redirectTo ?? message.to;
+  const from = message.from || mode.from;
   // Outside production every copy goes to the test inbox: a real author must never be written to.
   const cc = mode.redirectTo ? undefined : message.cc;
   const subject = mode.redirectTo ? `[Prueba para ${message.to}] ${message.subject}` : message.subject;
@@ -62,7 +65,7 @@ export async function sendEmail(message: EmailMessage): Promise<EmailResult> {
         secure: false,
       });
       const info = await transport.sendMail({
-        from: mode.from, to, subject, text: message.text, html: message.html,
+        from, to, subject, text: message.text, html: message.html,
         replyTo: message.replyTo, cc,
         headers: { "X-Istmo-Idempotency-Key": message.idempotencyKey },
       });
@@ -73,7 +76,7 @@ export async function sendEmail(message: EmailMessage): Promise<EmailResult> {
   }
   try {
     const { data, error } = await new Resend(process.env.RESEND_API_KEY).emails.send(
-      { from: mode.from, to: [to], subject, text: message.text, html: message.html, ...(message.replyTo ? { replyTo: message.replyTo } : {}), ...(cc ? { cc: [cc] } : {}) },
+      { from, to: [to], subject, text: message.text, html: message.html, ...(message.replyTo ? { replyTo: message.replyTo } : {}), ...(cc ? { cc: [cc] } : {}) },
       { idempotencyKey: message.idempotencyKey },
     );
     if (error) return { ok: false, error: "El proveedor de correo rechazó el envío.", uncertain: false };
@@ -168,4 +171,53 @@ ${input.files.length ? `<p style="margin:0 0 6px;font-weight:bold">Archivos y fo
 <p style="font-size:12px;color:#5b6780;line-height:1.5">${escape(disclaimer)}</p>
 </div></div></body></html>`;
   return { text, html };
+}
+
+/** Sender for notices to our own users. Kept apart from the address that writes to
+ *  responsables: if someone marks a summary as spam, that reputation stays over here. */
+export const noticeFrom = () => process.env.EMAIL_FROM_AVISOS || process.env.EMAIL_FROM || "";
+
+export type DigestGroup = { title: string; url: string; lines: string[] };
+
+/** One daily summary per author: what happened, grouped by proposal. */
+export function digestEmail(input: {
+  name: string;
+  siteName: string;
+  groups: DigestGroup[];
+  unsubscribeUrl: string;
+  settingsUrl: string;
+}) {
+  const total = input.groups.reduce((n, g) => n + g.lines.length, 0);
+  const headline =
+    total === 1 ? "Tienes 1 novedad en tus propuestas" : `Tienes ${total.toLocaleString("es-PA")} novedades en tus propuestas`;
+  const text = [
+    `Hola ${input.name}:`,
+    "",
+    headline + ".",
+    "",
+    ...input.groups.flatMap((g) => [g.title, ...g.lines.map((l) => "- " + l), g.url, ""]),
+    "—",
+    `Recibes este resumen porque tienes propuestas en ${input.siteName}. Para dejar de recibirlo: ${input.unsubscribeUrl}`,
+  ].join("\n");
+  const html = `<!doctype html><html lang="es"><body style="margin:0;background:#f4f6fb;font-family:Arial,Helvetica,sans-serif;color:#10213f">
+<div style="max-width:600px;margin:0 auto;padding:24px">
+<div style="height:6px;background:linear-gradient(90deg,#0a3a82 0 50%,#d21034 50% 100%);border-radius:6px 6px 0 0"></div>
+<div style="background:#fff;border:1px solid #dbe2ee;border-top:0;border-radius:0 0 12px 12px;padding:28px">
+<p style="margin:0 0 6px;font-size:12px;letter-spacing:.08em;color:#d21034;font-weight:bold">RESUMEN DEL DÍA</p>
+<h1 style="margin:0 0 18px;font-size:22px;line-height:1.3;color:#0a3a82">${escape(headline)}</h1>
+${input.groups
+  .map(
+    (g) => `<div style="border:1px solid #dbe2ee;border-left:4px solid #0a3a82;border-radius:12px;padding:16px 18px;margin:0 0 14px">
+<h2 style="margin:0 0 10px;font-size:17px;line-height:1.35;color:#10213f">${escape(g.title)}</h2>
+<ul style="margin:0 0 12px;padding-left:18px;font-size:15px;line-height:1.6">${g.lines.map((l) => `<li>${escape(l)}</li>`).join("")}</ul>
+<a href="${escape(g.url)}" style="color:#0a3a82;font-weight:bold;text-decoration:none">Ver la propuesta →</a>
+</div>`,
+  )
+  .join("")}
+<hr style="border:0;border-top:1px solid #dbe2ee;margin:20px 0">
+<p style="font-size:12px;color:#5b6780;line-height:1.5">Recibes este resumen porque tienes propuestas en ${escape(input.siteName)}.
+<a href="${escape(input.settingsUrl)}" style="color:#0a3a82">Gestionar avisos</a> ·
+<a href="${escape(input.unsubscribeUrl)}" style="color:#0a3a82">Dejar de recibirlos</a></p>
+</div></div></body></html>`;
+  return { text, html, subject: headline };
 }

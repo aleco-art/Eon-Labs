@@ -76,3 +76,33 @@ export const deliveryLabels: Record<string, string> = {
   unknown: "Resultado por confirmar",
   skipped: "No enviado",
 };
+
+export type NotificationKind = "apoyo" | "firma" | "comentario" | "republicacion" | "meta_firmas";
+export type Notification = {
+  id: string;
+  kind: NotificationKind;
+  actor_name: string | null;
+  proposal_id: string | null;
+  comment_id: string | null;
+  created_at: string;
+  read_at: string | null;
+  proposals: { title: string } | null;
+};
+export const notificationSelect = "id,kind,actor_name,proposal_id,comment_id,created_at,read_at,proposals(title)";
+
+/** What happened, in one line. `who` is the person's name, or nobody for anonymous signatures. */
+export function notificationLine(kind: NotificationKind, who: string | null) {
+  const name = who ?? "Alguien";
+  switch (kind) {
+    case "apoyo":
+      return `${name} apoyó tu propuesta`;
+    case "firma":
+      return `${name} firmó tu propuesta`;
+    case "comentario":
+      return `${name} comentó tu propuesta`;
+    case "republicacion":
+      return `${name} republicó tu propuesta`;
+    case "meta_firmas":
+      return "Tu propuesta alcanzó su meta de firmas";
+  }
+}

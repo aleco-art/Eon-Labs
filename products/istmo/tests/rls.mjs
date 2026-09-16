@@ -217,6 +217,31 @@ check("B no puede editar el contacto de A", aPhone.data.phone === null, JSON.str
 const accountEmail = await anon.from("profiles").select("*").eq("id", B.id).single();
 check("El correo de la cuenta sigue sin exponerse", !JSON.stringify(accountEmail.data).includes(B.email), Object.keys(accountEmail.data ?? {}).join(","));
 
+// Notifications: written by triggers, readable only by their owner, and only marked as read.
+const aInbox = await A.c.from("notifications").select("kind,actor_name,user_id").order("created_at");
+check("A recibe avisos de lo que hace B", (aInbox.data ?? []).length > 0 && aInbox.data.every((n) => n.user_id === A.id), (aInbox.data ?? []).map((n) => n.kind).join(","));
+const kinds = new Set((aInbox.data ?? []).map((n) => n.kind));
+check("Hay aviso de apoyo, comentario y firma", kinds.has("apoyo") && kinds.has("comentario") && kinds.has("firma"), [...kinds].join(","));
+const bInbox = await B.c.from("notifications").select("id");
+check("B no ve los avisos de A", (bInbox.data ?? []).length === 0, JSON.stringify(bInbox.data));
+const anonInbox = await anon.from("notifications").select("id");
+check("Un visitante no ve ningún aviso", (anonInbox.data ?? []).length === 0, JSON.stringify(anonInbox.data));
+const forgeNotif = await B.c.from("notifications").insert({ user_id: B.id, kind: "apoyo", proposal_id: pid });
+check("Nadie puede inventarse un aviso", Boolean(forgeNotif.error), forgeNotif.error?.message);
+const markRead = await A.c.from("notifications").update({ read_at: new Date().toISOString() }).is("read_at", null).select("id");
+check("A puede marcar sus avisos como leídos", !markRead.error && (markRead.data ?? []).length > 0, markRead.error?.message);
+const retagNotif = await A.c.from("notifications").update({ kind: "meta_firmas" }).eq("user_id", A.id);
+check("El tipo de aviso no se puede cambiar", Boolean(retagNotif.error), retagNotif.error?.message);
+const selfNotice = await admin.from("notifications").select("id").eq("actor_id", A.id).eq("user_id", A.id);
+check("Nadie recibe avisos de sus propias acciones", (selfNotice.data ?? []).length === 0, JSON.stringify(selfNotice.data));
+const settingsPeek = await B.c.from("email_settings").select("*").eq("user_id", A.id);
+check("Las preferencias de correo de A no son visibles para B", (settingsPeek.data ?? []).length === 0, JSON.stringify(settingsPeek.data));
+await admin.from("email_settings").upsert({ user_id: A.id });
+const tokenPeek = await A.c.from("email_settings").select("token").eq("user_id", A.id);
+check("El token de baja nunca sale al cliente", Boolean(tokenPeek.error), tokenPeek.error?.message);
+const tokenRpc = await A.c.rpc("digest_queue");
+check("La cola de resúmenes no es invocable por un usuario", Boolean(tokenRpc.error), tokenRpc.error?.message);
+
 const failed = results.filter((r) => !r.ok);
 console.log(`\n${results.length - failed.length}/${results.length} comprobaciones superadas`);
 process.exit(failed.length ? 1 : 0);

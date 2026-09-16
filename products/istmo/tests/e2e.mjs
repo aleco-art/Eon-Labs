@@ -208,6 +208,62 @@ await step("perfil y republicación", async () => {
   check("El correo de la cuenta no aparece en el perfil público", !JSON.stringify(anonProfile).includes(users.B.email), Object.keys(anonProfile[0] ?? {}).join(","));
 });
 
+await step("avisos", async () => {
+  const countTo = async (address, part) => {
+    const list = await (await fetch(`${MAIL}/api/v1/search?query=${encodeURIComponent("to:" + address)}`)).json();
+    return (list.messages ?? []).filter((m) => m.Subject.includes(part)).length;
+  };
+  await A.goto(BASE + "/");
+  await A.locator(".notif-button").waitFor({ timeout: 15000 });
+  await A.locator(".notif-dot").waitFor({ timeout: 15000 });
+  const unread = await A.locator(".notif-dot").innerText();
+  check("La campanita marca las novedades sin leer", /^[1-9]/.test(unread), unread);
+  await A.locator(".notif-button").click();
+  const panel = A.locator(".notif-panel");
+  await panel.waitFor();
+  const lines = await panel.locator(".notif-line").allTextContents();
+  check(
+    "Las novedades dicen quién apoyó, firmó, comentó y republicó",
+    ["apoyó", "firmó", "comentó", "republicó"].every((verb) => lines.some((l) => l.includes(verb))),
+    lines.join(" | "),
+  );
+  check("Cada novedad nombra a la persona y la propuesta", lines.some((l) => l.startsWith("Beto")) && (await panel.locator(".notif-what").first().innerText()).includes("Corredor peatonal"), lines[0]);
+  check("El autor no recibe avisos de sus propias acciones", !lines.some((l) => l.startsWith("Ana")), lines.join(" | "));
+  // The panel closes by clicking anywhere outside it, which is what the backdrop is for.
+  await A.locator(".notif-backdrop").click();
+  await panel.waitFor({ state: "detached", timeout: 10000 });
+  check("El panel se cierra al pulsar fuera", true);
+  let cleared = false;
+  for (let i = 0; i < 20 && !cleared; i++) {
+    await A.reload();
+    await A.locator(".notif-button").waitFor({ timeout: 15000 });
+    await wait(500);
+    cleared = (await A.locator(".notif-dot").count()) === 0;
+  }
+  check("Abrirlas las deja como leídas", cleared);
+
+  const cron = { headers: { authorization: "Bearer " + process.env.RESEARCH_WORKER_SECRET } };
+  const runDigest = async () => (await fetch(`${BASE}/api/avisos/resumen`, cron)).json();
+  const first = await runDigest();
+  check("El resumen diario sale hacia los autores con novedades", (first.sent ?? 0) >= 1, JSON.stringify(first));
+  const digest = await mailTo(users.A.email, "novedades");
+  check("El resumen llega con lo que pasó y el enlace a la propuesta", Boolean(digest) && digest.Text.includes("Beto Ríos apoyó tu propuesta") && digest.HTML.includes(proposalUrl), digest?.Subject);
+  check("El resumen se puede dejar de recibir desde el propio correo", Boolean(digest) && /\/avisos\/baja\?t=/.test(digest.Text), (digest?.Text ?? "").slice(-160));
+  const again = await runDigest();
+  check("Lo ya avisado no se repite al día siguiente", (again.sent ?? 0) === 0, JSON.stringify(again));
+
+  const { data: settings } = await admin.from("email_settings").select("token").eq("user_id", users.A.id).single();
+  await A.goto(`${BASE}/avisos/baja?t=${settings.token}`);
+  await A.getByRole("button", { name: /Confirmar y dejar de recibirlo/ }).click();
+  await A.getByText("Ya no recibirás el resumen diario.").waitFor({ timeout: 15000 });
+  const before = await countTo(users.A.email, "novedades");
+  await admin.from("notifications").update({ emailed_at: null }).eq("user_id", users.A.id);
+  await runDigest();
+  const after = await countTo(users.A.email, "novedades");
+  check("Quien se da de baja deja de recibirlo", after === before, `${before} → ${after}`);
+  await admin.from("notifications").update({ emailed_at: new Date().toISOString() }).eq("user_id", users.A.id);
+});
+
 await step("filtros", async () => {
   await B.goto(BASE + "/crear");
   await B.getByLabel("Título").fill("Festival gastronómico en Boquete");

@@ -5,6 +5,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { LogOut, Menu, Plus, Shield, UserRound, X } from "lucide-react";
 import { browserDb, configured } from "@/lib/supabase/client";
+import { NotificationBell } from "./notifications";
 
 type SessionState = { user: User | null; ready: boolean; isModerator: boolean };
 const Session = createContext<SessionState>({ user: null, ready: false, isModerator: false });
@@ -80,6 +81,7 @@ export function Shell({ children, siteName }: { children: React.ReactNode; siteN
             )}
             {user ? (
               <>
+                <NotificationBell />
                 <Link className="account-link desktop-only" href={"/perfil/" + user.id}><UserRound size={18} /> Mi perfil</Link>
                 <button className="account-link desktop-only" onClick={signOut}><LogOut size={17} /> Salir</button>
               </>
