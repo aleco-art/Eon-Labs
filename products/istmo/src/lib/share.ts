@@ -1,18 +1,10 @@
 import "server-only";
 import { cache } from "react";
-import { createClient } from "@supabase/supabase-js";
 import { proposalSelect, type Proposal } from "./domain";
 import { placeName } from "./place";
+import { publicDb } from "./supabase/public";
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
-/** Anonymous reader: a share card never shows more than a visitor could see. */
-function publicDb() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !key) return null;
-  return createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
-}
 
 export type ShareData = { proposal: Proposal; place: string };
 

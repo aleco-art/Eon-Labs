@@ -329,6 +329,22 @@ await step("mensajes", async () => {
   await B.waitForTimeout(800);
 });
 
+await step("respuestas de instituciones", async () => {
+  await A.goto(proposalUrl);
+  const form = A.locator("form", { hasText: "Publicar una novedad" });
+  await form.waitFor({ timeout: 15000 });
+  await form.getByLabel("Recibí una respuesta").check();
+  await form.getByLabel(/Quién respondió/).fill("Municipio de Panamá");
+  await form.getByLabel("Novedad").fill("Planificación Urbana nos invitó a presentar la propuesta en la consulta pública de octubre.");
+  await form.getByRole("button", { name: "Publicar novedad" }).click();
+  await A.getByText("Respuesta recibida de Municipio de Panamá", { exact: false }).waitFor({ timeout: 15000 });
+  await B.goto(BASE + "/respuestas");
+  const card = B.locator(".answer-card", { hasText: "Corredor peatonal arbolado en Calidonia" });
+  await card.waitFor({ timeout: 20000 });
+  check("La página pública de respuestas muestra la respuesta de la entidad", (await card.locator(".answer-who").textContent()).includes("Municipio de Panamá") && /consulta pública/.test(await card.locator(".answer-quote").innerText()));
+  check("Cada respuesta enlaza a su propuesta y su seguimiento", (await card.getByRole("link", { name: /su seguimiento/ }).getAttribute("href")).endsWith("#seguimiento"));
+});
+
 await step("filtros", async () => {
   await B.goto(BASE + "/crear");
   await B.getByLabel("Título").fill("Festival gastronómico en Boquete");

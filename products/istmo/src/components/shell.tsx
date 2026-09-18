@@ -130,6 +130,7 @@ export function Shell({ children, siteName }: { children: React.ReactNode; siteN
           </span>
           <nav aria-label="Legal">
             <Link href="/como-funciona">Cómo funciona</Link>
+            <Link href="/respuestas">Respuestas</Link>
             <Link href="/fuentes">Fuentes y actualización</Link>
             <Link href="/privacidad">Privacidad</Link>
             <Link href="/terminos">Términos</Link>

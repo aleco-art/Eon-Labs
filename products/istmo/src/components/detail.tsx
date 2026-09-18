@@ -260,8 +260,11 @@ export function Detail({ id }: { id: string }) {
 
       {isAuthor && <Recipients proposal={proposal} files={files} onShared={refresh} />}
 
-      <h2 className="section-title">Seguimiento</h2>
-      <p className="muted" style={{ fontSize: "0.92rem" }}>Información aportada por el autor de la propuesta. La plataforma no la verifica.</p>
+      <h2 className="section-title" id="seguimiento">Seguimiento</h2>
+      <p className="muted" style={{ fontSize: "0.92rem" }}>
+        Información aportada por el autor de la propuesta. La plataforma no la verifica.{" "}
+        <Link href="/respuestas">Ver todas las respuestas de instituciones</Link>
+      </p>
       {updates.map((u) => (
         <div className={"update" + (u.kind === "respuesta" ? " response" : "")} key={u.id}>
           <small className="muted">
