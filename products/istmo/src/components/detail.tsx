@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, FileText, Heart, MapPin, MessageCircle, Paperclip, PenLine, Repeat2 } from "lucide-react";
+import { ArrowLeft, FileText, Heart, MapPin, MessageCircle, Paperclip, PenLine, Repeat2, Send } from "lucide-react";
 import { browserDb, configured } from "@/lib/supabase/client";
 import { dateLabel, documentLimit, proposalSelect, type Proposal } from "@/lib/domain";
 import { placeLabel, useTerritories } from "@/lib/territories";
@@ -203,6 +203,23 @@ export function Detail({ id }: { id: string }) {
             <Repeat2 size={18} /> {proposal.reshare_count} <span className="label">Republicar</span>
           </button>
           <ShareButton id={proposal.id} title={proposal.title} onMessage={(t) => setMessage({ text: t, tone: "ok" })} />
+        </div>
+        {/* WhatsApp is where proposals travel in Panama; the link preview carries the share card. */}
+        <div className="share-row">
+          <a
+            className="button secondary small"
+            target="_blank"
+            rel="noreferrer"
+            href={
+              "https://wa.me/?text=" +
+              encodeURIComponent(
+                `«${proposal.title}». ${proposal.signatures_enabled ? "Apóyala y fírmala" : "Apóyala"} en Istmo: ` +
+                  new URL("/propuesta/" + proposal.id, process.env.NEXT_PUBLIC_SITE_URL ?? "https://istmoapp.digital").href,
+              )
+            }
+          >
+            <Send size={15} /> Compartir por WhatsApp
+          </a>
         </div>
         {message && <Notice message={message.text} tone={message.tone} />}
 
