@@ -71,6 +71,9 @@ export default async function Image({ params }: { params: Promise<{ id: string }
   const goal = p.signature_goal ?? 0;
   const showSignatures = p.signatures_enabled || p.signature_count > 0;
   const progress = goal ? Math.min(1, p.signature_count / goal) : 0;
+  // Without a photo the first lines of the body fill the space, but only as much as fits
+  // above the signature block: a bar and a long title leave room for less.
+  const excerptMax = (showSignatures ? (goal ? 80 : 105) : 150) - (title.length > 50 ? 25 : 0);
   // Zeros make a new proposal look abandoned when shared, so only what it already has is shown.
   const support = [
     p.like_count ? plural(p.like_count, "apoyo", "apoyos") : "",
@@ -89,16 +92,16 @@ export default async function Image({ params }: { params: Promise<{ id: string }
         </div>
 
         <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "58px 56px 48px 64px", minWidth: 0 }}>
-          <div style={{ display: "flex", fontSize: 22, fontWeight: 800, letterSpacing: 2, color: RED }}>
+          <div style={{ display: "flex", flexShrink: 0, fontSize: 22, fontWeight: 800, letterSpacing: 2, color: RED }}>
             {`PROPUESTA CIUDADANA · ${p.category.toUpperCase()}`}
           </div>
-          <div style={{ display: "flex", marginTop: 18, fontSize: titleSize, fontWeight: 800, lineHeight: 1.12, color: INK }}>{title}</div>
-          <div style={{ display: "flex", marginTop: 16, fontSize: 26, color: MUTED }}>
+          <div style={{ display: "flex", flexShrink: 0, marginTop: 18, fontSize: titleSize, fontWeight: 800, lineHeight: 1.12, color: INK }}>{title}</div>
+          <div style={{ display: "flex", flexShrink: 0, marginTop: 16, fontSize: 26, color: MUTED }}>
             {`${data.place}${p.profiles?.name ? " · por " + p.profiles.name : ""}`}
           </div>
           {!photo && (
-            <div style={{ display: "flex", marginTop: 26, fontSize: 30, lineHeight: 1.4, color: INK, maxWidth: 1000 }}>
-              {excerpt(p.body, 150)}
+            <div style={{ display: "flex", flexShrink: 0, marginTop: 22, marginBottom: 18, fontSize: 30, lineHeight: 1.4, color: INK, maxWidth: 1000 }}>
+              {excerpt(p.body, excerptMax)}
             </div>
           )}
 

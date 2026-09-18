@@ -45,5 +45,6 @@ export async function sharePhoto(id: string): Promise<string | null> {
 export function excerpt(body: string, max = 180) {
   const flat = body.replace(/\s+/g, " ").trim();
   if (flat.length <= max) return flat;
-  return flat.slice(0, flat.lastIndexOf(" ", max)) + "…";
+  // Cut on a word and drop the punctuation it ends on, so it never reads ".…".
+  return flat.slice(0, flat.lastIndexOf(" ", max)).replace(/[\s.,;:!?¡¿-]+$/, "") + "…";
 }
