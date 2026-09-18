@@ -11,6 +11,7 @@ type Item = {
   kind: NotificationKind;
   actor: string | null;
   proposal_id: string | null;
+  conversation_id: string | null;
   title: string | null;
   created_at: string;
 };
@@ -45,10 +46,15 @@ async function run() {
     if (!items.length) continue;
     const byProposal = new Map<string, DigestGroup>();
     for (const item of items) {
-      const key = item.proposal_id ?? "otros";
+      const key = item.kind === "mensaje" ? "mensajes" : (item.proposal_id ?? "otros");
       const group = byProposal.get(key) ?? {
-        title: item.title ?? "Tu propuesta",
-        url: item.proposal_id ? new URL("/propuesta/" + item.proposal_id, base).href : base,
+        title: item.kind === "mensaje" ? "Mensajes que recibiste" : (item.title ?? "Tu propuesta"),
+        url:
+          item.kind === "mensaje"
+            ? new URL("/mensajes", base).href
+            : item.proposal_id
+              ? new URL("/propuesta/" + item.proposal_id, base).href
+              : base,
         lines: [],
       };
       group.lines.push(notificationLine(item.kind, item.actor));

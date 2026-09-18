@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { browserDb, configured } from "@/lib/supabase/client";
 import { Notice } from "@/components/common";
 import { useSession } from "@/components/shell";
-import { DigestPreference } from "@/components/notifications";
+import { AccountPreferences } from "@/components/notifications";
 
 type Mode = "login" | "signup" | "reset" | "password";
 const titles: Record<Mode, string> = {
@@ -85,7 +85,7 @@ export default function Account() {
       {user && mode === "login" && (
         <Notice message={`Ya iniciaste sesión como ${user.email}.`} />
       )}
-      {user && mode !== "password" && <DigestPreference />}
+      {user && mode !== "password" && <AccountPreferences />}
       <form className="card form-card" onSubmit={submit}>
         {mode === "signup" && (
           <label className="field">Nombre público<input name="name" required minLength={2} maxLength={80} autoComplete="name" /><span className="hint">Se mostrará en tus propuestas y comentarios. Tu correo no será público.</span></label>

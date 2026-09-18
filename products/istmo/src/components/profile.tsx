@@ -7,6 +7,7 @@ import { validateFile } from "@/lib/files";
 import { useSession } from "./shell";
 import { Notice } from "./common";
 import { Avatar, Feed, ProposalCard, useCovers, useInteractions, useToggle } from "./feed";
+import { MessageButton } from "./messages";
 
 type Reshare = { created_at: string; proposals: Proposal | null };
 
@@ -91,7 +92,11 @@ export function ProfilePage({ id }: { id: string }) {
         </div>
         {profile.bio ? <p className="profile-bio">{profile.bio}</p> : !own && <p className="muted">Esta persona todavía no ha escrito su biografía.</p>}
         <ContactList profile={profile} />
-        {own && <button className="button secondary small" onClick={() => setEditing(!editing)}>{editing ? "Cerrar edición" : "Editar mi perfil"}</button>}
+        {own ? (
+          <button className="button secondary small" onClick={() => setEditing(!editing)}>{editing ? "Cerrar edición" : "Editar mi perfil"}</button>
+        ) : (
+          <MessageButton userId={id} name={profile.name} />
+        )}
       </div>
       {incomplete && !editing && (
         <Notice tone="info" message="Completa tu perfil: una foto, a qué te dedicas y una biografía corta ayudan a que la gente y los responsables confíen en tus propuestas." />

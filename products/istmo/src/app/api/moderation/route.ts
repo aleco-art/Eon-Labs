@@ -20,7 +20,9 @@ export async function POST(req: Request) {
     const { data: r } = await admin.from("reports").select("*").eq("id", input.reportId).maybeSingle();
     if (!r) throw new Error("Reporte no disponible.");
 
-    const target = r.attachment_id
+    const target = r.message_id
+      ? { table: "messages", id: r.message_id, type: "mensaje" }
+      : r.attachment_id
       ? { table: "attachments", id: r.attachment_id, type: "archivo" }
       : r.comment_id
         ? { table: "comments", id: r.comment_id, type: "comentario" }

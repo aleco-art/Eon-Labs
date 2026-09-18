@@ -252,7 +252,7 @@ await step("avisos", async () => {
   const again = await runDigest();
   check("Lo ya avisado no se repite al día siguiente", (again.sent ?? 0) === 0, JSON.stringify(again));
 
-  const { data: settings } = await admin.from("email_settings").select("token").eq("user_id", users.A.id).single();
+  const { data: settings } = await admin.from("user_settings").select("token").eq("user_id", users.A.id).single();
   await A.goto(`${BASE}/avisos/baja?t=${settings.token}`);
   await A.getByRole("button", { name: /Confirmar y dejar de recibirlo/ }).click();
   await A.getByText("Ya no recibirás el resumen diario.").waitFor({ timeout: 15000 });
@@ -262,6 +262,71 @@ await step("avisos", async () => {
   const after = await countTo(users.A.email, "novedades");
   check("Quien se da de baja deja de recibirlo", after === before, `${before} → ${after}`);
   await admin.from("notifications").update({ emailed_at: new Date().toISOString() }).eq("user_id", users.A.id);
+});
+
+await step("mensajes", async () => {
+  // A writes to B from B's profile and lands in the thread.
+  await A.goto(`${BASE}/perfil/${users.B.id}`);
+  await A.getByRole("button", { name: /Enviar mensaje/ }).click();
+  await A.getByLabel(/Mensaje para/).fill("Hola Beto, gracias por firmar. ¿Me ayudas a conseguir más firmas en Calidonia?");
+  await A.getByRole("button", { name: /^Enviar$/ }).click();
+  await A.waitForURL(/\/mensajes\/[0-9a-f-]{36}$/, { timeout: 15000 });
+  const threadUrl = A.url();
+  await A.getByText("¿Me ayudas a conseguir más firmas en Calidonia?", { exact: false }).waitFor({ timeout: 15000 });
+  check("Escribir desde un perfil abre la conversación", true, threadUrl);
+
+  // B hears about it in the bell and finds it in the inbox, marked unread.
+  await B.goto(BASE + "/");
+  await B.locator(".notif-dot").waitFor({ timeout: 20000 });
+  await B.locator(".notif-button").click();
+  const lines = await B.locator(".notif-panel .notif-line").allTextContents();
+  check("La campanita avisa del mensaje nuevo", lines.some((l) => l.includes("te escribió un mensaje")), lines.join(" | "));
+  await B.locator(".notif-backdrop").click();
+  await B.goto(BASE + "/mensajes");
+  const row = B.locator(".thread-list li", { hasText: "Ana Pérez" });
+  await row.waitFor({ timeout: 15000 });
+  check("La bandeja marca la conversación como no leída", (await row.getAttribute("data-unread")) !== null && (await row.locator(".thread-badge").innerText()) === "1");
+  await row.locator("a").click();
+  await B.getByText("¿Me ayudas a conseguir más firmas en Calidonia?", { exact: false }).waitFor({ timeout: 15000 });
+  await B.getByPlaceholder("Escribe tu mensaje").fill("¡Claro! Lo comparto en el grupo del barrio.");
+  await B.getByRole("button", { name: /^Enviar$/ }).click();
+  await B.locator(".bubble[data-mine]", { hasText: "Lo comparto en el grupo del barrio" }).waitFor({ timeout: 15000 });
+  await A.goto(threadUrl);
+  await A.getByText("Lo comparto en el grupo del barrio.", { exact: false }).waitFor({ timeout: 15000 });
+  check("La respuesta llega al otro lado", true);
+  await B.goto(BASE + "/mensajes");
+  await B.locator(".thread-list li", { hasText: "Ana Pérez" }).waitFor();
+  check("Al leerla deja de estar pendiente", (await B.locator(".thread-list li", { hasText: "Ana Pérez" }).getAttribute("data-unread")) === null);
+
+  // Blocking closes the thread for both of them.
+  await B.goto(threadUrl);
+  await B.getByRole("button", { name: /^Bloquear$/ }).click();
+  await B.getByText(/Tienes bloqueada a esta persona/).waitFor({ timeout: 10000 });
+  check("Bloquear desactiva la escritura en la conversación", await B.getByPlaceholder("Desbloquea para escribir").isDisabled());
+  await A.goto(threadUrl);
+  await A.getByPlaceholder("Escribe tu mensaje").fill("¿Sigues ahí?");
+  await A.getByRole("button", { name: /^Enviar$/ }).click();
+  await A.getByText("No puedes escribir a esta persona.").waitFor({ timeout: 10000 });
+  check("Quien está bloqueado recibe el aviso y el mensaje no sale", true);
+  await B.goto(threadUrl);
+  await B.getByRole("button", { name: /^Desbloquear$/ }).click();
+  await B.getByText("Ya puede volver a escribirte.").waitFor({ timeout: 10000 });
+
+  // Turning messages off from the account.
+  await B.goto(BASE + "/cuenta");
+  const allow = B.getByLabel(/Permitir que otras personas/);
+  await allow.waitFor({ timeout: 15000 });
+  await allow.uncheck();
+  await B.waitForTimeout(800);
+  await A.goto(`${BASE}/perfil/${users.B.id}`);
+  await A.getByRole("button", { name: /Enviar mensaje/ }).click();
+  await A.getByLabel(/Mensaje para/).fill("Otra cosa");
+  await A.getByRole("button", { name: /^Enviar$/ }).click();
+  await A.getByText("Esta persona no acepta mensajes en la plataforma.").waitFor({ timeout: 10000 });
+  check("Quien cierra los mensajes deja de recibirlos", true);
+  await B.goto(BASE + "/cuenta");
+  await B.getByLabel(/Permitir que otras personas/).check();
+  await B.waitForTimeout(800);
 });
 
 await step("filtros", async () => {

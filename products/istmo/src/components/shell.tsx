@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
-import { LogOut, Menu, Plus, Shield, UserRound, X } from "lucide-react";
+import { LogOut, Menu, MessageSquare, Plus, Shield, UserRound, X } from "lucide-react";
 import { browserDb, configured } from "@/lib/supabase/client";
 import { NotificationBell } from "./notifications";
 
@@ -82,6 +82,7 @@ export function Shell({ children, siteName }: { children: React.ReactNode; siteN
             {user ? (
               <>
                 <NotificationBell />
+                <Link className="account-link desktop-only" href="/mensajes"><MessageSquare size={17} /> Mensajes</Link>
                 <Link className="account-link desktop-only" href={"/perfil/" + user.id}><UserRound size={18} /> Mi perfil</Link>
                 <button className="account-link desktop-only" onClick={signOut}><LogOut size={17} /> Salir</button>
               </>
@@ -110,6 +111,7 @@ export function Shell({ children, siteName }: { children: React.ReactNode; siteN
         ))}
         {user ? (
           <>
+            <Link href="/mensajes"><MessageSquare size={18} /> Mensajes</Link>
             <Link href={"/perfil/" + user.id}><UserRound size={18} /> Mi perfil</Link>
             {isModerator && <Link href="/moderacion"><Shield size={18} /> Moderación</Link>}
             <button className="drawer-item" onClick={signOut}><LogOut size={18} /> Cerrar sesión</button>

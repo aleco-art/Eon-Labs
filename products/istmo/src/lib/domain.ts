@@ -77,18 +77,20 @@ export const deliveryLabels: Record<string, string> = {
   skipped: "No enviado",
 };
 
-export type NotificationKind = "apoyo" | "firma" | "comentario" | "republicacion" | "meta_firmas";
+export type NotificationKind = "apoyo" | "firma" | "comentario" | "republicacion" | "meta_firmas" | "mensaje";
 export type Notification = {
   id: string;
   kind: NotificationKind;
   actor_name: string | null;
   proposal_id: string | null;
   comment_id: string | null;
+  conversation_id: string | null;
   created_at: string;
   read_at: string | null;
   proposals: { title: string } | null;
 };
-export const notificationSelect = "id,kind,actor_name,proposal_id,comment_id,created_at,read_at,proposals(title)";
+export const notificationSelect =
+  "id,kind,actor_name,proposal_id,comment_id,conversation_id,created_at,read_at,proposals(title)";
 
 /** What happened, in one line. `who` is the person's name, or nobody for anonymous signatures. */
 export function notificationLine(kind: NotificationKind, who: string | null) {
@@ -104,5 +106,38 @@ export function notificationLine(kind: NotificationKind, who: string | null) {
       return `${name} republicó tu propuesta`;
     case "meta_firmas":
       return "Tu propuesta alcanzó su meta de firmas";
+    case "mensaje":
+      return `${name} te escribió un mensaje`;
   }
 }
+
+export type Conversation = {
+  conversation_id: string;
+  other_id: string;
+  other_name: string;
+  other_avatar: string | null;
+  last_body: string | null;
+  last_at: string | null;
+  last_mine: boolean | null;
+  unread: number;
+};
+export type Message = {
+  id: string;
+  sender_id: string;
+  body: string;
+  created_at: string;
+  read_at: string | null;
+  hidden: boolean;
+};
+export const messageLimit = 4000;
+
+/** Where a notification takes you when you click it. */
+export const notificationHref = (n: { kind: NotificationKind; proposal_id: string | null; comment_id: string | null; conversation_id: string | null }) =>
+  n.kind === "mensaje" && n.conversation_id
+    ? "/mensajes/" + n.conversation_id
+    : n.proposal_id
+      ? "/propuesta/" + n.proposal_id + (n.comment_id ? "#comentarios" : "")
+      : "/";
+
+export const timeLabel = (s: string) =>
+  new Date(s).toLocaleString("es-PA", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });

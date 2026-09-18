@@ -234,13 +234,73 @@ const retagNotif = await A.c.from("notifications").update({ kind: "meta_firmas" 
 check("El tipo de aviso no se puede cambiar", Boolean(retagNotif.error), retagNotif.error?.message);
 const selfNotice = await admin.from("notifications").select("id").eq("actor_id", A.id).eq("user_id", A.id);
 check("Nadie recibe avisos de sus propias acciones", (selfNotice.data ?? []).length === 0, JSON.stringify(selfNotice.data));
-const settingsPeek = await B.c.from("email_settings").select("*").eq("user_id", A.id);
+const settingsPeek = await B.c.from("user_settings").select("*").eq("user_id", A.id);
 check("Las preferencias de correo de A no son visibles para B", (settingsPeek.data ?? []).length === 0, JSON.stringify(settingsPeek.data));
-await admin.from("email_settings").upsert({ user_id: A.id });
-const tokenPeek = await A.c.from("email_settings").select("token").eq("user_id", A.id);
+await admin.from("user_settings").upsert({ user_id: A.id });
+const tokenPeek = await A.c.from("user_settings").select("token").eq("user_id", A.id);
 check("El token de baja nunca sale al cliente", Boolean(tokenPeek.error), tokenPeek.error?.message);
 const tokenRpc = await A.c.rpc("digest_queue");
 check("La cola de resúmenes no es invocable por un usuario", Boolean(tokenRpc.error), tokenRpc.error?.message);
+
+// Direct messages: one guarded door for sending, and nothing readable outside the thread.
+const C = await user("c");
+const sent = await A.c.rpc("send_message", { p_to: B.id, p_body: "Hola, vi tu propuesta y quiero ayudar." });
+check("A escribe a B", !sent.error && Boolean(sent.data), sent.error?.message);
+const convo = sent.data;
+const bThread = await B.c.from("messages").select("body,sender_id").eq("conversation_id", convo);
+check("B recibe el mensaje", (bThread.data ?? []).length === 1 && bThread.data[0].sender_id === A.id, JSON.stringify(bThread.data));
+const cThread = await C.c.from("messages").select("id").eq("conversation_id", convo);
+check("Un tercero no ve la conversación", (cThread.data ?? []).length === 0, JSON.stringify(cThread.data));
+const cConvo = await C.c.from("conversations").select("id").eq("id", convo);
+check("Un tercero no ve ni que la conversación existe", (cConvo.data ?? []).length === 0, JSON.stringify(cConvo.data));
+const anonThread = await anon.from("messages").select("id");
+check("Un visitante no ve mensajes", (anonThread.data ?? []).length === 0, JSON.stringify(anonThread.data));
+const forgeMsg = await C.c.from("messages").insert({ conversation_id: convo, sender_id: C.id, body: "Me cuelo en tu chat" });
+check("Nadie puede insertar mensajes directamente", Boolean(forgeMsg.error), forgeMsg.error?.message);
+const forgeConvo = await C.c.from("conversations").insert({ user_a: C.id, user_b: A.id });
+check("Nadie puede crear conversaciones directamente", Boolean(forgeConvo.error), forgeConvo.error?.message);
+const editMsg = await B.c.from("messages").update({ body: "texto cambiado" }).eq("conversation_id", convo);
+check("El texto de un mensaje no se puede cambiar", Boolean(editMsg.error), editMsg.error?.message);
+const readMsg = await B.c.from("messages").update({ read_at: new Date().toISOString() }).eq("conversation_id", convo).select("id");
+check("B puede marcar como leído lo que recibió", !readMsg.error && (readMsg.data ?? []).length === 1, readMsg.error?.message);
+const selfRead = await A.c.from("messages").update({ read_at: new Date().toISOString() }).eq("sender_id", A.id).select("id");
+check("Nadie marca como leído su propio mensaje", (selfRead.data ?? []).length === 0, JSON.stringify(selfRead.data));
+const aNotice = await admin.from("notifications").select("kind,conversation_id").eq("user_id", B.id).eq("kind", "mensaje");
+check("El mensaje genera aviso para quien lo recibe", (aNotice.data ?? []).length === 1 && aNotice.data[0].conversation_id === convo, JSON.stringify(aNotice.data));
+const inbox = await B.c.rpc("my_conversations");
+check("La bandeja devuelve solo tus conversaciones", (inbox.data ?? []).length === 1 && inbox.data[0].other_id === A.id, JSON.stringify((inbox.data ?? []).map((r) => r.other_id)));
+const cInbox = await C.c.rpc("my_conversations");
+check("La bandeja de un tercero está vacía", (cInbox.data ?? []).length === 0, JSON.stringify(cInbox.data));
+const selfMsg = await A.c.rpc("send_message", { p_to: A.id, p_body: "Hablando solo" });
+check("Nadie se escribe a sí mismo", Boolean(selfMsg.error), selfMsg.error?.message);
+const empty = await A.c.rpc("send_message", { p_to: B.id, p_body: "   " });
+check("Un mensaje vacío se rechaza", Boolean(empty.error), empty.error?.message);
+
+// Reporting copies the text so moderation never reads the thread.
+const reported = await B.c.rpc("report_message", { p_message: bThread.data[0].id ?? (await admin.from("messages").select("id").eq("conversation_id", convo).single()).data.id, p_reason: "Me está insultando" });
+const reportRow = await admin.from("reports").select("kind,snapshot,message_id").eq("kind", "mensaje").maybeSingle();
+check("Reportar un mensaje guarda una copia del texto", !reported.error && reportRow.data?.snapshot === "Hola, vi tu propuesta y quiero ayudar.", reported.error?.message ?? JSON.stringify(reportRow.data));
+const reportOwn = await A.c.rpc("report_message", { p_message: reportRow.data.message_id, p_reason: "Reporto lo mío" });
+check("Nadie reporta su propio mensaje", Boolean(reportOwn.error), reportOwn.error?.message);
+
+// Blocking closes the door in both directions.
+const block = await B.c.from("blocks").insert({ blocker_id: B.id, blocked_id: A.id });
+check("B bloquea a A", !block.error, block.error?.message);
+const afterBlock = await A.c.rpc("send_message", { p_to: B.id, p_body: "Sigo escribiendo" });
+check("Quien está bloqueado no puede escribir", Boolean(afterBlock.error), afterBlock.error?.message);
+const blockBack = await B.c.rpc("send_message", { p_to: A.id, p_body: "Ni yo te escribo" });
+check("Quien bloquea tampoco escribe", Boolean(blockBack.error), blockBack.error?.message);
+const seeBlocks = await A.c.from("blocks").select("blocker_id");
+check("Nadie ve quién lo bloqueó", (seeBlocks.data ?? []).length === 0, JSON.stringify(seeBlocks.data));
+await B.c.from("blocks").delete().eq("blocker_id", B.id).eq("blocked_id", A.id);
+
+// Closing the door to everyone.
+await admin.from("user_settings").upsert({ user_id: B.id, messages_from: "nadie" });
+const closed = await A.c.rpc("send_message", { p_to: B.id, p_body: "¿Hola?" });
+check("Quien no acepta mensajes no los recibe", Boolean(closed.error), closed.error?.message);
+await admin.from("user_settings").upsert({ user_id: B.id, messages_from: "todos" });
+const settingsPeek2 = await C.c.from("user_settings").select("messages_from").eq("user_id", B.id);
+check("Las preferencias de mensajes de otro no son visibles", (settingsPeek2.data ?? []).length === 0, JSON.stringify(settingsPeek2.data));
 
 const failed = results.filter((r) => !r.ok);
 console.log(`\n${results.length - failed.length}/${results.length} comprobaciones superadas`);

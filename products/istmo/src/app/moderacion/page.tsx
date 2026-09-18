@@ -8,6 +8,7 @@ import { Notice } from "@/components/common";
 
 type Report = {
   id: string; proposal_id: string | null; comment_id: string | null; attachment_id: string | null; responsable_id: string | null;
+  message_id: string | null; snapshot: string | null;
   kind: string; reason: string; resolved: boolean; created_at: string;
 };
 type Log = { id: string; action: string; target_type: string; target_id: string; note: string | null; created_at: string };
@@ -62,7 +63,7 @@ export default function Moderation() {
       <label className="check"><input type="checkbox" checked={showResolved} onChange={(e) => setShowResolved(e.target.checked)} /> Mostrar reportes cerrados</label>
       {message && <Notice message={message.text} tone={message.tone} />}
       {reports.map((r) => {
-        const type = r.attachment_id ? "Archivo" : r.comment_id ? "Comentario" : r.responsable_id ? "Dato del directorio" : "Propuesta";
+        const type = r.message_id ? "Mensaje privado" : r.attachment_id ? "Archivo" : r.comment_id ? "Comentario" : r.responsable_id ? "Dato del directorio" : "Propuesta";
         const actions = r.responsable_id ? ["flag_entry", "dismiss"] : ["hide", "restore", "dismiss"];
         return (
           <article className="card form-card" key={r.id}>
@@ -72,6 +73,12 @@ export default function Moderation() {
               <span className={"badge " + (r.resolved ? "manual" : "level")}>{r.resolved ? "Cerrado" : "Pendiente"}</span>
             </div>
             <p style={{ margin: "10px 0", whiteSpace: "pre-wrap" }}>{r.reason}</p>
+            {r.snapshot !== null && (
+              <blockquote className="reported-text">
+                <p className="hint" style={{ margin: "0 0 6px" }}>Mensaje reportado, tal como se envió. La conversación completa no es visible para la moderación.</p>
+                {r.snapshot}
+              </blockquote>
+            )}
             <p className="hint">
               {r.proposal_id && <Link className="text-button" href={"/propuesta/" + r.proposal_id} target="_blank">Ver propuesta</Link>}
               {r.responsable_id && <Link className="text-button" href="/responsables" target="_blank">Directorio ({r.responsable_id})</Link>}

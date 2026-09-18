@@ -2,13 +2,15 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Bell } from "lucide-react";
-import { dateLabel, notificationLine, type Notification } from "@/lib/domain";
+import { dateLabel, notificationHref, notificationLine, type Notification } from "@/lib/domain";
 
 /** Bell in the top bar: what other people did with this author's proposals. */
 export function NotificationBell() {
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState<Notification[]>([]);
   const [unread, setUnread] = useState(0);
+  // What was new when the panel opened keeps its highlight after the server marks it read.
+  const [fresh, setFresh] = useState<Set<string>>(new Set());
 
   const load = useCallback(async () => {
     try {
@@ -36,14 +38,23 @@ export function NotificationBell() {
     const next = !open;
     setOpen(next);
     if (!next) return;
-    await load();
-    if (!unread) return;
-    setUnread(0);
-    try {
-      await fetch("/api/notificaciones", { method: "POST", headers: { "content-type": "application/json" }, body: "{}" });
-    } catch {
-      // Reading them again later will mark them.
+    setFresh(new Set(items.filter((n) => !n.read_at).map((n) => n.id)));
+    if (unread) {
+      setUnread(0);
+      // Marked before anything else, and kept alive: people often click a notice straight away,
+      // and leaving the page must not cancel the request.
+      try {
+        await fetch("/api/notificaciones", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: "{}",
+          keepalive: true,
+        });
+      } catch {
+        // Opening the panel again will mark them.
+      }
     }
+    await load();
   }
 
   const label = unread ? `Novedades, ${unread} sin leer` : "Novedades";
@@ -66,11 +77,8 @@ export function NotificationBell() {
             ) : (
               <ul className="notif-list">
                 {items.map((n) => (
-                  <li key={n.id} data-unread={n.read_at ? undefined : true}>
-                    <Link
-                      href={n.proposal_id ? "/propuesta/" + n.proposal_id + (n.comment_id ? "#comentarios" : "") : "/"}
-                      onClick={() => setOpen(false)}
-                    >
+                  <li key={n.id} data-unread={!n.read_at || fresh.has(n.id) ? true : undefined}>
+                    <Link href={notificationHref(n)} onClick={() => setOpen(false)}>
                       <span className="notif-line">{notificationLine(n.kind, n.actor_name)}</span>
                       {n.proposals?.title && <span className="notif-what">«{n.proposals.title}»</span>}
                       <span className="notif-when">{dateLabel(n.created_at)}</span>
@@ -89,19 +97,20 @@ export function NotificationBell() {
   );
 }
 
-/** The only email we send on our own initiative, so the switch lives with the account. */
-export function DigestPreference() {
-  const [digest, setDigest] = useState<boolean | null>(null);
+type Prefs = { digest: boolean; messagesFrom: "todos" | "nadie" };
+
+/** What the platform may send you and who may write to you, in one place. */
+export function AccountPreferences() {
+  const [prefs, setPrefs] = useState<Prefs | null>(null);
   const [saving, setSaving] = useState(false);
 
   const load = useCallback(async () => {
     try {
       const res = await fetch("/api/avisos/preferencias");
       if (!res.ok) return;
-      const data = (await res.json()) as { digest: boolean };
-      setDigest(data.digest);
+      setPrefs((await res.json()) as Prefs);
     } catch {
-      // Leave the switch hidden rather than show a wrong state.
+      // Leave the switches hidden rather than show a wrong state.
     }
   }, []);
 
@@ -110,34 +119,57 @@ export function DigestPreference() {
     void load();
   }, [load]);
 
-  async function choose(value: boolean) {
-    setDigest(value);
+  async function choose(change: Partial<Prefs>) {
+    if (!prefs) return;
+    const next = { ...prefs, ...change };
+    setPrefs(next);
     setSaving(true);
     try {
       await fetch("/api/avisos/preferencias", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ digest: value }),
+        body: JSON.stringify({ digest: next.digest, messagesFrom: next.messagesFrom }),
       });
     } finally {
       setSaving(false);
     }
   }
 
-  if (digest === null) return null;
+  if (prefs === null) return null;
   return (
     <div className="card form-card">
       <p className="eyebrow">Avisos por correo</p>
       <label className="check">
-        <input type="checkbox" checked={digest} disabled={saving} onChange={(e) => void choose(e.target.checked)} />
+        <input
+          type="checkbox"
+          checked={prefs.digest}
+          disabled={saving}
+          onChange={(e) => void choose({ digest: e.target.checked })}
+        />
         <span>
-          Enviarme un <b>resumen diario</b> de lo que pasa en mis propuestas: apoyos, firmas, comentarios y
-          republicaciones. Un solo correo al día, y solo si hubo movimiento.
+          Enviarme un <b>resumen diario</b> de lo que pasa en mis propuestas: apoyos, firmas, comentarios,
+          republicaciones y mensajes. Un solo correo al día, y solo si hubo movimiento.
         </span>
       </label>
       <p className="hint">
         Los correos de tu cuenta, como confirmar el correo o restablecer la contraseña, llegan siempre. Dentro de la
         plataforma verás las novedades en la campanita, tengas esto activado o no.
+      </p>
+      <p className="eyebrow" style={{ marginTop: 18 }}>Mensajes</p>
+      <label className="check">
+        <input
+          type="checkbox"
+          checked={prefs.messagesFrom === "todos"}
+          disabled={saving}
+          onChange={(e) => void choose({ messagesFrom: e.target.checked ? "todos" : "nadie" })}
+        />
+        <span>
+          Permitir que otras personas de {"Istmo"} me escriban mensajes. Si lo desactivas, nadie podrá iniciar ni
+          continuar una conversación contigo, y tus conversaciones anteriores siguen ahí.
+        </span>
+      </label>
+      <p className="hint">
+        Nadie ve tu correo en los mensajes. En cada conversación puedes bloquear a la persona o reportar un mensaje.
       </p>
     </div>
   );
