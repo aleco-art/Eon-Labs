@@ -302,6 +302,32 @@ await admin.from("user_settings").upsert({ user_id: B.id, messages_from: "todos"
 const settingsPeek2 = await C.c.from("user_settings").select("messages_from").eq("user_id", B.id);
 check("Las preferencias de mensajes de otro no son visibles", (settingsPeek2.data ?? []).length === 0, JSON.stringify(settingsPeek2.data));
 
+// Directory suggestions: anyone signed in can propose, only moderation publishes.
+const suggestion = {
+  suggested_by: B.id, name: "Junta Comunal de Bella Vista", entity_type: "Junta comunal", areas: ["Urbanización"],
+  level: "distrital", province_code: "08", district_code: "0808", email: "juntabellavista@example.test",
+  competence: "Aseo, alumbrado y parques del corregimiento.", source_url: "https://example.test/junta",
+};
+const sugg = await B.c.from("responsable_suggestions").insert(suggestion).select("id,status").single();
+check("B sugiere un responsable", !sugg.error && sugg.data?.status === "pendiente", sugg.error?.message);
+const unreachable = await B.c.from("responsable_suggestions").insert({ ...suggestion, email: null });
+check("Una sugerencia sin correo ni página de contacto se rechaza", Boolean(unreachable.error), unreachable.error?.message);
+const selfApproved = await B.c.from("responsable_suggestions").insert({ ...suggestion, status: "aceptada" });
+check("Nadie aprueba su propia sugerencia al crearla", Boolean(selfApproved.error), selfApproved.error?.message);
+const selfUpdate = await B.c.from("responsable_suggestions").update({ status: "aceptada" }).eq("id", sugg.data.id);
+check("Nadie cambia el estado de su sugerencia", Boolean(selfUpdate.error), selfUpdate.error?.message);
+const forgedSugg = await B.c.from("responsable_suggestions").insert({ ...suggestion, suggested_by: A.id });
+check("Nadie sugiere en nombre de otro", Boolean(forgedSugg.error), forgedSugg.error?.message);
+const peekSugg = await A.c.from("responsable_suggestions").select("id").eq("suggested_by", B.id);
+check("Las sugerencias de B no son visibles para A", (peekSugg.data ?? []).length === 0, JSON.stringify(peekSugg.data));
+const anonSugg = await anon.from("responsable_suggestions").select("id");
+check("Un visitante no ve sugerencias", (anonSugg.data ?? []).length === 0, JSON.stringify(anonSugg.data));
+const directInsert = await B.c.from("responsables").insert({
+  id: "colado", name: "Oficina inventada", entity_type: "Otra", areas: ["Otras"], level: "nacional",
+  competence: "Nada", source_url: "https://example.test", source_kind: "oficial", checked_at: "2026-09-18",
+});
+check("Nadie publica directamente en el directorio", Boolean(directInsert.error), directInsert.error?.message);
+
 const failed = results.filter((r) => !r.ok);
 console.log(`\n${results.length - failed.length}/${results.length} comprobaciones superadas`);
 process.exit(failed.length ? 1 : 0);

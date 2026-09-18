@@ -296,6 +296,7 @@ export function Recipients({ proposal, files, onShared }: { proposal: Proposal; 
           <div className="tab-panel" role="tabpanel" id="panel-directorio" aria-labelledby="tab-directorio">
             <p className="tab-intro">
               <b>Recomendado.</b> Responsables con competencia en la temática y en la ubicación de tu propuesta, revisados por Istmo. Cada uno indica su fuente y cuándo se comprobó.
+              {" "}¿Falta alguien? <a href="/responsables#sugerir" target="_blank" rel="noreferrer">Sugiérelo para el directorio</a>.
             </p>
             <details className="legend">
               <summary>¿Qué significan las etiquetas?</summary>

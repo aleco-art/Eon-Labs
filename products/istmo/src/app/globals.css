@@ -62,6 +62,25 @@ small { font-size: 0.8125rem; }
 .account-link:hover { background: var(--blue-50); }
 .menu-button { display: none; padding: 8px; border-radius: 10px; color: var(--blue); }
 
+/* Suggest a responsable */
+.suggest { margin-top: 18px; }
+.suggest-head { display: flex; align-items: center; gap: 14px; color: var(--blue); }
+.suggest-head > div { flex: 1; min-width: 0; color: var(--ink); }
+.suggest-form { margin-top: 16px; border-top: 1px solid var(--line); padding-top: 16px; }
+.suggest-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; }
+.suggest-areas { border: 0; padding: 0; margin: 4px 0 12px; display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.suggest-areas legend { font-weight: 600; margin-bottom: 6px; }
+.suggest-areas .check { margin: 0; }
+.suggest-mine ul { margin: 0; padding-left: 18px; font-size: 0.9rem; line-height: 1.7; }
+.suggest-status { font-weight: 700; }
+.suggest-status.pendiente { color: var(--muted); }
+.suggest-status.aceptada { color: #1a7f4b; }
+.suggest-status.rechazada { color: var(--red); }
+@media (max-width: 640px) {
+  .suggest-head { flex-wrap: wrap; }
+  .suggest-grid { grid-template-columns: 1fr; }
+}
+
 /* Public answers */
 .lede { max-width: 760px; font-size: 1.05rem; line-height: 1.6; color: var(--muted); }
 .answers-count { margin: 18px 0 14px; color: var(--muted); }

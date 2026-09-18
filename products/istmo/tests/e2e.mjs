@@ -345,6 +345,40 @@ await step("respuestas de instituciones", async () => {
   check("Cada respuesta enlaza a su propuesta y su seguimiento", (await card.getByRole("link", { name: /su seguimiento/ }).getAttribute("href")).endsWith("#seguimiento"));
 });
 
+await step("sugerir un responsable", async () => {
+  await B.goto(BASE + "/responsables");
+  const box = B.locator("#sugerir");
+  await box.getByRole("button", { name: "Sugerir un responsable" }).click();
+  await box.getByLabel("Entidad u oficina").fill("Junta Comunal de Bella Vista");
+  await box.getByLabel("Tipo").selectOption("Junta comunal");
+  await box.getByLabel("Correo publicado").fill("junta.bellavista@example.test");
+  await box.getByLabel("Provincia o comarca").selectOption({ label: "Panamá" });
+  await box.getByLabel("Distrito").selectOption({ label: "Panamá" });
+  await box.getByLabel("Urbanización").check();
+  await box.getByLabel("¿Qué atiende?").fill("Aseo, alumbrado y parques del corregimiento; recibe solicitudes vecinales.");
+  await box.getByLabel(/Dónde aparece publicado/).fill("https://example.test/junta-bella-vista");
+  await box.getByRole("button", { name: "Enviar sugerencia" }).click();
+  await box.getByText("Lo revisaremos antes de publicarlo").waitFor({ timeout: 15000 });
+  check("Sugerir un responsable queda en revisión", await box.locator(".suggest-status.pendiente").isVisible());
+  const beforePublish = await B.locator(".entry", { hasText: "Junta Comunal de Bella Vista" }).count();
+  check("Lo sugerido no aparece en el directorio antes de moderarse", beforePublish === 0, String(beforePublish));
+
+  await admin.from("moderators").insert({ user_id: users.A.id });
+  await A.goto(BASE + "/moderacion");
+  const pending = A.locator("article", { hasText: "Junta Comunal de Bella Vista" });
+  await pending.waitFor({ timeout: 20000 });
+  await pending.getByRole("button", { name: "Publicar en el directorio" }).click();
+  await A.getByText("Publicado en el directorio.").waitFor({ timeout: 15000 });
+  await admin.from("moderators").delete().eq("user_id", users.A.id);
+
+  await B.goto(BASE + "/responsables");
+  const entry = B.locator(".entry", { hasText: "Junta Comunal de Bella Vista" });
+  await entry.waitFor({ timeout: 20000 });
+  check("Tras moderarse aparece en el directorio con su correo", (await entry.innerText()).includes("junta.bellavista@example.test"));
+  await B.locator("#sugerir .suggest-status.aceptada").waitFor({ timeout: 15000 });
+  check("Quien lo sugirió ve que se publicó", true);
+});
+
 await step("filtros", async () => {
   await B.goto(BASE + "/crear");
   await B.getByLabel("Título").fill("Festival gastronómico en Boquete");
@@ -556,7 +590,8 @@ await step("directorio", async () => {
   await P.goto(BASE + "/responsables");
   await P.getByText(/responsables ·/).waitFor({ timeout: 15000 });
   const line = await P.locator(".results-line").innerText();
-  check("Directorio carga desde la base de datos", /^130 responsables/.test(line), line);
+  // The seed has 130; earlier steps may have published one more from a suggestion.
+  check("Directorio carga desde la base de datos", Number(line.match(/^(\d+) responsables/)?.[1] ?? 0) >= 130, line);
   await P.getByLabel("Área").selectOption("Deportes");
   await P.getByLabel("Provincia").selectOption({ label: "Chiriquí" });
   const names = await P.locator(".entry h3").allTextContents();

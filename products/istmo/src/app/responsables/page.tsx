@@ -6,6 +6,7 @@ import { browserDb, configured } from "@/lib/supabase/client";
 import { categories, dateLabel, normalize } from "@/lib/domain";
 import { useTerritories } from "@/lib/territories";
 import { Notice, ReportButton } from "@/components/common";
+import { SuggestResponsable } from "@/components/suggest";
 
 type Row = {
   id: string; name: string; entity_type: string; role_title: string | null; person_name: string | null; areas: string[];
@@ -60,6 +61,7 @@ export default function Responsables() {
         Entidades, oficinas y organizaciones con competencia en cada temática, con su canal de contacto publicado, la fuente y la fecha de consulta.
         Estar en esta lista no significa que respalden ninguna propuesta. <Link className="text-button" href="/fuentes">Cómo se construyó</Link>.
       </p>
+      <SuggestResponsable />
       <div className="card filters" style={{ marginTop: 20 }}>
         <div className="filters-row">
           <div className="search-box">
@@ -124,7 +126,10 @@ export default function Responsables() {
           {!filtered.length && (
             <div className="empty">
               <h2>No hay responsables con estos filtros.</h2>
-              <p>El directorio inicial no cubre todas las áreas y territorios. Desde tu propuesta puedes añadir un destinatario manualmente.</p>
+              <p>
+                El directorio inicial no cubre todas las áreas y territorios. Desde tu propuesta puedes añadir un destinatario
+                manualmente, o <a href="#sugerir">sugerir que lo añadamos</a> para todo el mundo.
+              </p>
             </div>
           )}
         </>
