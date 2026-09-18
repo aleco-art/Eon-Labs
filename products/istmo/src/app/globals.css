@@ -429,6 +429,10 @@ fieldset.subpanel { min-width: 0; }
   .mobile-drawer a, .mobile-drawer button.drawer-item { display: flex; align-items: center; gap: 10px; width: 100%; padding: 14px 6px; border-bottom: 1px solid var(--line); font-weight: 600; font-size: 1rem; }
   .mobile-drawer .button { margin-top: 16px; width: 100%; }
 }
+/* On phones the how-it-works panel only pushes the proposals down; it stays on tablets and up. */
+@media (max-width: 760px) {
+  .hero-panel { display: none; }
+}
 @media (max-width: 560px) {
   .page { padding: 20px 16px 64px; }
   .topbar-inner { padding: 0 16px; gap: 10px; }
@@ -436,10 +440,6 @@ fieldset.subpanel { min-width: 0; }
   .filters-row { grid-template-columns: 1fr; }
   .feed-grid { grid-template-columns: 1fr; }
   .detail, .document, .form-card, .send-panel { padding: 18px; }
-  .hero-panel { padding: 24px; }
-  .hero-panel::after { width: 96px; height: 96px; right: -34px; top: -34px; }
-  .hero-panel .eyebrow { padding-right: 56px; }
-  .hero-panel h2 { padding-right: 32px; }
   .recipient { grid-template-columns: auto minmax(0, 1fr); }
   .recipient > :last-child { grid-column: 2; }
   .actions span.label { display: none; }
